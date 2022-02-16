@@ -73,59 +73,59 @@ msys2 の場合、C:/msys64/home/ユーザー名/.bashrc に次のように記�
 xdev68k/
 │
 ├ archive/
-│	│	ダウンロードした外部ツールのアーカイブファイル
-│	├ readme.txt
-│	│		原作者、入手元の情報、利用規約をまとめたテキスト
-│	└  *.zip *.lzh
-│			原本のアーカイブファイル
+│  │  ダウンロードした外部ツールのアーカイブファイル
+│  ├ readme.txt
+│  │      原作者、入手元の情報、利用規約をまとめたテキスト
+│  └  *.zip *.lzh
+│          原本のアーカイブファイル
 ├ build_gcc/
-│		クロスコンパイラのソースコードとビルドにより生成された中間ファイル群
-│		このディレクトリ以下には 18 万近いファイルが存在する。削除しても問題ない。
+│      クロスコンパイラのソースコードとビルドにより生成された中間ファイル群
+│      このディレクトリ以下には 18 万近いファイルが存在する。削除しても問題ない。
 ├ example/
-│		クロス開発サンプルコード
+│      クロス開発サンプルコード
 ├ include/
-│	│	ヘッダファイル
-│	└ xc/
-│			SHARP C Compiler PRO-68K ver2.1 のヘッダファイル
-│			Copyright 1990,91,92 SHARP/Hudson
+│  │  ヘッダファイル
+│  └ xc/
+│          SHARP C Compiler PRO-68K ver2.1 のヘッダファイル
+│          Copyright 1990,91,92 SHARP/Hudson
 ├ m68k-toolchain/
-│		クロスコンパイラのビルド結果
+│      クロスコンパイラのビルド結果
 ├ run68/
-│		X68K コマンドラインエミュレータ run68 Version 0.09
-│		originally programmed by Ｙｏｋｋｏさん、maintained by masamic さん Chack’n さん
+│      X68K コマンドラインエミュレータ run68 Version 0.09
+│      originally programmed by Ｙｏｋｋｏさん、maintained by masamic さん Chack’n さん
 ├ lib/
-│	│	ライブラリファイル
-│	├ xc/
-│	│		SHARP C Compiler PRO-68K ver2.1 のライブラリファイル
-│	│		Copyright 1990,91,92 SHARP/Hudson
-│	└ m68k_elf/
-│		│
-│		├ license/
-│		│		libgcc のライセンス情報とソースコードパッケージ
-│		└ m68000/ m68020/ m68040/ m68060/ 
-│				各種 CPU 構成ごとの libgcc.a
+│  │  ライブラリファイル
+│  ├ xc/
+│  │      SHARP C Compiler PRO-68K ver2.1 のライブラリファイル
+│  │      Copyright 1990,91,92 SHARP/Hudson
+│  └ m68k_elf/
+│      │
+│      ├ license/
+│      │      libgcc のライセンス情報とソースコードパッケージ
+│      └ m68000/ m68020/ m68040/ m68060/ 
+│              各種 CPU 構成ごとの libgcc.a
 ├ util/
-│	│
-│	└ x68k_gas2has.pl
-│			GAS to HAS コンバータ
-│			Copyright (C) 2022 Yosshin
+│  │
+│  └ x68k_gas2has.pl
+│          GAS to HAS コンバータ
+│          Copyright (C) 2022 Yosshin
 ├ x68k_bin/
-│	│	X68K のコマンドラインユーティリティ
-│	├ AR.X
-│	│		X68k Archiver v1.00
-│	│		Copyright 1987 SHARP/Hudson
-│	├ HAS060.X
-│	│		High-speed Assembler 68060 対応版 version 3.09+89
-│	│		原作者:Y.Nakamura さん、作者:M.Kamada さん
-│	└ hlk.r
-│			HLK evolution version 3.01+14
-│			原作者:SALT さん、作者:立花えり子さん
+│  │  X68K のコマンドラインユーティリティ
+│  ├ AR.X
+│  │      X68k Archiver v1.00
+│  │      Copyright 1987 SHARP/Hudson
+│  ├ HAS060.X
+│  │      High-speed Assembler 68060 対応版 version 3.09+89
+│  │      原作者:Y.Nakamura さん、作者:M.Kamada さん
+│  └ hlk.r
+│          HLK evolution version 3.01+14
+│          原作者:SALT さん、作者:立花えり子さん
 ├ build_m68k-toolchain.sh
-│		クロスコンパイラのビルドスクリプト
+│      クロスコンパイラのビルドスクリプト
 ├ build_x68k-libgcc.sh
-│		libgcc のビルドスクリプト
+│      libgcc のビルドスクリプト
 └ install_xdev68k-utils.sh
-		環境構築スクリプト
+        環境構築スクリプト
 ```
 
 # Hello World サンプルの実行
