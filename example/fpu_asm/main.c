@@ -22,23 +22,23 @@
 float fpu_acosf(float x)
 {
 	float value;
-    asm volatile (
-    	"facos.x %1,%0"
-    :	/* 出力 */	"=f"	(value)
-    :	/* 入力 */	"f"		(x)
-    );
-    return value;
+	asm volatile (
+		"facos.x %1,%0"
+	:	/* 出力 */	"=f"	(value)
+	:	/* 入力 */	"f"		(x)
+	);
+	return value;
 }
 
 double fpu_acos(double x)
 {
 	double value;
-    asm volatile (
-    	"facos.x %1,%0"
-    :	/* 出力 */	"=f"	(value)
-    :	/* 入力 */	"f"		(x)
-    );
-    return value;
+	asm volatile (
+		"facos.x %1,%0"
+	:	/* 出力 */	"=f"	(value)
+	:	/* 入力 */	"f"		(x)
+	);
+	return value;
 }
 
 int main(int argc, char *argv[]){
