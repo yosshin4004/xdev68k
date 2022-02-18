@@ -5,7 +5,7 @@
 
 xdev68k は、SHARP X68K シリーズ対応のクロス開発環境です。
 最新の gcc を用いて X68K 対応の実行ファイルが作成可能です。
-msys2+mingw、cygwin、WSL 等々の、exe ファイルが実行可能な Unix 互換環境で利用可能です。
+ホスト環境は、msys2+mingw、cygwin、WSL 等々の、exe ファイルが実行可能な Unix 互換環境が利用可能です。
 （推奨環境は msys2+mingw です。それ以外の環境は十分なテストが行われていません。）
 
 xdev68k は、
@@ -73,59 +73,59 @@ msys2 の場合、C:/msys64/home/ユーザー名/.bashrc に次のように記�
 xdev68k/
 │
 ├ archive/
-│  │  ダウンロードした外部ツールのアーカイブファイル
-│  ├ readme.txt
-│  │      原作者、入手元の情報、利用規約をまとめたテキスト
-│  └  *.zip *.lzh
-│          原本のアーカイブファイル
+│	│	ダウンロードした外部ツールのアーカイブファイル
+│	├ readme.txt
+│	│		原作者、入手元の情報、利用規約をまとめたテキスト
+│	└  *.zip *.lzh
+│			原本のアーカイブファイル
 ├ build_gcc/
-│      クロスコンパイラのソースコードとビルドにより生成された中間ファイル群
-│      このディレクトリ以下には 18 万近いファイルが存在する。削除しても問題ない。
+│		クロスコンパイラのソースコードとビルドにより生成された中間ファイル群
+│		このディレクトリ以下には 18 万近いファイルが存在する。削除しても問題ない。
 ├ example/
-│      クロス開発サンプルコード
+│		クロス開発サンプルコード
 ├ include/
-│  │  ヘッダファイル
-│  └ xc/
-│          SHARP C Compiler PRO-68K ver2.1 のヘッダファイル
-│          Copyright 1990,91,92 SHARP/Hudson
+│	│	ヘッダファイル
+│	└ xc/
+│			SHARP C Compiler PRO-68K ver2.1 のヘッダファイル
+│			Copyright 1990,91,92 SHARP/Hudson
 ├ m68k-toolchain/
-│      クロスコンパイラのビルド結果
+│		クロスコンパイラのビルド結果
 ├ run68/
-│      X68K コマンドラインエミュレータ run68 Version 0.09
-│      originally programmed by Ｙｏｋｋｏさん、maintained by masamic さん Chack’n さん
+│		X68K コマンドラインエミュレータ run68 Version 0.09
+│		originally programmed by Ｙｏｋｋｏさん、maintained by masamic さん Chack’n さん
 ├ lib/
-│  │  ライブラリファイル
-│  ├ xc/
-│  │      SHARP C Compiler PRO-68K ver2.1 のライブラリファイル
-│  │      Copyright 1990,91,92 SHARP/Hudson
-│  └ m68k_elf/
-│      │
-│      ├ license/
-│      │      libgcc のライセンス情報とソースコードパッケージ
-│      └ m68000/ m68020/ m68040/ m68060/ 
-│              各種 CPU 構成ごとの libgcc.a
+│	│	ライブラリファイル
+│	├ xc/
+│	│		SHARP C Compiler PRO-68K ver2.1 のライブラリファイル
+│	│		Copyright 1990,91,92 SHARP/Hudson
+│	└ m68k_elf/
+│		│
+│		├ license/
+│		│		libgcc のライセンス情報とソースコードパッケージ
+│		└ m68000/ m68020/ m68040/ m68060/ 
+│				各種 CPU 構成ごとの libgcc.a
 ├ util/
-│  │
-│  └ x68k_gas2has.pl
-│          GAS to HAS コンバータ
-│          Copyright (C) 2022 Yosshin
+│	│
+│	└ x68k_gas2has.pl
+│			GAS to HAS コンバータ
+│			Copyright (C) 2022 Yosshin
 ├ x68k_bin/
-│  │  X68K のコマンドラインユーティリティ
-│  ├ AR.X
-│  │      X68k Archiver v1.00
-│  │      Copyright 1987 SHARP/Hudson
-│  ├ HAS060.X
-│  │      High-speed Assembler 68060 対応版 version 3.09+89
-│  │      原作者:Y.Nakamura さん、作者:M.Kamada さん
-│  └ hlk.r
-│          HLK evolution version 3.01+14
-│          原作者:SALT さん、作者:立花えり子さん
+│	│	X68K のコマンドラインユーティリティ
+│	├ AR.X
+│	│		X68k Archiver v1.00
+│	│		Copyright 1987 SHARP/Hudson
+│	├ HAS060.X
+│	│		High-speed Assembler 68060 対応版 version 3.09+89
+│	│		原作者:Y.Nakamura さん、作者:M.Kamada さん
+│	└ hlk.r
+│			HLK evolution version 3.01+14
+│			原作者:SALT さん、作者:立花えり子さん
 ├ build_m68k-toolchain.sh
-│      クロスコンパイラのビルドスクリプト
+│		クロスコンパイラのビルドスクリプト
 ├ build_x68k-libgcc.sh
-│      libgcc のビルドスクリプト
+│		libgcc のビルドスクリプト
 └ install_xdev68k-utils.sh
-        環境構築スクリプト
+		環境構築スクリプト
 ```
 
 # Hello World サンプルの実行
@@ -137,81 +137,78 @@ bash コンソール上でディレクトリ xdev68k に移動し、以下を実
 cd example/hello
 make
 ```
-カレントディレクトリに X68K の実行ファイルである MAIN.X が得られます。
-これを、実機またはエミュレータ環境にコピーして実行します（makefile で自動化されていないので手動で行います）。
+カレントディレクトリに MAIN.X というファイルが生成されます。これが X68K の実行ファイルです。
+MAIN.X を、X68K 実機またはエミュレータ環境にコピーして実行します（makefile で自動化されていないので手動で行います）。
 X68K のコンソールに以下のように出力されれば成功です。
 ```bash
 hello world.
 ```
 
 
-# コンパイル～実行ファイル起動までの詳細手順
+# コンパイル～実行ファイル生成までの詳細
 
-例として、example.c をコンパイルし、
-X68K の実行ファイル example.x を生成する手順を示します。
+例として、先ほどの Hello World サンプルのソースファイル main.c を例に、
+コンパイルから実行ファイル生成までの流れを解説します。
 ビルド作業は bash コンソール上で行います。
 
 1. コンパイル  
-example.c をクロスコンパイラ m68k-elf-gcc でコンパイルします。
+main.c をクロスコンパイラ m68k-elf-gcc でコンパイルします。
 	```bash
-	# example.c をコンパイルする。
+	# main.c をコンパイルする。
 	# -I${XDEV68K_DIR}/include/xc : include パスの指定
 	# -Os : サイズ優先最適化
 	# -fcall-used-d2 -fcall-used-a2 : X68K と ABI を一致させるため d2 a2 を破壊可能レジスタに指定
 	# -Wno-builtin-declaration-mismatch : 警告の抑制
-	${XDEV68K_DIR}/m68k-toolchain/bin/m68k-elf-gcc example.c -I${XDEV68K_DIR}/include/xc -S -Os -m68000 -fcall-used-d2 -fcall-used-a2 -Wno-builtin-declaration-mismatch -o example.m68k-gas.s
+	${XDEV68K_DIR}/m68k-toolchain/bin/m68k-elf-gcc main.c -I${XDEV68K_DIR}/include/xc -S -Os -m68000 -fcall-used-d2 -fcall-used-a2 -Wno-builtin-declaration-mismatch -o main.m68k-gas.s
 	```
-	カレントディレクトリに example.m68k-gas.s が得られます。
+	カレントディレクトリにソースファイル main.m68k-gas.s が生成されます。
 
 2. アセンブラソースを変換  
-example.m68k-gas.s は、GAS 形式と呼ばれる書式で記述されています。
+main.m68k-gas.s は、GAS 形式と呼ばれる書式で記述されています。
 x68k_gas2has.pl を用いて、X68K で利用可能な HAS 形式に変換します。
 	```bash
 	# HAS.X がアセンブル可能な書式に変換する。
 	# -cpu オプション : 対象とする CPU の種類
 	# -inc オプション : ソース冒頭で include するファイル
-	perl ${XDEV68K_DIR}/util/x68k_gas2has.pl -i example.m68k-gas.s -o example.s -cpu 68000 -inc doscall.mac,iocscall.mac
+	perl ${XDEV68K_DIR}/util/x68k_gas2has.pl -i main.m68k-gas.s -o main.s -cpu 68000 -inc doscall.mac,iocscall.mac
 	```
-	カレントディレクトリに、HAS 形式の example.s が得られます。
+	カレントディレクトリに、HAS 形式のソースファイル main.s が生成されます。
 
 3. アセンブル  
-example.s を X68K 対応アセンブラ HAS060.X でアセンブルします。
+main.s を X68K 対応アセンブラ HAS060.X でアセンブルします。
 アセンブラの実行は、X68K コマンドラインエミュレータ run68 で行います。
 
 	```bash
-	# example.s をアセンブルする。
+	# main.s をアセンブルする。
 	# -u : 未定義シンボルを外部参照にする 
 	# -e : 外部参照オフセットをロングワードにする 
 	# -w0 : 警告の抑制
 	# -I${XDEV68K_DIR}/include/xc : include パスの指定
 	HAS="${XDEV68K_DIR}/run68/run68.exe ${XDEV68K_DIR}/x68k_bin/HAS060.X"
-	${HAS} -e -u -w0 -I${XDEV68K_DIR}/include/xc -o example.o example.s
+	${HAS} -e -u -w0 -I${XDEV68K_DIR}/include/xc -o main.o main.s
 	```
-	カレントディレクトリに example.o が得られます。
+	カレントディレクトリにオブジェクトファイル main.o が生成されます。
 
 4. リンク  
-example.o を X68K 対応リンカ hlk.r でリンクします。
+main.o を X68K 対応リンカ hlk.r でリンクします。
 リンカの実行は、X68K コマンドラインエミュレータ run68 で行います。
 本リポジトリに含まれている libgcc.a をリンクする必要があります。
 	```bash
-	# example.o をリンクする。
+	# main.o をリンクする。
 	# HLK に長いパス文字を与えることは難しいので、
 	# 回避策としてリンク対象ファイルを lk_tmp 以下にコピーし、
 	# 短い相対パスを用いてリンクを実行させる。
 	rm -rf lk_tmp
 	mkdir -p lk_tmp
-	cp example.o lk_tmp/
+	cp main.o lk_tmp/
 	cp ${XDEV68K_DIR}/lib/xc/CLIB.L lk_tmp/
 	cp ${XDEV68K_DIR}/lib/xc/FLOATFNC.L lk_tmp/
 	cp ${XDEV68K_DIR}/lib/m68k_elf/m68000/libgcc.a lk_tmp/
 	ls lk_tmp/ > lk_list.txt
 	HLK="${XDEV68K_DIR}/run68/run68.exe ${XDEV68K_DIR}/x68k_bin/hlk.r"
-	${HLK} -Llk_tmp/ -o example.x -i lk_list.txt
+	${HLK} -Llk_tmp/ -o MAIN.X -i lk_list.txt
 	```
-	カレントディレクトリに example.x が得られます。
-
-5. 実行  
-example.x を実機またはエミュレータ環境にコピーして起動してください。
+	カレントディレクトリに実行ファイル MAIN.X が生成されます。
 
 
 # GAS 形式 → HAS 形式変換例
@@ -283,7 +280,7 @@ m68k-elf-gcc で生成したコードには、これを必ずリンクする必�
 
 >:warning:
 >必ず xdev68k/lib/m68k_elf 以下の libgcc.a を利用してください。
->xdev68k/m68k-toolchain 以下の libgcc.a は X68K では利用できません。
+>xdev68k/m68k-toolchain 以下の libgcc.a は X68K のオブジェクトファイルとリンクできません。
 >従来の X68K 移植版 gcc に含まれた libgcc.a もリンク可能ですが、互換性が無いため動作保証はありません。
 
 libgcc.a は複数種類あり、アプリケーションのビルド設定に合致するものを選択して利用します。
@@ -353,30 +350,31 @@ The building process is completed successfully.
 	関数の戻り値を d0 レジスタのみに格納する configure でビルドされた gcc を利用する必要があります。
 	「環境構築手順」で示したとおり、
 	build_m68k-toolchain.sh を利用していれば問題ありませんが、
-	バイナリ配布されているビルド済み gcc（例えば Linux のディストリビューターが提供している m68k-linux-gnu-gcc のようなもの）を利用する場合は
-	注意が必要です。
+	バイナリ配布されているビルド済み gcc
+	（例えば Linux のディストリビューターが提供している m68k-linux-gnu-gcc のようなもの）
+	を利用する場合は注意が必要です。
 
-* long long 型（回避不能だが、影響を受けるケースは極めて稀）  
+* long long 型（回避不能）  
 	64 bit 整数型である long long 型のバイナリ表現が、
 	従来の X68K 対応コンパイラと m68k-elf-gcc とで異なります。
 	```
 	従来の X68K 対応コンパイラ : 下位 32bit、上位 32bit の順に格納（つまりビッグエンディアン配置でない）  
 	m68k-elf-gcc               : 上位 32bit、下位 32bit の順に格納（厳密にビッグエンディアン配置）  
 	```
-	この問題の回避策はありませんが、
-	過去のソフトウェア資産上に long long 型が出現することは極めて稀であり、
-	問題になることはほぼありません。
+	現状ではこの問題の回避策はありません。
+	（幸い、過去のソフトウェア資産上に long long 型が出現することは少なく、問題に発展することは稀。
+	少なくとも、SHARP C Compiler PRO-68K のヘッダには出現しない。）
 
-* long double 型（回避不能だが、影響を受けるケースは極めて稀）  
+* long double 型（回避不能）  
 	拡張倍精度浮動小数型である long double 型のバイナリ表現が、
 	従来の X68K 対応コンパイラと m68k-elf-gcc とで異なります。
 	```
 	従来の X68K 対応コンパイラ : long double ＝ 8 bytes 型（double 型互換）  
 	m68k-elf-gcc               : long double ＝ 12 bytes 型  
 	```
-	この問題の回避策はありませんが、
-	過去のソフトウェア資産上に long double 型が出現することは極めて稀であり、
-	問題になることはまずありません。
+	現状ではこの問題の回避策はありません。
+	（幸い、過去のソフトウェア資産上に long double 型が出現することは少なく、問題に発展することは稀。
+	少なくとも、SHARP C Compiler PRO-68K のヘッダには出現しない。）
 
 ## 2. NaN Inf 互換性問題
 最新の m68k-elf-gcc では、NaN や Inf のバイナリ表現は一般的なコンパイラ上での扱いと同様です。
@@ -409,6 +407,15 @@ NaN (0.0f/0.0f を計算させて生成)
 後者では NaN Inf が正しく表示されていません。
 
 
+## 3. LIBC シンボル衝突問題
+X68K には ANSI-C 対応の基本ライブラリである LIBC（作者:Project LIBC Group）が存在しました。
+
+LIBC には、
+その当時の X68K 対応 gcc 付属の ligbcc に含まれていなかった一部の数学関数（___cmpdf2）が収録されていました。
+これが、最新の m68k-elf-gcc 対応 libgcc では libgcc 側に収録されているため、
+リンク時にシンボルが衝突します。
+
+
 # 推奨される利用スタイル
 
 以上を踏まえて、m68k-elf-gcc の推奨される利用スタイルをまとめます。
@@ -424,8 +431,12 @@ NaN (0.0f/0.0f を計算させて生成)
 
 現状多くの制限があります。
 
-* GAS 形式アセンブラコードは gcc が出力する形式のみに対応  
-	x68k_gas2has.pl が認識できるのは、GAS 形式アセンブラコードの記述方法のうち、gcc が出力する可能性のあるもののみです。
+* c++ には対応していません  
+	現状では未テストです。
+	c++ 対応のランタイムライブラリが未整備のため、実行ファイルが生成できません。
+
+* GAS 形式アセンブラコードは gcc が出力する書式のみに対応  
+	x68k_gas2has.pl が認識できるのは、GAS 形式アセンブラコードの記述方法のうち、gcc が出力する可能性のある書式のみです。
 
 * inline asm 内に記述可能なアセンブラコードの制限  
 	x68k_gas2has.pl はマクロ制御命令（HAS の macro local endm exitm rept irp irpc など）の全ての仕様に対応していません。
@@ -441,7 +452,7 @@ NaN (0.0f/0.0f を計算させて生成)
 環境構築時のエラーや、
 アセンブラソース変換中のエラーなど、
 何かしらの問題に遭遇した場合は、
-エラーを起こした該当行の情報等を添えてご報告いただけるとありがたいです。
+エラーを起こした該当行の情報等を添えてご報告いただけますと助かります。（全ての問題を対処している余裕は無いかもしれませんが。）
 
 
 # ライセンス
