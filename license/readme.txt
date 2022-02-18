@@ -70,7 +70,7 @@
 ・newlib
 
 	オリジナルアーカイブファイル
-		newlib-3.3.0.tar.gz
+		build_gcc/download/newlib-3.3.0.tar.gz
 
 	xdev68k 上のインストール先
 		xdev68k/m68k-toolchain/
