@@ -22,9 +22,6 @@ HLK = $(RUN68) ${XDEV68K_DIR}/x68k_bin/hlk.r
 TARGET_FILE = MAIN.X
 
 # ヘッダ検索パス
-# m68k-elf-gcc のヘッダを検索対象にする場合は、
-#	-I${XDEV68K_DIR}/m68k-toolchain/m68k-elf/include 
-# を追加する。SHARP XC コンパイラのヘッダとコンフリクトするので注意。
 INCLUDE_FLAGS = -I${XDEV68K_DIR}/include/xc
 
 

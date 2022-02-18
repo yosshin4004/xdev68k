@@ -28,7 +28,7 @@ int main(int argc, char *argv[]){
 		static char s_string[] = "hello world. (by puts())";
 		asm volatile (
 			"	move.l	%0,-(sp)\n"
-			"	jsr		_puts\n"			/* X68K では外部シンボルを参照する時は _ を付ける */
+			"	jsr		_puts\n"			/* 外部シンボルを参照する時は _ を付ける */
 			"	addq.l	#4,sp\n"
 		:	/* 出力 */
 		:	/* 入力 */	"irm" (&s_string)	/* 引数 %0 */
