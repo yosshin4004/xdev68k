@@ -91,8 +91,9 @@ ${LHA} -x -w=${ARCHIVE%.*} ${ARCHIVE}
 
 # インストール
 mkdir -p ../x68k_bin
+mkdir -p ../archive/download
 cp --preserve=timestamps ${ARCHIVE%.*}/HAS060.X ../x68k_bin/
-cp --preserve=timestamps ${ARCHIVE} ../archive/
+cp --preserve=timestamps ${ARCHIVE} ../archive/download
 
 
 #------------------------------------------------------------------------------
@@ -109,8 +110,9 @@ unzip -x ${ARCHIVE}
 
 # インストール
 mkdir -p ../x68k_bin
+mkdir -p ../archive/download
 cp --preserve=timestamps hlk-3.01+14/hlk.r ../x68k_bin/
-cp --preserve=timestamps ${ARCHIVE} ../archive/
+cp --preserve=timestamps ${ARCHIVE} ../archive/download
 
 
 #------------------------------------------------------------------------------
@@ -160,12 +162,13 @@ rm -rf ../lib/xc
 mkdir -p ../include/xc
 mkdir -p ../lib/xc
 mkdir -p ../x68k_bin
+mkdir -p ../archive/download
 cp -r XC2102/INCLUDE/* ../include/xc
 cp -r XC2102/LIB/* ../lib/xc
 cp -r XC2101/BIN/AR.X ../x68k_bin
-cp --preserve=timestamps XC2101.LZH ../archive/
-cp --preserve=timestamps XC2102.LZH ../archive/
-cp --preserve=timestamps XC2102A.LZH ../archive/
+cp --preserve=timestamps XC2101.LZH ../archive/download
+cp --preserve=timestamps XC2102.LZH ../archive/download
+cp --preserve=timestamps XC2102A.LZH ../archive/download
 
 
 #------------------------------------------------------------------------------
