@@ -5,7 +5,7 @@
 
 xdev68k は、SHARP X68K シリーズ対応のクロス開発環境です。
 最新の gcc を用いて X68K 対応の実行ファイルが作成可能です。
-ホスト環境は、msys2+mingw、cygwin 等々の、windows exe ファイルが実行可能な Unix 互換環境が利用可能です。
+ホスト環境は、msys2+mingw cygwin 等々の windows exe ファイルが扱える Unix 互換環境が利用可能です。
 
 xdev68k は、
 旧プロジェクトである x68k_gcc_has_converter（ https://github.com/yosshin4004/x68k_gcc_has_converter ）から発展したものです。
@@ -371,7 +371,7 @@ ABI とは Application Binary Interface の略で、
 	（例えば Linux のディストリビューターが提供している m68k-linux-gnu-gcc のようなもの）
 	を利用する場合は注意が必要です。
 
-* long long 型（回避不能）  
+* long long 型のエンディアンの違い（回避不能）  
 	64 bit 整数型である long long 型のバイナリ表現が、
 	従来の X68K 対応コンパイラと m68k-elf-gcc とで異なります。
 	```
@@ -382,7 +382,7 @@ ABI とは Application Binary Interface の略で、
 	（幸い、過去のソフトウェア資産上に long long 型が出現することは少なく、問題に発展することは稀。
 	少なくとも、SHARP C Compiler PRO-68K のヘッダには出現しない。）
 
-* long double 型（回避不能）  
+* long double 型のビット幅の違い（回避不能）  
 	拡張倍精度浮動小数型である long double 型のバイナリ表現が、
 	従来の X68K 対応コンパイラと m68k-elf-gcc とで異なります。
 	```
