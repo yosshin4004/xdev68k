@@ -117,7 +117,7 @@
 ・C Compiler PRO-68K ver2.1（XC）
 
 	オリジナルアーカイブファイル
-		xdev68k/archive/
+		xdev68k/archive/download/
 			XC2101.LZH
 			XC2102.LZH
 
@@ -145,7 +145,7 @@
 ・無償公開された XC システムディスク 2 の修正パッチ
 
 	オリジナルアーカイブファイル
-		xdev68k/archive/
+		xdev68k/archive/download/
 			XC2102A.LZH
 
 	xdev68k 上のインストール先
@@ -167,7 +167,7 @@
 ・High-speed Assembler 68060 対応版 version 3.09+89
 
 	オリジナルアーカイブファイル
-		xdev68k/archive/
+		xdev68k/archive/download/
 			HAS06089.LZH
 
 	xdev68k 上のインストール先
@@ -191,7 +191,7 @@
 ・HLK evolution version 3.01+14
 
 	オリジナルアーカイブファイル
-		xdev68k/archive/
+		xdev68k/archive/download/
 			HLKEV14.ZIP
 
 	xdev68k 上のインストール先
