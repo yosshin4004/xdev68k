@@ -5,7 +5,7 @@
 
 xdev68k は、SHARP X68K シリーズ対応のクロス開発環境です。
 最新の gcc を用いて X68K 対応の実行ファイルが作成可能です。
-ホスト環境は、msys2+mingw、cygwin 等々の、exe ファイルが実行可能な Unix 互換環境が利用可能です。
+ホスト環境は、msys2+mingw、cygwin 等々の、windows exe ファイルが実行可能な Unix 互換環境が利用可能です。
 
 xdev68k は、
 クロス開発環境をダウンロード＆ビルド＆インストールするスクリプトと、
@@ -19,7 +19,7 @@ xdev68k は、
 # 環境構築手順
 
 1. Unix 互換環境のインストールと環境構築（作業時間 : 1 時間程度）  
-msys2+mingw、cygwin 等々の、exe ファイルが実行可能な Unix 互換環境を用意します。
+msys2+mingw、cygwin 等々の Unix 互換環境を用意します。
 推奨環境は msys2+mingw です（cygwin でも恐らく問題なく動作します。現状 WSL は後述の理由から非推奨です）。
 msys2 のインストーラは https://www.msys2.org/ から入手可能です。
 gcc や perl 等、基本的な開発ツールをインストールしておきます。
