@@ -14,8 +14,8 @@ int main(int argc, char *argv[]){
 		条件付きアセンブリ
 	*/
 	{
-		static char s_string1[] = "FLAG is 1.\r\n";
-		static char s_string2[] = "FLAG is not 1.\r\n";
+		static const char s_string1[] = "FLAG is 1.\r\n";
+		static const char s_string2[] = "FLAG is not 1.\r\n";
 		asm volatile (
 			"FLAG:=1\n"							/* ユーザー定義シンボル */
 			"	.if	FLAG==1\n"
