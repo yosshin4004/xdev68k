@@ -5,8 +5,7 @@
 
 xdev68k は、SHARP X68K シリーズ対応のクロス開発環境です。
 最新の gcc を用いて X68K 対応の実行ファイルが作成可能です。
-ホスト環境は、msys2+mingw、cygwin、WSL 等々の、exe ファイルが実行可能な Unix 互換環境が利用可能です。
-（推奨環境は msys2+mingw です。それ以外の環境は十分なテストが行われていません。）
+ホスト環境は、msys2+mingw、cygwin 等々の、exe ファイルが実行可能な Unix 互換環境が利用可能です。
 
 xdev68k は、
 クロス開発環境をダウンロード＆ビルド＆インストールするスクリプトと、
@@ -20,8 +19,8 @@ xdev68k は、
 # 環境構築手順
 
 1. Unix 互換環境のインストールと環境構築（作業時間 : 1 時間程度）  
-msys2+mingw、cygwin、WSL 等々の、exe ファイルが実行可能な Unix 互換環境を用意します。
-推奨環境は msys2+mingw です。
+msys2+mingw、cygwin 等々の、exe ファイルが実行可能な Unix 互換環境を用意します。
+推奨環境は msys2+mingw です（cygwin でも恐らく問題なく動作します。現状 WSL は後述の理由から非推奨です）。
 msys2 のインストーラは https://www.msys2.org/ から入手可能です。
 gcc や perl 等、基本的な開発ツールをインストールしておきます。
 msys2 の場合は以下のように実行します。
@@ -436,8 +435,7 @@ LIBC には、
 
 現状多くの制限があります。
 
-* c++ には対応していません  
-	現状では未テストです。
+* c++ には未対応  
 	c++ 対応のランタイムライブラリが未整備のため、実行ファイルが生成できません。
 
 * GAS 形式アセンブラコードは gcc が出力する書式のみに対応  
@@ -446,6 +444,10 @@ LIBC には、
 * inline asm 内に記述可能なアセンブラコードの制限  
 	x68k_gas2has.pl はマクロ制御命令（HAS の macro local endm exitm rept irp irpc など）の全ての仕様に対応していません。
 	特殊記号（HAS の '&' '!' , '<'～'>' , '%' など）が出現するとパースエラーになります。
+
+* ホスト環境として WSL が利用できない  
+	xdev68k のホスト環境として、現状では WSL は利用できません。
+	これは run68 が正常動作しないためです。
 
 
 # 絶賛テスト中
@@ -472,6 +474,12 @@ Free Software Foundation の成果物、
 また、xdev68k で利用させていただいた X68K 関連ソフトウェア資産の多くは、
 X68000 LIBRARY http://www.retropc.net/x68000/ からダウンロードさせて頂いています。
 HAS060 の作者でもあり、アーカイブを保守されている X68000 LIBRARY の管理者 M.Kamada さんに感謝いたします。
+
+install_xdev68k-utils.sh の *.lhz アーカイブ展開処理で、
+LHa for UNIX with Autoconf https://github.com/jca02266/lha/ 
+を利用させて頂いています。
+LHa for UNIX 原作者の Tsugio Okamoto 氏、
+LHa for UNIX with Autoconf 作成者 Koji Arai 氏に感謝いたします。
 
 
 # ライセンス
