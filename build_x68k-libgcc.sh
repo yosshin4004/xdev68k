@@ -615,9 +615,9 @@ done
 #-----------------------------------------------------------------------------
 ROOT_DIR="${PWD}"
 cd ${LIBGCC_BUILD_DIR}/src/
-tar -zcvf src.tar.gz ${GCC_ABI_IN_X68K}/
-mkdir -p ${XDEV68K_DIR}/lib/${GCC_ABI_IN_X68K}/license/
-mv src.tar.gz ${XDEV68K_DIR}/lib/${GCC_ABI_IN_X68K}/license/src.tar.gz
+tar -zcvf libgcc_src.tar.gz ${GCC_ABI_IN_X68K}/
+mkdir -p ${XDEV68K_DIR}/archive/
+mv libgcc_src.tar.gz ${XDEV68K_DIR}/archive/libgcc_src.tar.gz
 cd ${ROOT_DIR}
 
 
