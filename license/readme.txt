@@ -215,11 +215,17 @@
 
 ・上記以外
 
+	ファイル
+		xdev68k/util/x68k_gas2has.pl
+		xdev68k/build_m68k-toolchain.sh
+		xdev68k/build_x68k-libgcc.sh
+		xdev68k/install_xdev68k-utils.sh
+
 	作者
 		Yosshin
 
 	入手元
-		https://github.com/yosshin4004
+		https://github.com/yosshin4004/xdev68k/
 
 	利用規約
 		Apache License, Version 2.0 が適用されます。
