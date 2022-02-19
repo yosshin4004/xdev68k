@@ -8,10 +8,6 @@ xdev68k は、SHARP X68K シリーズ対応のクロス開発環境です。
 ホスト環境は、msys2+mingw、cygwin 等々の、windows exe ファイルが実行可能な Unix 互換環境が利用可能です。
 
 xdev68k は、
-クロス開発環境をダウンロード＆ビルド＆インストールするスクリプトと、
-補助ツールで構成されています。
-
-xdev68k は、
 旧プロジェクトである x68k_gcc_has_converter（ https://github.com/yosshin4004/x68k_gcc_has_converter ）から発展したものです。
 旧プロジェクトは終了し、本プロジェクトに統合されました。
 
@@ -19,11 +15,11 @@ xdev68k は、
 # 環境構築手順
 
 1. Unix 互換環境のインストールと環境構築（作業時間 : 1 時間程度）  
-msys2+mingw、cygwin 等々の Unix 互換環境を用意します。
-推奨環境は msys2+mingw です（cygwin でも恐らく問題なく動作します。現状 WSL は後述の理由から非推奨です）。
-msys2 のインストーラは https://www.msys2.org/ から入手可能です。
-gcc や perl 等、基本的な開発ツールをインストールしておきます。
-msys2 の場合は以下のように実行します。
+	msys2+mingw、cygwin 等々の Unix 互換環境を用意します。
+	推奨環境は msys2+mingw です（cygwin でも恐らく問題なく動作します。現状 WSL は後述の理由から非推奨です）。
+	msys2 のインストーラは https://www.msys2.org/ から入手可能です。
+	gcc や perl 等、基本的な開発ツールをインストールしておきます。
+	msys2 の場合は以下のように実行します。
 	```bash
 	pacman -S base-devel
 	pacman -S mingw-w64-i686-toolchain
@@ -31,12 +27,12 @@ msys2 の場合は以下のように実行します。
 	```
 
 2. xdev68k を取得（作業時間 : 1 分程度）  
-本リポジトリを clone します。
-以降、ディレクトリ xdev68k に clone された前提で説明を進めます。
+	本リポジトリを clone します。
+	以降、ディレクトリ xdev68k に clone された前提で説明を進めます。
 
 3. クロスコンパイラ作成（作業時間 : 数時間）  
-十分なディスク容量（10GB 程度）があることを確認した上で、
-ホスト環境の bash コンソール上でディレクトリ xdev68k に移動し、以下のコマンドを実行します。
+	十分なディスク容量（10GB 程度）があることを確認した上で、
+	ホスト環境の bash コンソール上でディレクトリ xdev68k に移動し、以下のコマンドを実行します。
 	```bash
 	build_m68k-toolchain.sh
 	```
@@ -47,7 +43,21 @@ msys2 の場合は以下のように実行します。
 	```
 
 4. ユーティリティのインストール（作業時間 : 5 分程度）  
-ホスト環境の bash コンソール上で、先ほどと同じディレクトリ（xdev68k）から以下のコマンドを実行します。
+	ここの操作では、以下のファイルが（自動で）ダウンロードまたはインストールされます。
+	対象ファイルの詳細については、以下の URL でご確認頂けます。
+
+	* C Compiler PRO-68K ver2.1（XC） システムディスク 1 & 2  
+	http://retropc.net/x68000/software/sharp/xc21/  
+	* 無償公開された XC システムディスク 2 の修正パッチ  
+	http://retropc.net/x68000/software/sharp/xc21/xc2102a/  
+	* HAS060.X  
+	http://retropc.net/x68000/software/develop/as/has060/  
+	* HLK evolution  
+	http://retropc.net/x68000/software/develop/lk/hlkev/  
+	* X68K コマンドラインエミュレータ run68 Version 0.09  
+	http://pws.prserv.net/run68/ （消失）  
+
+	ホスト環境の bash コンソール上で、先ほどと同じディレクトリ（xdev68k）から以下のコマンドを実行します。
 	```bash
 	install_xdev68k-utils.sh
 	```
@@ -58,11 +68,9 @@ msys2 の場合は以下のように実行します。
 	Please set the current directory path to environment variable XDEV68K_DIR.
 	```
 
-
-
 5. 環境変数設定（作業時間 : 1 分程度）  
-環境変数 XDEV68K_DIR に、ディレクトリ xdev68k のフルパスを設定します。
-msys2 の場合、C:/msys64/home/ユーザー名/.bashrc に次のように記述しておくと良いでしょう。
+	環境変数 XDEV68K_DIR に、ディレクトリ xdev68k のフルパスを設定します。
+	msys2 の場合、C:/msys64/home/ユーザー名/.bashrc に次のように記述しておくと良いでしょう。
 	```bash
 	export XDEV68K_DIR=ディレクトリxdev68kのフルパス
 	```
@@ -74,11 +82,15 @@ msys2 の場合、C:/msys64/home/ユーザー名/.bashrc に次のように記�
 xdev68k/
 │
 ├ archive/
-│	│	ダウンロードした外部ツールのアーカイブファイル
+│	│	利用させて頂いたソフトウェアのアーカイブファイル
 │	├ readme.txt
 │	│		原作者、入手元の情報、利用規約をまとめたテキスト
-│	└  *.zip *.lzh
-│			原本のアーカイブファイル
+│	├ libgcc_src.tar.gz
+│	│		libgcc のソースコード
+│	├ *.zip *.lzh
+│	│		原本のアーカイブファイル
+│	└ download/
+│			ダウンロードしたソフトウェアのアーカイブファイル
 ├ build_gcc/
 │		クロスコンパイラのソースコードとビルドにより生成された中間ファイル群
 │		このディレクトリ以下には 18 万近いファイルが存在する。削除しても問題ない。
@@ -88,39 +100,32 @@ xdev68k/
 │	│	ヘッダファイル
 │	└ xc/
 │			SHARP C Compiler PRO-68K ver2.1 のヘッダファイル
-│			Copyright 1990,91,92 SHARP/Hudson
 ├ m68k-toolchain/
 │		クロスコンパイラのビルド結果
 ├ run68/
 │		X68K コマンドラインエミュレータ run68 Version 0.09
-│		originally programmed by Ｙｏｋｋｏさん、maintained by masamic さん Chack’n さん
 ├ lib/
 │	│	ライブラリファイル
 │	├ xc/
 │	│		SHARP C Compiler PRO-68K ver2.1 のライブラリファイル
-│	│		Copyright 1990,91,92 SHARP/Hudson
 │	└ m68k_elf/
 │		│
 │		├ license/
-│		│		libgcc のライセンス情報とソースコードパッケージ
+│		│		libgcc のライセンス情報
 │		└ m68000/ m68020/ m68040/ m68060/ 
 │				各種 CPU 構成ごとの libgcc.a
 ├ util/
 │	│
 │	└ x68k_gas2has.pl
 │			GAS to HAS コンバータ
-│			Copyright (C) 2022 Yosshin
 ├ x68k_bin/
 │	│	X68K のコマンドラインユーティリティ
 │	├ AR.X
 │	│		X68k Archiver v1.00
-│	│		Copyright 1987 SHARP/Hudson
 │	├ HAS060.X
 │	│		High-speed Assembler 68060 対応版 version 3.09+89
-│	│		原作者:Y.Nakamura さん、作者:M.Kamada さん
 │	└ hlk.r
 │			HLK evolution version 3.01+14
-│			原作者:SALT さん、作者:立花えり子さん
 ├ build_m68k-toolchain.sh
 │		クロスコンパイラのビルドスクリプト
 ├ build_x68k-libgcc.sh
@@ -153,7 +158,7 @@ hello world.
 ビルド作業は、ホスト環境の bash コンソール上で行います。
 
 1. コンパイル  
-main.c をクロスコンパイラ m68k-elf-gcc でコンパイルします。
+	main.c をクロスコンパイラ m68k-elf-gcc でコンパイルします。
 	```bash
 	# main.c をコンパイルする。
 	# -I${XDEV68K_DIR}/include/xc : include パスの指定
@@ -165,8 +170,8 @@ main.c をクロスコンパイラ m68k-elf-gcc でコンパイルします。
 	カレントディレクトリにソースファイル main.m68k-gas.s が生成されます。
 
 2. アセンブラソースを変換  
-main.m68k-gas.s は、GAS 形式と呼ばれる書式で記述されています。
-x68k_gas2has.pl を用いて、X68K で利用可能な HAS 形式に変換します。
+	main.m68k-gas.s は、GAS 形式と呼ばれる書式で記述されています。
+	x68k_gas2has.pl を用いて、X68K で利用可能な HAS 形式に変換します。
 	```bash
 	# HAS.X がアセンブル可能な書式に変換する。
 	# -cpu オプション : 対象とする CPU の種類
@@ -176,9 +181,8 @@ x68k_gas2has.pl を用いて、X68K で利用可能な HAS 形式に変換しま
 	カレントディレクトリに、HAS 形式のソースファイル main.s が生成されます。
 
 3. アセンブル  
-main.s を X68K 対応アセンブラ HAS060.X でアセンブルします。
-アセンブラの実行は、X68K コマンドラインエミュレータ run68 で行います。
-
+	main.s を X68K 対応アセンブラ HAS060.X でアセンブルします。
+	アセンブラの実行は、X68K コマンドラインエミュレータ run68 で行います。
 	```bash
 	# main.s をアセンブルする。
 	# -u : 未定義シンボルを外部参照にする 
@@ -191,9 +195,9 @@ main.s を X68K 対応アセンブラ HAS060.X でアセンブルします。
 	カレントディレクトリにオブジェクトファイル main.o が生成されます。
 
 4. リンク  
-main.o を X68K 対応リンカ hlk.r でリンクします。
-リンカの実行は、X68K コマンドラインエミュレータ run68 で行います。
-本リポジトリに含まれている libgcc.a をリンクする必要があります。
+	main.o を X68K 対応リンカ hlk.r でリンクします。
+	リンカの実行は、X68K コマンドラインエミュレータ run68 で行います。
+	本リポジトリに含まれている libgcc.a をリンクする必要があります。
 	```bash
 	# main.o をリンクする。
 	# HLK に長いパス文字を与えることは難しいので、
@@ -494,6 +498,6 @@ libgcc.a をアプリケーションにリンクして利用する場合は、�
 
 * install_xdev68k-utils.sh によりダウンロードまたはインストールされたファイル群  
 それぞれにライセンスと配布規定が存在します。
-詳細は xdev68k/archive/readme.txt を参照してください。
+詳細は xdev68k/license/readme.txt を参照してください。
 
 
