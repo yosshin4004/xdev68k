@@ -46,16 +46,21 @@ xdev68k は、
 	ここの操作では、以下のファイルが（自動で）ダウンロードまたはインストールされます。
 	対象ファイルの詳細については、以下の URL でご確認頂けます。
 
-	* C Compiler PRO-68K ver2.1（XC） システムディスク 1 & 2  
-	http://retropc.net/x68000/software/sharp/xc21/  
+	* C Compiler PRO-68K ver2.1（XC）システムディスク 1 & 2  
+	http://retropc.net/x68000/software/sharp/xc21/
+	（ファイル名 XC2101.LZH, XC2102.LZH）
 	* 無償公開された XC システムディスク 2 の修正パッチ  
-	http://retropc.net/x68000/software/sharp/xc21/xc2102a/  
+	http://retropc.net/x68000/software/sharp/xc21/xc2102a/
+	（ファイル名 XC2102A.LZH）
 	* HAS060.X  
-	http://retropc.net/x68000/software/develop/as/has060/  
+	http://retropc.net/x68000/software/develop/as/has060/
+	（ファイル名 HAS06089.LZH）
 	* HLK evolution  
-	http://retropc.net/x68000/software/develop/lk/hlkev/  
+	http://retropc.net/x68000/software/develop/lk/hlkev/
+	（ファイル名 HLKEV14.ZIP）
 	* X68K コマンドラインエミュレータ run68 Version 0.09  
-	http://pws.prserv.net/run68/ （消失）  
+	https://sourceforge.net/projects/run68/
+	（ファイル名 run68bin-009a-20090920.zip）
 
 	ホスト環境の bash コンソール上で、先ほどと同じディレクトリ（xdev68k）から以下のコマンドを実行します。
 	```bash
