@@ -37,21 +37,23 @@ msys2 の場合は以下のように実行します。
 
 3. クロスコンパイラ作成（作業時間 : 数時間）  
 十分なディスク容量（10GB 程度）があることを確認した上で、
-ホスト環境の bash コンソール上でディレクトリ xdev68k に移動し、
-build_m68k-toolchain.sh
-を実行します。
-xdev68k/m68k-toolchain 以下に、Motorola 680x0 シリーズ対応のクロスコンパイラである m68k-elf-gcc が構築されます。
-以下のメッセージがコンソールに出力されれば完了です。
+ホスト環境の bash コンソール上でディレクトリ xdev68k に移動し、以下のコマンドを実行します。
+	```bash
+	build_m68k-toolchain.sh
+	```
+	xdev68k/m68k-toolchain 以下に、Motorola 680x0 シリーズ対応のクロスコンパイラである m68k-elf-gcc が構築されます。
+	以下のメッセージがコンソールに出力されれば完了です。
 	```
 	The building process is completed successfully.
 	```
 
 4. ユーティリティのインストール（作業時間 : 5 分程度）  
-続けて、
-install_xdev68k-utils.sh
-を実行します。
-クロスコンパイル環境で必要になるユーティリティの実行ファイル、ヘッダおよびライブラリがインストールされます。
-以下のメッセージがコンソールに出力されれば完了です。
+ホスト環境の bash コンソール上で、先ほどと同じディレクトリ（xdev68k）から以下のコマンドを実行します。
+	```bash
+	install_xdev68k-utils.sh
+	```
+	クロスコンパイル環境で必要になるユーティリティの実行ファイル、ヘッダおよびライブラリがインストールされます。
+	以下のメッセージがコンソールに出力されれば完了です。
 	```
 	The installation process is completed successfully.
 	Please set the current directory path to environment variable XDEV68K_DIR.
