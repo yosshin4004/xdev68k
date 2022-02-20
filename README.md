@@ -24,9 +24,12 @@ xdev68k は、
 	pacman -S base-devel
 	pacman -S mingw-w64-i686-toolchain
 	pacman -S mingw-w64-x86_64-toolchain
+	pacman -S autoconf-wrapper
+	pacman -S msys/autoconf
+	pacman -S msys/automake-wrapper
 	```
-	以降 msys2 の bash コンソール起動は、スタートメニューの MSYS2 MinGW 64bit のアイコンから行います。
-	ここから起動しないと、ネイティブのコンパイラ環境にパスが通った状態にならず、クロスコンパイル構築がうまく行きません。  
+	以降 msys の bash コンソール起動は、スタートメニューの MSYS2 MinGW 64bit のアイコンから行います。
+	ここから起動しないと、ネイティブのコンパイラ環境にパスが通った状態にならず、クロスコンパイラ構築に失敗します。  
 	![screen_shot_gfx](https://user-images.githubusercontent.com/11882108/154822283-4b208ca4-8a69-4b34-a160-5b7845cbaa2a.png)
 
 2. xdev68k を取得（作業時間 : 1 分程度）  
