@@ -25,11 +25,17 @@ static inline float my_fadd(float a, float b) {
 	register float reg_d0 asm ("d0") = a;
 	register float reg_d1 asm ("d1") = b;
 	asm volatile (
-			".dc.w	0xfe5b\n"		/* 0xfe5b = __FADD */
-	:	/* o—Í */	"=d" (reg_d0),	/* out %0 */	/* FE call 0xfe5b ‚Í d0/d1 ‚ÉŒ‹‰Ê‚ğ•Ô‚· */
-					"=d" (reg_d1)	/* out %1 */	/* FE call 0xfe5b ‚Í d0/d1 ‚ÉŒ‹‰Ê‚ğ•Ô‚· */
-	:	/* “ü—Í */	"irm" (reg_d0),	/* in %2 */		/* FE call 0xfe5b ‚Í d0.l ‚ğ”í‰ÁZ”‚Æ‚µ‚Äó‚¯æ‚é */
-					"irm" (reg_d1)	/* in %3 */		/* FE call 0xfe5b ‚Í d1.l ‚ğ‰ÁZ”‚Æ‚µ‚Äó‚¯æ‚é */
+			/*
+				FE call 0xfe5b (__FADD) ‚ÍA
+				d0.l ‚ğ”í‰ÁZ”‚Æ‚µ‚Äó‚¯æ‚éB
+				d1.l ‚ğ‰ÁZ”‚Æ‚µ‚Äó‚¯æ‚éB
+				d0/d1 ‚ÉŒ‹‰Ê‚ğ•Ô‚·B
+			*/
+			".dc.w	0xfe5b\n"
+	:	/* o—Í */	"+r" (reg_d0),	/* in out %0 */
+					"+r" (reg_d1)	/* in out %1 */
+	:	/* “ü—Í */
+	:	/* ”j‰ó */
 	);
 	return reg_d0;
 }
