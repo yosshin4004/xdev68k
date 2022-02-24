@@ -1248,10 +1248,10 @@ sub apply_converter {
 			$line_num++;
 			$g_src_location = $input_file_name . ':' . $line_num;
 
-			# 行末改行の除去
+			# 行末スペースと改行の除去
 			#	CR LF なテキストを入力した場合、chomp() では行末改行が
 			#	除去しきれない。正規表現で除去する。
-			$line =~ s/[\r\n]*$//g;
+			$line =~ s/\s*[\r\n]*$//g;
 
 			# 修正前の行
 			my $orig = $line;
