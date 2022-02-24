@@ -27,10 +27,13 @@ INCLUDE_FLAGS = -I${XDEV68K_DIR}/include/xc
 
 # コンパイルフラグ
 COMMON_FLAGS = -m68000 -Os $(INCLUDE_FLAGS)
-CFLAGS = $(COMMON_FLAGS) -Wno-builtin-declaration-mismatch -fcall-used-d2 -fcall-used-a2 -finput-charset=cp932 -fexec-charset=cp932
+CFLAGS = $(COMMON_FLAGS) -Wno-builtin-declaration-mismatch -fcall-used-d2 -fcall-used-a2 -finput-charset=cp932 -fexec-charset=cp932 -fverbose-asm
 
-# ソースファイル
-SRCS =	main.c
+# *.c ソースファイル
+C_SRCS = main.c
+
+# *.s ソースファイル
+ASM_SRCS = 
 
 # リンク対象のライブラリファイル
 LIBS =\
@@ -45,7 +48,8 @@ LIBS =\
 INTERMEDIATE_DIR = _build
 
 # オブジェクトファイル
-OBJS = $(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.c,%.o,$(SRCS)))
+OBJS =	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.c,%.o,$(C_SRCS))) \
+	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.s,%.o,$(ASM_SRCS)))
 
 # HLK に入力するリンクリスト
 HLK_LINK_LIST = $(INTERMEDIATE_DIR)/_lk_list.tmp
@@ -74,10 +78,14 @@ $(TARGET_FILE) : $(OBJS)
         done
 	$(HLK) -i $(HLK_LINK_LIST) -o $(TARGET_FILE)
 
-# c ソースのコンパイル
+# *.c ソースのコンパイル
 $(INTERMEDIATE_DIR)/%.o : %.c makefile
 	mkdir -p $(INTERMEDIATE_DIR)
 	$(CC) -S $(CFLAGS) -o $(INTERMEDIATE_DIR)/$*.m68k-gas.s $<
 	$(GAS2HAS) -i $(INTERMEDIATE_DIR)/$*.m68k-gas.s -o $(INTERMEDIATE_DIR)/$*.s
 	rm -f $(INTERMEDIATE_DIR)/$*.m68k-gas.s
 	$(HAS) -e -u -w0 $(INCLUDE_FLAGS) $(INTERMEDIATE_DIR)/$*.s -o $(INTERMEDIATE_DIR)/$*.o
+
+# *.s ソースのコンパイル
+$(INTERMEDIATE_DIR)/%.o : %.s makefile
+	$(HAS) -e -u -w0 $(INCLUDE_FLAGS) $*.s -o $(INTERMEDIATE_DIR)/$*.o
