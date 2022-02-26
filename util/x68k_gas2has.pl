@@ -1338,6 +1338,29 @@ sub apply_converter {
 
 					next;
 				}
+				# GAS のシンボル定義ディレクティブ行？
+				#		.set <シンボル>, <値>
+				elsif (
+					$asm_mode eq 'gas'
+				&&	$line =~ /^(\s*)(\.set)(\s+)(.+?)$g_regex_end/i
+				) {
+					my $spaces1		= $1;
+					my $directive	= $2;
+					my $spaces2		= $3;
+					my $arg_list	= $4;
+					$arg_list = modify_arg_list($arg_list, $asm_mode);
+					my @args = split(',', $arg_list);
+					if (@args != 2) {
+						die("$g_src_location: ERROR: apply_converter failed to parse [$line].\n");
+					}
+					my $symbol = $args[0];
+					my $value  = $args[1];
+					$modified .= $symbol . '=' . $value;
+					if ($pass == 1) {
+						symbol_db_register_symbol($symbol);
+					}
+					next;
+				}
 				# HAS のシンボル定義ディレクティブ行？
 				#	<シンボル> <ディレクティブ> <式>
 				elsif (
