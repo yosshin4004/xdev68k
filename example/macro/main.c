@@ -16,7 +16,7 @@
 
 int main(int argc, char *argv[]){
 	/*
-		マクロ
+		.macro
 	*/
 	{
 		static int resultA = 0;
@@ -48,6 +48,50 @@ int main(int argc, char *argv[]){
 		);
 
 		printf("result = %d (expected = 3)\n", resultA);
+	}
+
+	/*
+		.rept
+	*/
+	{
+		static char s_string[] = ".rept test";
+		asm volatile (
+			"\n"
+			"	.rept	3\n"
+			"	move.l	%0,-(sp)\n"
+			"	jbsr	_puts\n"			/* 外部シンボルを参照する時は _ を付ける */
+			"	addq.l	#4,sp\n"
+			"	.endm\n"
+
+		:	/* 出力 */
+		:	/* 入力 */	"irm" (&s_string)	/* 引数 %0 */
+		:	/* 破壊 */	"d0", "d1", "d2", "a0", "a1", "a2"	/* C 関数は d0-d2/a0-a2 を破壊する */
+		);
+	}
+
+	/*
+		.irp
+	*/
+	{
+		asm volatile (
+			"\n"
+			"	.irp	arg,string0,string1,string2\n"
+			"	move.l	#arg,-(sp)\n"
+			"	jbsr	_puts\n"			/* 外部シンボルを参照する時は _ を付ける */
+			"	addq.l	#4,sp\n"
+			"	.endm\n"
+
+			"			.data\n"
+			"string0:	.dc.b $30,0	\n"
+			"string1:	.dc.b $31,0	\n"
+			"string2:	.dc.b $32,0	\n"
+
+			"			.text\n"
+
+		:	/* 出力 */
+		:	/* 入力 */
+		:	/* 破壊 */	"d0", "d1", "d2", "a0", "a1", "a2"	/* C 関数は d0-d2/a0-a2 を破壊する */
+		);
 	}
 
 	return 0;
