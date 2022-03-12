@@ -1552,8 +1552,16 @@ sub apply_converter {
 						my $directive	= $2;
 						my $spaces2		= $3;	# 省略可能
 						my $arg_list	= $4;	# 省略可能
-						# todo : 未対応
-						die("$g_src_location: ERROR: apply_converter failed. $directive is not supported yet.\n");
+						$modified .= $spaces1 . $directive . $spaces2 . $arg_list;
+
+						# シンボルデータベースのスタックを 1 段深くする
+						symbol_db_inc_depth();
+
+						# irp / irpc は、第一引数をローカルシンボルとして登録
+						if ($directive =~ /^\.?(?:irpc|irp)$/) {
+							my @args = split(',', $arg_list);
+							symbol_db_register_symbol($args[0]);
+						}
 						next;
 					}
 
