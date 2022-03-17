@@ -628,6 +628,14 @@ my $g_regex_number =
 .	'|'.$g_regex_dec
 .	')';
 
+# 文字列リテラルにマッチする正規表現
+my $g_regex_string_literal =
+	'(?:'
+.		'\"(?:[^\\\\\"]|\\\\.)*?\"'
+.	'|'.'\'(?:[^\\\\\']|\\\\.)*?\''
+.	')';
+
+
 
 # ラベルまたはシンボル名にマッチする正規表現
 #	数字からは開始しない。
@@ -3216,6 +3224,17 @@ sub modify_arg_list {
 			}
 			push(@a_modified_arg, $modified_arg);
 		}
+		# 文字列リテラル
+		elsif (
+			$arg =~ /^($g_regex_string_literal)/i
+		) {
+			my $string_literal = $1;
+			my $modified_arg = $string_literal;
+			if (DEBUG) {
+				print "			arg [$arg -> $modified_arg] as (string literal)\n";
+			}
+			push(@a_modified_arg, $modified_arg);
+		}
 		# 上記いずれにも該当しないならエラー
 		else {
 			die("$g_src_location: ERROR: modify_arg_list failed to parse [$arg_list] as $asm_mode.\n");
@@ -3259,7 +3278,7 @@ sub split_and_modify_arg_list {
 	my $arg;
 
 	# 直前のステート
-	my $state;
+	my $state = '';
 
 	# 行末コメントとスペースを除去
 	$arg_list =~ s/$g_regex_line_end_comment//gi;
@@ -3358,10 +3377,24 @@ sub split_and_modify_arg_list {
 				$state = 'label';
 			}
 		}
+		# 文字列リテラル
+		elsif (
+			$arg_list =~ /^($g_regex_string_literal)/i
+		&&	# 許容する直前のステート
+			(	$state eq ''
+			||	$state eq ','
+			)
+		) {
+			$arg_list = $';
+			my $string_literal = $1;
+			$arg .= $string_literal;
+			$state = 'string_literal';
+		}
 		# 項の境界、または終点？
 		#	括弧
 		#	即値の \#
 		#	MIT syntax で出現する \@
+		#	カンマ
 		elsif ($arg_list =~ /^([\(\)\{\}\[\]\#\@,]|$)/i) {
 			$arg_list = $';
 			my $char = $1;
