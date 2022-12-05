@@ -99,8 +99,8 @@ cp --preserve=timestamps ${ARCHIVE} ../archive/download
 #------------------------------------------------------------------------------
 # HLK evolution のインストール
 #------------------------------------------------------------------------------
-ARCHIVE="HLKEV14.ZIP"
-SHA512SUM="3066400a3f0d53cde56ab689f4bc92f560cc608a480d537d3cbd1eeb5ed13bd828ff8421ce55dd330260247725f6a7d5fb805fb5f47c09362e72b2d0c9cb2d44"
+ARCHIVE="hlkev15.zip"
+SHA512SUM="4fb22768f38f26f40e26e0e4a33797ecfff10f4c79966a286ea8c308020f666963b521f30f3333864decb003c16ec5e8824d491653b24faa4fce2330888c7166"
 wget -nc http://retropc.net/x68000/software/develop/lk/hlkev/${ARCHIVE}
 if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
 	echo "SHA512SUM verification of ${ARCHIVE} failed!"
@@ -111,7 +111,7 @@ unzip -x ${ARCHIVE}
 # インストール
 mkdir -p ../x68k_bin
 mkdir -p ../archive/download
-cp --preserve=timestamps hlk-3.01+14/hlk.r ../x68k_bin/
+cp --preserve=timestamps ./hlk.r ../x68k_bin/
 cp --preserve=timestamps ${ARCHIVE} ../archive/download
 
 
