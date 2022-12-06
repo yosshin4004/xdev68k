@@ -1,7 +1,8 @@
-archive/
+archive/download/
 build_gcc/
-m68k-toolchain/
 include/
 lib/xc/
+m68k-toolchain/
 x68k_bin/
 run68/run68.exe
+x68k_bin/
