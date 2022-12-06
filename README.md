@@ -27,6 +27,7 @@ xdev68k は、
 	pacman -S autoconf-wrapper
 	pacman -S msys/autoconf
 	pacman -S msys/automake-wrapper
+	pacman -S unzip
 	```
 	以降 msys の bash コンソール起動は、スタートメニューの MSYS2 MinGW 64bit のアイコンから行います。
 	ここから起動しないと、ネイティブのコンパイラ環境にパスが通った状態にならず、クロスコンパイラ構築に失敗します。  
@@ -63,7 +64,7 @@ xdev68k は、
 	（ファイル名 HAS06089.LZH）
 	* HLK evolution  
 	http://retropc.net/x68000/software/develop/lk/hlkev/
-	（ファイル名 HLKEV14.ZIP）
+	（ファイル名 hlkrev15.zip）
 	* X68K コマンドラインエミュレータ run68 Version 0.09  
 	https://sourceforge.net/projects/run68/
 	（ファイル名 run68bin-009a-20090920.zip）
