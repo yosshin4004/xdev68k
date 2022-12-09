@@ -98,20 +98,40 @@ cp --preserve=timestamps ${ARCHIVE} ../archive/download
 
 #------------------------------------------------------------------------------
 # HLK evolution のインストール
+# version 3.01+15 になってから Out of memory エラーが出てしまう
 #------------------------------------------------------------------------------
-ARCHIVE="hlkev15.zip"
-SHA512SUM="4fb22768f38f26f40e26e0e4a33797ecfff10f4c79966a286ea8c308020f666963b521f30f3333864decb003c16ec5e8824d491653b24faa4fce2330888c7166"
-wget -nc http://retropc.net/x68000/software/develop/lk/hlkev/${ARCHIVE}
+#ARCHIVE="hlkev15.zip"
+#SHA512SUM="4fb22768f38f26f40e26e0e4a33797ecfff10f4c79966a286ea8c308020f666963b521f30f3333864decb003c16ec5e8824d491653b24faa4fce2330888c7166"
+#wget -nc http://retropc.net/x68000/software/develop/lk/hlkev/${ARCHIVE}
+#if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
+#	echo "SHA512SUM verification of ${ARCHIVE} failed!"
+#	exit
+#fi
+#unzip -x ${ARCHIVE}
+#
+## インストール
+#mkdir -p ../x68k_bin
+#mkdir -p ../archive/download
+#cp --preserve=timestamps ./hlk.r ../x68k_bin/
+#cp --preserve=timestamps ${ARCHIVE} ../archive/download
+
+
+#------------------------------------------------------------------------------
+# HLK v3.01 のインストール
+#------------------------------------------------------------------------------
+ARCHIVE="HLK301B.LZH"
+SHA512SUM="afe6b96b6b9549cbddc1215bf534b255b840249d1d14e149a06d4b50591e1ac0842b207bb75ec0fb0f48c04dc1cf241a6e63c6c8834479ef38e470b1abbb9a7d"
+wget -nc http://retropc.net/x68000/software/develop/lk/hlk/${ARCHIVE}
 if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
 	echo "SHA512SUM verification of ${ARCHIVE} failed!"
 	exit
 fi
-unzip -x ${ARCHIVE}
+${LHA} -x -w=${ARCHIVE%.*} ${ARCHIVE}
 
 # インストール
 mkdir -p ../x68k_bin
 mkdir -p ../archive/download
-cp --preserve=timestamps ./hlk.r ../x68k_bin/
+cp --preserve=timestamps ${ARCHIVE%.*}/hlk301.x ../x68k_bin/
 cp --preserve=timestamps ${ARCHIVE} ../archive/download
 
 

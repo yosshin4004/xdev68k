@@ -188,30 +188,25 @@
 		HAS06089.LZH に含まれる README.DOC に従ってください。
 
 
-・HLK evolution version 3.01+15
+・HLK evolution version 3.01
 
 	オリジナルアーカイブファイル
 		xdev68k/archive/download/
-			hlkev15.zip
+			HLK301B.LZH
 
 	xdev68k 上のインストール先
 		xdev68k/x68k_bin
-			hlkev15.zip から取り出した hlk.r をコピーしています。
+			HLK301B.LZH から取り出した hlk301.x をコピーしています。
 
 	原作者
 		SALT さん
 
-	作者
-		立花えり子さん
-
 	入手元
-		公式リポジトリはこちらです。
-		https://github.com/kg68k/hlk-ev
 		以下の URL から転載されたアーカイブが入手可能です。
-		http://retropc.net/x68000/software/develop/lk/hlkev/
+		http://retropc.net/x68000/software/develop/lk/hlk/
 
 	利用規約
-		hlkev15.zip に含まれる hlkev.txt に従ってください。
+		HLK301B.LZH に含まれる readme.doc に従ってください。
 
 
 ・上記以外

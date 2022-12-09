@@ -62,9 +62,9 @@ xdev68k は、
 	* HAS060.X  
 	http://retropc.net/x68000/software/develop/as/has060/
 	（ファイル名 HAS06089.LZH）
-	* HLK evolution  
-	http://retropc.net/x68000/software/develop/lk/hlkev/
-	（ファイル名 hlkrev15.zip）
+	* HLK v3.01  
+	http://retropc.net/x68000/software/develop/lk/hlk/
+	（ファイル名 HLK301B.LZH）
 	* X68K コマンドラインエミュレータ run68 Version 0.09  
 	https://sourceforge.net/projects/run68/
 	（ファイル名 run68bin-009a-20090920.zip）
@@ -140,8 +140,8 @@ xdev68k/
 │	│		X68k Archiver v1.00
 │	├ HAS060.X
 │	│		High-speed Assembler 68060 対応版 version 3.09+89
-│	└ hlk.r
-│			HLK evolution version 3.01+14
+│	└ hlk301.x
+│			HLK v3.01
 ├ build_m68k-toolchain.sh
 │		クロスコンパイラのビルドスクリプト
 ├ build_x68k-libgcc.sh
@@ -211,7 +211,7 @@ hello world.
 	カレントディレクトリにオブジェクトファイル main.o が生成されます。
 
 4. リンク  
-	main.o を X68K 対応リンカ hlk.r でリンクします。
+	main.o を X68K 対応リンカ hlk301.x でリンクします。
 	リンカの実行は、X68K コマンドラインエミュレータ run68 で行います。
 	本リポジトリに含まれている libgcc.a をリンクする必要があります。
 	```bash
@@ -226,7 +226,7 @@ hello world.
 	cp ${XDEV68K_DIR}/lib/xc/FLOATFNC.L lk_tmp/
 	cp ${XDEV68K_DIR}/lib/m68k_elf/m68000/libgcc.a lk_tmp/
 	ls lk_tmp/ > lk_list.txt
-	HLK="${XDEV68K_DIR}/run68/run68.exe ${XDEV68K_DIR}/x68k_bin/hlk.r"
+	HLK="${XDEV68K_DIR}/run68/run68.exe ${XDEV68K_DIR}/x68k_bin/hlk301.x"
 	${HLK} -Llk_tmp/ -o MAIN.X -i lk_list.txt
 	```
 	カレントディレクトリに実行ファイル MAIN.X が生成されます。

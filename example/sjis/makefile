@@ -16,7 +16,7 @@ CC = ${XDEV68K_DIR}/m68k-toolchain/bin/m68k-elf-gcc
 GAS2HAS = perl ${XDEV68K_DIR}/util/x68k_gas2has.pl -cpu 68000 -inc doscall.mac
 RUN68 = ${XDEV68K_DIR}/run68/run68.exe
 HAS = $(RUN68) ${XDEV68K_DIR}/x68k_bin/HAS060.X
-HLK = $(RUN68) ${XDEV68K_DIR}/x68k_bin/hlk.r
+HLK = $(RUN68) ${XDEV68K_DIR}/x68k_bin/hlk301.x
 
 # 実行ファイル名
 TARGET_FILE = MAIN.X
