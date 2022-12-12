@@ -1255,7 +1255,10 @@ foreach my $asm_mode (@g_asm_modes) {
 					print "ERROR : Argument for " . $ARGV[$iArg - 1] . " is not specified.\n";
 					exit(EXIT_FAILURE);
 				}
-				$force_include_file_name_list = $ARGV[$iArg];
+				if ($force_include_file_name_list ne '') {
+					$force_include_file_name_list .= ',';
+				}
+				$force_include_file_name_list .= $ARGV[$iArg];
 			}
 			# inline アセンブラ内の構文
 			elsif ($ARGV[$iArg] eq "-inline-asm-syntax") {
