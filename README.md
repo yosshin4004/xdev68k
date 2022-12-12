@@ -110,8 +110,10 @@ xdev68k/
 │		クロス開発サンプルコード
 ├ include/
 │	│	ヘッダファイル
-│	└ xc/
-│			SHARP C Compiler PRO-68K ver2.1 のヘッダファイル
+│	├ xc/
+│	│		SHARP C Compiler PRO-68K ver2.1 のヘッダファイル
+│	└ xdev68k/
+│			xdev68k 環境で追加されたヘッダファイル等
 ├ m68k-toolchain/
 │		クロスコンパイラのビルド結果
 ├ run68/
