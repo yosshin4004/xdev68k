@@ -13,7 +13,7 @@ endif
 # 各種コマンド短縮名
 CXX = ${XDEV68K_DIR}/m68k-toolchain/bin/m68k-elf-g++
 CC = ${XDEV68K_DIR}/m68k-toolchain/bin/m68k-elf-gcc
-GAS2HAS = perl ${XDEV68K_DIR}/util/x68k_gas2has.pl -cpu 68030 -inc doscall.mac
+GAS2HAS = perl ${XDEV68K_DIR}/util/x68k_gas2has.pl -cpu 68030 -inc doscall.inc -inc iocscall.inc
 RUN68 = ${XDEV68K_DIR}/run68/run68.exe
 HAS = $(RUN68) ${XDEV68K_DIR}/x68k_bin/HAS060.X
 HLK = $(RUN68) ${XDEV68K_DIR}/x68k_bin/hlk301.x
@@ -22,7 +22,7 @@ HLK = $(RUN68) ${XDEV68K_DIR}/x68k_bin/hlk301.x
 TARGET_FILE = MAIN.X
 
 # ヘッダ検索パス
-INCLUDE_FLAGS = -I${XDEV68K_DIR}/include/xc
+INCLUDE_FLAGS = -I${XDEV68K_DIR}/include/xc -I${XDEV68K_DIR}/include/xdev68k
 
 
 # コンパイルフラグ

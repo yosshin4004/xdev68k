@@ -33,12 +33,12 @@ static inline float my_fadd(float a, float b) {
 	*/
 	asm (
 			/*
-				FE call 0xfe5b (__FADD) は、
+				__FADD は、
 				d0.l を被加算数として受け取る。
 				d1.l を加算数として受け取る。
 				d0/d1 に結果を返す。
 			*/
-			".dc.w	0xfe5b\n"
+			".dc.w	__FADD\n"		/* fefunc.inc で "__FADD equ $fe5b" が定義されている */
 	:	/* 出力 */	"+r" (reg_d0),	/* in out %0 */
 					"+r" (reg_d1)	/* in out %1 */
 	:	/* 入力 */

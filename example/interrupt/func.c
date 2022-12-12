@@ -1,4 +1,8 @@
 #include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <iocslib.h>
+#include <doslib.h>
 
 
 /* 割り込み設定の保存用バッファ */
@@ -9,13 +13,15 @@ static volatile uint32_t s_uspBackup = 0;
 /* MFP 操作の待ち時間 */
 void waitForMfp() {
 	/*
-		今となっては出展元が不明だが、X68000 全盛期当時、
+		今となっては出展元が不明ですが、X68000 全盛期当時、
 		sr レジスタの書き換えと MFP 操作の間に若干の待ち時間を入れないと、
-		X68030 などの高速な CPU 環境で誤動作する恐れがあるといわれていた。
+		X68030 などの高速な CPU 環境で誤動作する恐れがあると言われていました。
 
 		実際に X68030 実機環境でテストできていないため真偽が不明で、
-		誤動作は X68000 都市伝説の一つだった可能性も否定できないが、
-		念のため待ち時間を確保する目的で、この関数を実行する。
+		誤動作は X68000 都市伝説の一つだった可能性も否定できませんが、
+		念のため待ち時間を確保する目的で、この関数を実行しています。
+
+		この関数は、何も実行せず return するだけの動作です。
 	*/
 }
 
@@ -23,6 +29,12 @@ void waitForMfp() {
 void initVsyncInterrupt(void *func) {
 	register uint32_t reg_a2 asm ("a2") = (uint32_t)func;
 
+	/*
+		最新の gcc 環境では、スーパーバイザーモード⇔ユーザーモードの切り替えに、
+		IOCSLIB.L に収録されている B_SUPER() を利用するのは危険です。
+		ここでは、スーパーバイザーモード区間にコンパイラの最適化が介入することを
+		避けるため、インラインアセンブラを利用します。
+	*/
 	asm volatile (
 		/* MFP のレジスタ番号 */
 		"\n"
@@ -37,7 +49,7 @@ void initVsyncInterrupt(void *func) {
 
 		/* スーパーバイザーモードに入る */
 		"	suba.l	a1,a1\n"
-		"	iocs	_B_SUPER\n"
+		"	iocs	__B_SUPER\n"					/* iocscall.inc で "__B_SUPER equ $81" が定義されている */
 		"	move.l	d0,_s_uspBackup\n"				/*（もともとスーパーバイザーモードなら d0.l=-1） */
 
 		/* 割り込み off */
@@ -66,7 +78,7 @@ void initVsyncInterrupt(void *func) {
 		"	move.l	_s_uspBackup(pc),d0\n"
 		"	bmi.b	@F\n"							/* スーパーバイザーモードから実行されていたら戻す必要無し */
 		"		movea.l	d0,a1\n"
-		"		iocs	_B_SUPER\n"
+		"		iocs	__B_SUPER\n"				/* iocscall.inc で "__B_SUPER equ $81" が定義されている */
 		"@@:\n"
 
 	:	/* 出力 */
@@ -78,10 +90,13 @@ void initVsyncInterrupt(void *func) {
 
 /* 垂直帰線期間割り込み停止 */
 void termVsyncInterrupt() {
+	/*
+		前述の理由から、インラインアセンブラを利用します。
+	*/
 	asm volatile (
 		/* スーパーバイザーモードに入る */
 		"	suba.l	a1,a1\n"
-		"	iocs	_B_SUPER\n"
+		"	iocs	__B_SUPER\n"					/* iocscall.inc で "__B_SUPER equ $81" が定義されている */
 		"	move.l	d0,_s_uspBackup\n"				/*（もともとスーパーバイザーモードなら d0.l=-1） */
 
 		/* 割り込み off */
@@ -118,7 +133,7 @@ void termVsyncInterrupt() {
 		"	move.l	_s_uspBackup(pc),d0\n"
 		"	bmi.b	@F\n"							/* スーパーバイザーモードから実行されていたら戻す必要無し */
 		"		movea.l	d0,a1\n"
-		"		iocs	_B_SUPER\n"
+		"		iocs	__B_SUPER\n"				/* iocscall.inc で "__B_SUPER equ $81" が定義されている */
 		"@@:\n"
 
 	:	/* 出力 */

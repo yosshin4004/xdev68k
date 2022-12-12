@@ -17,13 +17,13 @@ int main(int argc, char *argv[]){
 		static const char s_string1[] = "FLAG is 1.\r\n";
 		static const char s_string2[] = "FLAG is not 1.\r\n";
 		asm volatile (
-			"FLAG:=1\n"							/* ユーザー定義シンボル */
+			"FLAG:=1\n"						/* ユーザー定義シンボル */
 			"	.if	FLAG==1\n"
 			"		move.l	%0,-(sp)\n"
 			"	.else\n"
 			"		move.l	%1,-(sp)\n"
 			"	.endif\n"
-			"	dc.w	_PRINT\n"
+			"	dc.w	__PRINT\n"			/* doscall.inc で "__PRINT equ 0xff09" が定義されている */
 			"	addq.l	#4,sp\n"
 		:	/* 出力 */
 		:	/* 入力 */	"irm" (&s_string1),	/* 引数 %0 */
