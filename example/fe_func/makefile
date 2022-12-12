@@ -1,6 +1,6 @@
-# m68k-elf-gcc でビルドする Makefile
-# run68.exe を実行する都合上、msys か cygwin か WSL 環境から実行すること。
-# （msys 以外ではテストできていません）
+# この makefile は、msys や cygwin などの Unix 互換環境上で利用することを想定している。
+# ビルドには xdev68k が必要。
+# https://github.com/yosshin4004/xdev68k
 
 # 必要な環境変数が定義されていることを確認する。
 ifndef XDEV68K_DIR
@@ -14,7 +14,7 @@ endif
 CXX = ${XDEV68K_DIR}/m68k-toolchain/bin/m68k-elf-g++
 CC = ${XDEV68K_DIR}/m68k-toolchain/bin/m68k-elf-gcc
 GAS2HAS = perl ${XDEV68K_DIR}/util/x68k_gas2has.pl -cpu 68000 -inc doscall.inc -inc iocscall.inc -inc fefunc.inc
-RUN68 = ${XDEV68K_DIR}/run68/run68.exe
+RUN68 = ${XDEV68K_DIR}/run68/run68
 HAS = $(RUN68) ${XDEV68K_DIR}/x68k_bin/HAS060.X
 HLK = $(RUN68) ${XDEV68K_DIR}/x68k_bin/hlk301.x
 
