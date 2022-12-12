@@ -209,6 +209,28 @@
 		HLK301B.LZH に含まれる readme.doc に従ってください。
 
 
+・Project C Library LIBC 1.1.32A ぱっち DON 版
+
+	ファイル
+		include/xdev68k/doscall.inc
+		include/xdev68k/fefunc.inc
+		include/xdev68k/iocscall.inc
+
+	原作者
+		Project LIBC Group
+		立花えり子 さん
+
+	作者
+		DON さん
+
+	入手元
+		以下の URL から転載されたアーカイブが入手可能です。
+		http://retropc.net/x68000/software/develop/lib/libcdon/
+
+	利用規約
+		public domain です。
+
+
 ・上記以外
 
 	ファイル
