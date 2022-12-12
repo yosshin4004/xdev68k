@@ -65,16 +65,22 @@ cd ${INSTALLER_TEMP_DIR}
 #------------------------------------------------------------------------------
 # lha コマンドをソースからビルド
 #------------------------------------------------------------------------------
-wget -nc https://github.com/jca02266/lha/archive/master.zip
-unzip master.zip
-cd lha-master/
+ARCHIVE="release-20211125.zip"
+SHA512SUM="e75dc606d7637f2c506072f2f44eda69da075a57ad2dc76f54e41b1d39d34ca01410317cc6538f8ea42f4da81ca14889df1195161f4e305d2d67189ec8e60e24"
+wget -nc https://github.com/jca02266/lha/archive/refs/tags/${ARCHIVE}
+if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
+	echo "SHA512SUM verification of ${ARCHIVE} failed!"
+	exit
+fi
+unzip release-20211125.zip
+cd lha-release-20211125/
 autoreconf -is
-./configure --with-tmp-file=no --disable-largefile --disable-multibyte-filename --disable-iconv
+sh ./configure
 make
 cd ../
 
 # lha コマンド
-LHA=lha-master/src/lha
+LHA=lha-release-20211125/src/lha
 
 
 #------------------------------------------------------------------------------
