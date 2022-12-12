@@ -201,13 +201,13 @@ cp --preserve=timestamps XC2102A.LZH ../archive/download
 # sourceforge 上のアーカイブへの直接リンク URL が不明。
 # やむを得ず、ダウンロード済みの zip からファイルを利用する。
 
-ARCHIVE="run68bin-009a-20090920.zip"
+ARCHIVE="../archive/run68bin-009a-20090920.zip"
 SHA512SUM="1472fcd137d5314a86cb26c1fc052bce4f3c14be7625b26d93d16ba320d9e729d69bbdee19ea425d48ad157b429a8d9a8a560de9bd18e42d467f99eba3e1fc6c"
 if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
 	echo "SHA512SUM verification of ${ARCHIVE} failed!"
 	exit
 fi
-unzip ../archive/run68bin-009a-20090920.zip
+unzip ${ARCHIVE%.*}
 cp --preserve=timestamps run68bin-009a-20090920/run68.exe ../run68/run68.exe
 
 
