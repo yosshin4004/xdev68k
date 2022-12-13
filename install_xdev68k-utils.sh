@@ -63,6 +63,24 @@ cd ${INSTALLER_TEMP_DIR}
 
 
 #------------------------------------------------------------------------------
+# run68 コマンドをソースからビルドしインストール
+#------------------------------------------------------------------------------
+ARCHIVE="master.zip"
+wget -nc https://github.com/yosshin4004/run68mac/archive/refs/heads/${ARCHIVE}
+unzip ${ARCHIVE}
+cd run68mac-master/
+mkdir build
+cd build
+cmake ..
+make
+cd ../
+cd ..
+
+# インストール
+cp --preserve=timestamps run68mac-master/build/run68* ../run68/
+
+
+#------------------------------------------------------------------------------
 # lha コマンドをソースからビルド
 #------------------------------------------------------------------------------
 ARCHIVE="release-20211125.zip"
@@ -72,7 +90,7 @@ if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
 	echo "SHA512SUM verification of ${ARCHIVE} failed!"
 	exit
 fi
-unzip release-20211125.zip
+unzip ${ARCHIVE}
 cd lha-release-20211125/
 autoreconf -is
 sh ./configure
@@ -181,26 +199,6 @@ cp -r XC2102_02/LIB/* ../lib/xc
 cp -r XC2101/BIN/AR.X ../x68k_bin
 cp --preserve=timestamps XC2101.LZH ../archive/download
 cp --preserve=timestamps XC2102_02.LZH ../archive/download
-
-
-#------------------------------------------------------------------------------
-# run68 のインストール
-#------------------------------------------------------------------------------
-
-# アーカイブの入手元 URL
-# https://sourceforge.net/projects/run68/
-#
-# sourceforge 上のアーカイブへの直接リンク URL が不明。
-# やむを得ず、ダウンロード済みの zip からファイルを利用する。
-
-ARCHIVE="../archive/run68bin-009a-20090920.zip"
-SHA512SUM="1472fcd137d5314a86cb26c1fc052bce4f3c14be7625b26d93d16ba320d9e729d69bbdee19ea425d48ad157b429a8d9a8a560de9bd18e42d467f99eba3e1fc6c"
-if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
-	echo "SHA512SUM verification of ${ARCHIVE} failed!"
-	exit
-fi
-unzip ${ARCHIVE%.*}
-cp --preserve=timestamps run68bin-009a-20090920/run68.exe ../run68/run68.exe
 
 
 #------------------------------------------------------------------------------
