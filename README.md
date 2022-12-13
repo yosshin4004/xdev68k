@@ -28,6 +28,8 @@ xdev68k は、
 	pacman -S msys/autoconf
 	pacman -S msys/automake-wrapper
 	pacman -S unzip
+	pacman -S cmake
+	pacman -S libiconv
 	```
 	以降 msys の bash コンソール起動は、スタートメニューの MSYS2 MinGW 64bit のアイコンから行います。
 	ここから起動しないと、ネイティブのコンパイラ環境にパスが通った状態にならず、クロスコンパイラ構築に失敗します。  
