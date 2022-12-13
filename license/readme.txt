@@ -119,14 +119,14 @@
 	オリジナルアーカイブファイル
 		xdev68k/archive/download/
 			XC2101.LZH
-			XC2102.LZH
+			XC2102_02.LZH
 
 	xdev68k 上のインストール先
 		xdev68k/include/xc/
-			XC2102.LZH に含まれる INCLUDE/ 以下のファイルを取得し、小文字
+			XC2102_02.LZH に含まれる INCLUDE/ 以下のファイルを取得し、小文字
 			ファイル名化と、ファイル末尾の EOF 除去を行いました。
 		xdev68k/lib/xc/
-			XC2102.LZH に含まれる LIB/ 以下のファイルをコピーしました。
+			XC2102_02.LZH に含まれる LIB/ 以下のファイルをコピーしました。
 		xdev68k/x68k_bin
 			XC2101.LZH に含まれる AR.X をコピーしました。
 
@@ -137,28 +137,6 @@
 		公式配布元サイトは存在しません。
 		以下の URL から転載されたアーカイブが入手可能です。
 		http://retropc.net/x68000/software/sharp/xc21/
-
-	利用規約
-		xdev68k/license/FSHARP/許諾条件.txt に従ってください。
-
-
-・無償公開された XC システムディスク 2 の修正パッチ
-
-	オリジナルアーカイブファイル
-		xdev68k/archive/download/
-			XC2102A.LZH
-
-	xdev68k 上のインストール先
-		xdev68k/include/xc/
-			XC2101A.LZH に含まれる INCLUDE/ 以下のファイルを取得し、小文字
-			ファイル名化と、ファイル末尾の EOF 除去を行いました。
-
-	作者
-		M.Kamada さん
-
-	入手元
-		以下の URL からアーカイブが入手可能です。
-		http://retropc.net/x68000/software/sharp/xc21/xc2102a/
 
 	利用規約
 		xdev68k/license/FSHARP/許諾条件.txt に従ってください。

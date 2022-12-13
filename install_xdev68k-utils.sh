@@ -153,8 +153,8 @@ if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
 fi
 ${LHA} -x -w=${ARCHIVE%.*} ${ARCHIVE}
 
-ARCHIVE="XC2102.LZH"
-SHA512SUM="8bd549d0d6157173c9d562fb15ef354bfea9e98e77c2cc93634d7a75bc2084bd24b9549b569c392fad40ab3c1a207cbdb1c278d17f1bee77ec12ea9eb3a3e4f6"
+ARCHIVE="XC2102_02.LZH"
+SHA512SUM="c06339be8bf3251bb0b4a37365aa013a6083294edad17a3c4fafc35ab2cd2656260454642b1fa89645e3d796fe6c0ba67ce7f541d43e0a14b6529ce5aa113ede"
 wget -nc http://retropc.net/x68000/software/sharp/xc21/${ARCHIVE}
 if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
 	echo "SHA512SUM verification of ${ARCHIVE} failed!"
@@ -162,22 +162,9 @@ if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
 fi
 ${LHA} -x -w=${ARCHIVE%.*} ${ARCHIVE}
 
-ARCHIVE="XC2102A.LZH"
-SHA512SUM="c09a20962f9921f100d462cf4f9bc26e13306e3208aedc88551031ca5e19603d668f2a71dab536479c7a246cbcdcfc2a6b08f85bcf1943802adfa0fad66c7c7c"
-wget -nc http://retropc.net/x68000/software/sharp/xc21/xc2102a/${ARCHIVE}
-if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
-	echo "SHA512SUM verification of ${ARCHIVE} failed!"
-	exit
-fi
-${LHA} -x -w=${ARCHIVE%.*} ${ARCHIVE}
-
-# パッチファイルを適用
-cp XC2102A/MATH.H XC2102/INCLUDE
-cp XC2102A/MOUSE.H XC2102/INCLUDE
-
 # ヘッダファイルを小文字に変換
 # ヘッダファイル末尾の EOF（文字コード 0x1a）を除去
-pushd XC2102/INCLUDE
+pushd XC2102_02/INCLUDE
 		for f in * ; do mv $f `echo $f | awk '{print tolower($0)}'`; done
 		for f in * ; do cat $f | sed s/^\\x1a$//g > $f.tmp && rm $f && mv $f.tmp $f; done
 popd
@@ -189,12 +176,11 @@ mkdir -p ../include/xc
 mkdir -p ../lib/xc
 mkdir -p ../x68k_bin
 mkdir -p ../archive/download
-cp -r XC2102/INCLUDE/* ../include/xc
-cp -r XC2102/LIB/* ../lib/xc
+cp -r XC2102_02/INCLUDE/* ../include/xc
+cp -r XC2102_02/LIB/* ../lib/xc
 cp -r XC2101/BIN/AR.X ../x68k_bin
 cp --preserve=timestamps XC2101.LZH ../archive/download
-cp --preserve=timestamps XC2102.LZH ../archive/download
-cp --preserve=timestamps XC2102A.LZH ../archive/download
+cp --preserve=timestamps XC2102_02.LZH ../archive/download
 
 
 #------------------------------------------------------------------------------
