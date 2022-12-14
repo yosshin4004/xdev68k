@@ -86,6 +86,7 @@ $(INTERMEDIATE_DIR)/%.o : %.c makefile
 	rm -f $(INTERMEDIATE_DIR)/$*.m68k-gas.s
 	$(HAS) -e -u -w0 $(INCLUDE_FLAGS) $(INTERMEDIATE_DIR)/$*.s -o $(INTERMEDIATE_DIR)/$*.o
 
-# *.s ソースのコンパイル
+# *.s ソースのアセンブル
 $(INTERMEDIATE_DIR)/%.o : %.s makefile
+	mkdir -p $(INTERMEDIATE_DIR)
 	$(HAS) -e -u -w0 $(INCLUDE_FLAGS) $*.s -o $(INTERMEDIATE_DIR)/$*.o
