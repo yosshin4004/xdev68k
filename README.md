@@ -15,11 +15,11 @@ xdev68k は、
 # 環境構築手順
 
 1. Unix 互換環境のインストールと環境構築（作業時間 : 10 分程度）  
-	msys2+mingw、cygwin 等々の Unix 互換環境を用意します。
-	推奨環境は msys2+mingw です（cygwin でも恐らく問題なく動作します。現状 WSL は後述の理由から非推奨です）。
+	msys2+mingw、cygwin、linux、WSL 等々の Unix 互換環境を用意します。
+	ここでは、推奨環境である msys2+mingw を利用する場合のインストール手順のみを示します。
+
 	msys2 のインストーラは https://www.msys2.org/ から入手可能です。
-	gcc や perl 等、基本的な開発ツールをインストールしておきます。
-	msys2 の場合は以下のように実行します。
+	インストールが終わったら、msys の今ロース上で以下を実行し、gcc や perl 等、環境構築に必要なツールをインストールします。
 	```bash
 	pacman -S base-devel
 	pacman -S mingw-w64-i686-toolchain
