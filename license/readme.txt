@@ -85,29 +85,32 @@
 		オリジナルアーカイブファイルの COPYING.NEWLIB を参照してください。
 
 
-・run68 Version 0.09a
+・run68mac
 
 	オリジナルアーカイブファイル
-		xdev68k/archive/
-			run68bin-009a-20090920.zip
-			run68-code-r68-trunk.zip（ソースコード）
+		xdev68k/archive/download/
+			run68mac-master.zip
 
 	xdev68k 上のインストール先
 		xdev68k/run68/
-			run68bin-009a-20090920.zip から取得した run68.exe が置かれて
-			います。
+			ビルド結果の実行ファイルが置かれています。
 
 	原作者
 		originally programmed by Ｙｏｋｋｏ さん
-
-	作者
 		maintained by masamic さん, Chack'n さん
+		mac 対応 by GOROman さん
+		その他大勢のコントリビューター
 
 	入手元
-		Run68 Support Pages（消失）
-			http://pws.prserv.net/run68/
-		Run68 Support Pages からリンクされていた公式配布 URL
-			https://sourceforge.net/projects/run68/
+		original 版
+			Run68 Support Pages（消失）
+				http://pws.prserv.net/run68/
+			Run68 Support Pages からリンクされていた公式配布 URL
+				https://sourceforge.net/projects/run68/
+		mac 対応版
+			https://github.com/GOROman/run68mac
+		mac 対応版 + msys2/linux環境パッチ版
+			https://github.com/yosshin4004/run68mac
 
 	利用規約
 		GNU GENERAL PUBLIC LICENSE が適用されます。
@@ -166,7 +169,7 @@
 		HAS06089.LZH に含まれる README.DOC に従ってください。
 
 
-・HLK evolution version 3.01
+・HLK version 3.01
 
 	オリジナルアーカイブファイル
 		xdev68k/archive/download/
