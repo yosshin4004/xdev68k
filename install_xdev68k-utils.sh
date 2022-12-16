@@ -77,7 +77,9 @@ cd ../
 cd ..
 
 # インストール
+mkdir -p ../archive/download
 cp --preserve=timestamps run68mac-master/build/run68* ../run68/
+cp --preserve=timestamps ${ARCHIVE} ../archive/download/run68mac-${ARCHIVE}
 
 
 #------------------------------------------------------------------------------
@@ -183,7 +185,8 @@ ${LHA} -x -w=${ARCHIVE%.*} ${ARCHIVE}
 # ヘッダファイルを小文字に変換
 # ヘッダファイル末尾の EOF（文字コード 0x1a）を除去
 pushd XC2102_02/INCLUDE
-		for f in * ; do mv $f `echo $f | awk '{print tolower($0)}'`; done
+		# 大文字小文字を区別しないファイルシステムを想定し、一旦 *.tmp にリネームしたのち、小文字ファイル名に変換している。
+		for f in * ; do mv $f $f.tmp && mv $f.tmp `echo $f | awk '{print tolower($0)}'`; done
 		for f in * ; do cat $f | sed s/^\\x1a$//g > $f.tmp && rm $f && mv $f.tmp $f; done
 popd
 
