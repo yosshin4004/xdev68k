@@ -5,7 +5,7 @@
 
 xdev68k は、SHARP X68K シリーズ対応のクロス開発環境です。
 最新の gcc を用いて X68K 対応の実行ファイルが作成可能です。
-ホスト環境は、msys2+mingw cygwin 等々の windows exe ファイルが扱える Unix 互換環境が利用可能です。
+ホスト環境は、msys2+mingw、cygwin、linux、WSL 等々の Unix 互換環境が利用可能です（mac も恐らく利用可能ですが未検証）。
 
 xdev68k は、
 旧プロジェクトである x68k_gcc_has_converter（ https://github.com/yosshin4004/x68k_gcc_has_converter ）から発展したものです。
