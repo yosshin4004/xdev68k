@@ -57,10 +57,7 @@ xdev68k は、
 
 	* C Compiler PRO-68K ver2.1（XC）システムディスク 1 & 2  
 	http://retropc.net/x68000/software/sharp/xc21/
-	（ファイル名 XC2101.LZH, XC2102.LZH）
-	* 無償公開された XC システムディスク 2 の修正パッチ  
-	http://retropc.net/x68000/software/sharp/xc21/xc2102a/
-	（ファイル名 XC2102A.LZH）
+	（ファイル名 XC2101.LZH, XC2102_02.LZH）  
 	* HAS060.X  
 	http://retropc.net/x68000/software/develop/as/has060/
 	（ファイル名 HAS06089.LZH）
