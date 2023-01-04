@@ -26,7 +26,8 @@
 		この問題の回避方法は 3 通り考えられます。
 
 		1) コンパイラの最適化を無効にする
-			最適化の恩恵を受けられなくなるので消極的な方法です。
+			gcc の pragma を利用することで、局所的に最適化を無効化することが
+			可能です。
 
 		2) アセンブラを利用する
 			スーパーバイザモードに入っている区間のコードは、コンパイラの
@@ -36,7 +37,7 @@
 			スーパーバイザモードからの復帰を考え無ければ、そもそもこの問題を
 			考慮する必要はありません。
 
-		ここでは、(3) の方法を利用します。
+		ここでは、(1) の方法を利用します。
 */
 
 #include <stdint.h>
@@ -45,14 +46,37 @@
 #include <iocslib.h>
 #include <doslib.h>
 
-int main(int argc, char *argv[]){
-	/* スーパーバイザモードに移行する */
-	B_SUPER(0);
 
+/* GCC のコンパイルオプションを退避 */
+#pragma GCC push_options
+
+/* GCC のスタック一括補正を無効化（この後の pragma GCC pop_options で再び有効化される）*/
+#pragma GCC optimize("-fno-defer-pop")
+
+/* 内部時計の状態を取得 */
+uint32_t getRtc(){
+	/* スーパーバイザモードに移行する */
+	intptr_t usp = B_SUPER(0);
+
+	/* ハードウェアに直接アクセスし内部時計の状態を取得（スーパーバイザモードでないとエラーになる）*/
+	uint32_t rtc = *(uint32_t *)0xE8A000;
+
+	/* ユーザーモードに復帰する */
+	if (usp > 0) {
+		B_SUPER(usp);
+	}
+
+	return rtc;
+}
+
+/* GCC のコンパイルオプションを復活 */
+#pragma GCC pop_options
+
+
+int main(int argc, char *argv[]){
 	/* 何かキーが押されるまで繰り返す */
 	while (INPOUT(0xFF) == 0) {
-		/* ハードウェアに直接アクセスし内部時計の状態を表示します */
-		printf("RTC(0xE8A000) = %08X\n", *(uint32_t *)0xE8A000);
+		printf("RTC = %08X\n", getRtc());
 	}
 
 	return 0;
