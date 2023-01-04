@@ -78,8 +78,8 @@ cd ..
 
 # インストール
 mkdir -p ../archive/download
-cp --preserve=timestamps run68mac-master/build/run68* ../run68/
-cp --preserve=timestamps ${ARCHIVE} ../archive/download/run68mac-${ARCHIVE}
+cp -p run68mac-master/build/run68* ../run68/
+cp -p ${ARCHIVE} ../archive/download/run68mac-${ARCHIVE}
 
 
 #------------------------------------------------------------------------------
@@ -118,8 +118,8 @@ ${LHA} -x -w=${ARCHIVE%.*} ${ARCHIVE}
 # インストール
 mkdir -p ../x68k_bin
 mkdir -p ../archive/download
-cp --preserve=timestamps ${ARCHIVE%.*}/HAS060.X ../x68k_bin/
-cp --preserve=timestamps ${ARCHIVE} ../archive/download
+cp -p ${ARCHIVE%.*}/HAS060.X ../x68k_bin/
+cp -p ${ARCHIVE} ../archive/download
 
 
 #------------------------------------------------------------------------------
@@ -138,8 +138,8 @@ cp --preserve=timestamps ${ARCHIVE} ../archive/download
 ## インストール
 #mkdir -p ../x68k_bin
 #mkdir -p ../archive/download
-#cp --preserve=timestamps ./hlk.r ../x68k_bin/
-#cp --preserve=timestamps ${ARCHIVE} ../archive/download
+#cp -p ./hlk.r ../x68k_bin/
+#cp -p ${ARCHIVE} ../archive/download
 
 
 #------------------------------------------------------------------------------
@@ -157,8 +157,8 @@ ${LHA} -x -w=${ARCHIVE%.*} ${ARCHIVE}
 # インストール
 mkdir -p ../x68k_bin
 mkdir -p ../archive/download
-cp --preserve=timestamps ${ARCHIVE%.*}/hlk301.x ../x68k_bin/
-cp --preserve=timestamps ${ARCHIVE} ../archive/download
+cp -p ${ARCHIVE%.*}/hlk301.x ../x68k_bin/
+cp -p ${ARCHIVE} ../archive/download
 
 
 #------------------------------------------------------------------------------
@@ -200,8 +200,8 @@ mkdir -p ../archive/download
 cp -r XC2102_02/INCLUDE/* ../include/xc
 cp -r XC2102_02/LIB/* ../lib/xc
 cp -r XC2101/BIN/AR.X ../x68k_bin
-cp --preserve=timestamps XC2101.LZH ../archive/download
-cp --preserve=timestamps XC2102_02.LZH ../archive/download
+cp -p XC2101.LZH ../archive/download
+cp -p XC2102_02.LZH ../archive/download
 
 
 #------------------------------------------------------------------------------
