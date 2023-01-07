@@ -1784,13 +1784,25 @@ sub apply_converter {
 
 			# 2 パス目：コンバート結果の出力
 			if ($pass == 2) {
+				# 変換前の記述（長すぎると HAS がエラーを起こすので分割）
+				my @split_origs = split_string($orig, 128);
+				my $num_split_origs = @split_origs;
+
 				# 変換前の記述をコメントとして付加
-				my $columns = calc_columns($modified);
-				while ($columns < 48) {
-					$columns += 8;
-					$modified .= '	';
+				{
+					# 変換前の記述 1 行目
+					my $columns = calc_columns($modified);
+					while ($columns < 48) {
+						$columns += 8;
+						$modified .= '	';
+					}
+					$modified .= '	*' . $split_origs[0];
+
+					# 変換前の記述 2 行目以降
+					for (my $i = 1; $i < $num_split_origs; $i++) {
+						$modified .= '							*		' . $split_origs[$i];
+					}
 				}
-				$modified .= '	*' . $orig;
 
 				# ファイルに書き出す
 				print $fh_output $modified . "\n";
@@ -3631,6 +3643,70 @@ sub calc_columns {
 	}
 
 	return $columns;
+}
+
+
+#------------------------------------------------------------------------------
+#	文字列を分割する
+#
+#	[parameters]
+#		・$string
+#			文字列
+#
+#		・$max_len
+#			許容する文字列長
+#
+#	[return]
+#		分割された文字列
+#------------------------------------------------------------------------------
+sub split_string {
+	my ($string, $max_len) = @_;
+
+	my @a_part;
+	{
+		my @a_char = split('', $string);
+		my $num_chars = @a_char;
+		my $part = '';
+		my $part_len = 0;
+		my $sjis = 0;
+
+		# 元の文字列を 1 文字ずつ処理するループ
+		for (my $i = 0; $i < $num_chars; $i++) {
+			my $char = $a_char[$i];
+			my $char_code = ord($char);
+			$part .= $char;
+			$part_len++;
+
+			if ($sjis == 0) {
+				# sjis の 1 バイト目？
+				if (0x81 <= $char_code  &&  $char_code <= 0x9f
+				||	0xe0 <= $char_code  &&  $char_code <= 0xef
+				) {
+					$sjis = 1;
+				}
+			} else {
+				# sjis の 2 バイト目？
+				if (0x40 <= $char_code  &&  $char_code <= 0x7e
+				||	0x80 <= $char_code  &&  $char_code <= 0xfc
+				) {
+					$sjis = 0;
+				}
+			}
+
+			# 許容する文字列長を超えていて、かつ sjis 多バイト文字の途中でないなら
+			if ($part_len > $max_len  &&  $sjis == 0) {
+				push(@a_part, $part . "\n");
+				$part = '';
+				$part_len = 0;
+			}
+		}
+
+		if ($part_len != 0) {
+			push(@a_part, $part);
+		}
+	}
+
+	return @a_part;
 }
 
 
