@@ -44,6 +44,8 @@ int main(int argc, char *argv[]){
 	/* 拡張後のヒープサイズを求める */
 	printf("after allmem()\n");
 	printf("heap free size = %d bytes\n", (int)get_heap_free_size());
+
+	return 0;
 }
 
 
