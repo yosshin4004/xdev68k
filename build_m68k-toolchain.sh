@@ -236,7 +236,14 @@ export LD_FOR_TARGET=${PROGRAM_PREFIX}ld
 export AS_FOR_TARGET=${PROGRAM_PREFIX}as
 export AR_FOR_TARGET=${PROGRAM_PREFIX}ar
 export RANLIB_FOR_TARGET=${PROGRAM_PREFIX}ranlib
-if [ ! -v newlib_cflags ]; then
+#
+#	次の記述は、
+#		if [ ! -v newlib_cflags ]; then
+#	としたいが、-v が使えない bash 環境が存在するため、代替手段を利用する。
+#	"${newlib_cflags+exists}" は、newlib_cflags が未定義なら空文字（偽）、
+#	そうでなければ exists（真）になる。従って -v の代替になる。
+#
+if [ ! "${newlib_cflags+exists}" ]; then
 	newlib_cflags=""
 fi
 export newlib_cflags="${newlib_cflags} -DPREFER_SIZE_OVER_SPEED -D__OPTIMIZE_SIZE__"
