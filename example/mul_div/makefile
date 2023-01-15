@@ -51,11 +51,17 @@ INTERMEDIATE_DIR = _build
 OBJS =	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.c,%.o,$(C_SRCS))) \
 	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.s,%.o,$(ASM_SRCS)))
 
+# 依存関係ファイル
+DEPS =	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.c,%.d,$(C_SRCS)))
+
 # HLK に入力するリンクリスト
 HLK_LINK_LIST = $(INTERMEDIATE_DIR)/_lk_list.tmp
 
 # デフォルトのターゲット
 all : $(TARGET_FILE)
+
+# 依存関係ファイルの include
+-include $(DEPS)
 
 # 中間生成物の削除
 clean : 
@@ -71,17 +77,17 @@ $(TARGET_FILE) : $(OBJS)
 	rm -f $(HLK_LINK_LIST)
 	@for FILENAME in $(OBJS); do\
 		echo $$FILENAME >> $(HLK_LINK_LIST); \
-        done
+	done
 	@for FILENAME in $(LIBS); do\
 		cp $$FILENAME $(INTERMEDIATE_DIR)/`basename $$FILENAME`; \
 		echo $(INTERMEDIATE_DIR)/`basename $$FILENAME` >> $(HLK_LINK_LIST); \
-        done
+	done
 	$(HLK) -i $(HLK_LINK_LIST) -o $(TARGET_FILE)
 
 # *.c ソースのコンパイル
 $(INTERMEDIATE_DIR)/%.o : %.c makefile
 	mkdir -p $(INTERMEDIATE_DIR)
-	$(CC) -S $(CFLAGS) -o $(INTERMEDIATE_DIR)/$*.m68k-gas.s $<
+	$(CC) -S $(CFLAGS) -o $(INTERMEDIATE_DIR)/$*.m68k-gas.s -MT $(INTERMEDIATE_DIR)/$*.o -MD -MP -MF $(INTERMEDIATE_DIR)/$*.d $<
 	$(GAS2HAS) -i $(INTERMEDIATE_DIR)/$*.m68k-gas.s -o $(INTERMEDIATE_DIR)/$*.s
 	rm -f $(INTERMEDIATE_DIR)/$*.m68k-gas.s
 	$(HAS) -e -u -w0 $(INCLUDE_FLAGS) $(INTERMEDIATE_DIR)/$*.s -o $(INTERMEDIATE_DIR)/$*.o
