@@ -116,6 +116,9 @@ fi
 ${LHA} -x -w=${ARCHIVE%.*} ${ARCHIVE}
 
 # インストール
+# cp コマンドに -p オプションを付けるのは、タイムスタンプを維持するためである。
+# HAS060.X は「実行ファイルのタイムスタンプを書き換えてはいけない」と利用規約で
+# 規定しているため、このような対応を行っている。
 mkdir -p ../x68k_bin
 mkdir -p ../archive/download
 cp -p ${ARCHIVE%.*}/HAS060.X ../x68k_bin/
@@ -135,7 +138,7 @@ cp -p ${ARCHIVE} ../archive/download
 #fi
 #unzip -x ${ARCHIVE}
 #
-## インストール
+# インストール
 #mkdir -p ../x68k_bin
 #mkdir -p ../archive/download
 #cp -p ./hlk.r ../x68k_bin/
@@ -187,7 +190,8 @@ ${LHA} -x -w=${ARCHIVE%.*} ${ARCHIVE}
 pushd XC2102_02/INCLUDE
 		# 大文字小文字を区別しないファイルシステムを想定し、一旦 *.tmp にリネームしたのち、小文字ファイル名に変換している。
 		for f in * ; do mv $f $f.tmp && mv $f.tmp `echo $f | awk '{print tolower($0)}'`; done
-		for f in * ; do cat $f | sed s/^\\x1a$//g > $f.tmp && rm $f && mv $f.tmp $f; done
+		# ここで sed を使うと一部環境で正常動作しないので perl を利用している。
+		for f in * ; do cat $f | perl -pe 's/^\x1a$//g' > $f.tmp && rm $f && mv $f.tmp $f; done
 popd
 
 # インストール
