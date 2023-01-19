@@ -42,7 +42,7 @@ int muls(short a, short b) {
 	);
 	return ret;
 }
-unsigned short divu(unsigned int a, unsigned short b) {
+unsigned short divu(unsigned short a, unsigned int b) {
 	/* コンパイラによる reordering を許可 */
 	unsigned short ret;
 	asm (
@@ -53,7 +53,7 @@ unsigned short divu(unsigned int a, unsigned short b) {
 	);
 	return ret;
 }
-short divs(int a, short b) {
+short divs(short a, int b) {
 	/* コンパイラによる reordering を許可 */
 	unsigned short ret;
 	asm (
@@ -68,20 +68,20 @@ short divs(int a, short b) {
 
 int main(int argc, char *argv[]){
 	printf(
-		"mulu(2,3) = %d (expected value = 6)\n",
-		mulu(2,3)
+		"mulu(0x2000, 0x3000) = 0x%8X (expected value = 0x6000000)\n",
+		mulu(0x2000, 0x3000)
 	);
 	printf(
-		"muls(2,-3) = %d (expected value = -6)\n",
-		muls(2,-3)
+		"muls(-0x2000, -0x3000) = 0x%8X (expected value = 0x6000000)\n",
+		muls(-0x2000, -0x3000)
 	);
 	printf(
-		"divu(3,6) = %d (expected value = 2)\n",
-		divu(3,6)
+		"divu(0x2000, 0x6000000) = 0x%8X (expected value = 0x3000)\n",
+		divu(0x2000, 0x6000000)
 	);
 	printf(
-		"divs(3,-6) = %d (expected value = -2)\n",
-		divs(3,-6)
+		"divs(-0x2000, -0x6000000) = 0x%8X (expected value = 0x3000)\n",
+		divs(-0x2000, -0x6000000)
 	);
 	return 0;
 }
