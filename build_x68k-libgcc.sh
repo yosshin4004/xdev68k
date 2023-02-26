@@ -220,7 +220,7 @@ fi
 # gcc ビルド用ワークディレクトリが存在しないならエラー
 if [ ! -e ${GCC_BUILD_DIR} ];
 then
-	echo "ERROR: directory '${GCC_BUILD_DIR}' is not found. please run build_x68k-libgcc.sh."
+	echo "ERROR: directory '${GCC_BUILD_DIR}' is not found. please run build_m68k-toolchain.sh."
 	exit 0
 fi
 
