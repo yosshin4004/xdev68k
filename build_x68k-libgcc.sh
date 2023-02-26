@@ -8,9 +8,8 @@
 #		build_m68k-toolchain.sh を実行した後に本スクリプトを実行する。
 #
 #	EN:
-#		Create libgcc.a for X68K with m68k-toolchain.
+#		Build libgcc.a for X68K with m68k-toolchain.
 #		Run this script After build_m68k-toolchain.sh has finished.
-#		The tools used in the build step on the X68K are listed below.
 #
 #------------------------------------------------------------------------------
 #
