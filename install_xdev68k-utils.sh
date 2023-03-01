@@ -71,7 +71,11 @@ unzip ${ARCHIVE}
 cd run68mac-master/
 mkdir build
 cd build
-cmake ..
+
+# https://github.com/yosshin4004/xdev68k/issues/4
+# に従い -G"Unix Makefiles" を付加した。
+cmake -G"Unix Makefiles" ..
+
 make
 cd ../
 cd ..
