@@ -2162,6 +2162,10 @@ sub modify_directive {
 			$modified = $spaces1 . '.align' . $spaces2 . modify_arg_list($arg_list, $asm_mode);
 		}
 		# ソースファイル名指定
+		#	GAS
+		#		.file "filename"
+		#	HAS
+		#		.file "filename"
 		elsif ($line =~ /^(\s*)\.file(\s+)\"(.*)\"$g_regex_end/i) {
 			my $spaces1	= $1;
 			my $spaces2	= $2;
@@ -2174,15 +2178,38 @@ sub modify_directive {
 			my $directive	= $2;
 			$modified = $spaces1 . $directive;
 		}
+		# 番号付きソースファイル名指定は除去
+		#	GAS
+		#		.file 1 "filename"
+		elsif ($line =~ /^(\s*)\.file(\s+)(\d+)(\s+)\"(.*)\"$g_regex_end/i) {
+			my $spaces1	= $1;
+			my $spaces2	= $2;
+			my $arg1	= $3;
+			my $spaces3	= $3;
+			my $string	= $4;
+			# 何も行わない
+		}
+		# ソースコード位置情報は除去
+		#	GAS
+		#		.loc 1 71 2 view .LVU114
+		#		.loc 1 106 2 is_stmt 1 view .LVU115
+		#		等々
+		elsif ($line =~ /^(\s*)\.loc(\s+)(.*)$g_regex_end/i) {
+			my $spaces1		= $1;
+			my $spaces2		= $2;
+			my $arg_list	= $3;
+			# 何も行わない
+		}
 		# HAS が認識できないディレクティブの除去
 		#	.hidden		複数ファイルにまたがって参照されるが非公開にしたいラベル
 		#	.type		ラベルの用途を指定するデバッグ情報らしい
 		#	.size		デバッグ情報らしい
 		#	.ident		コンパイラのバージョン情報らしい
 		#	.section	必要なものは個別に認識済み
+		#	.weak		弱いシンボル
 		#	.swbeg		詳細不明
 		#	.cfi_...	デバッグ情報らしい
-		elsif ($line =~ /^(\s*)(\.(?:hidden|type|size|ident|section|swbeg|cfi_\w+))(?:(\s+)(.+?))?$g_regex_end/i) {
+		elsif ($line =~ /^(\s*)(\.(?:hidden|type|size|ident|section|weak|swbeg|cfi_\w+))(?:(\s+)(.+?))?$g_regex_end/i) {
 			my $spaces1		= $1;
 			my $directive	= $2;
 			my $spaces2		= $3;	# 省略可能
