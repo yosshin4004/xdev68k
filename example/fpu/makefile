@@ -29,6 +29,7 @@ INCLUDE_FLAGS = -I${XDEV68K_DIR}/include/xc -I${XDEV68K_DIR}/include/xdev68k
 # コンパイルフラグ
 COMMON_FLAGS = -m68030 -m68881 -Os $(INCLUDE_FLAGS)
 CFLAGS = $(COMMON_FLAGS) -Wno-builtin-declaration-mismatch -fcall-used-d2 -fcall-used-a2 -finput-charset=cp932 -fexec-charset=cp932 -fverbose-asm
+CXXFLAGS = $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++17
 
 # *.c ソースファイル
 C_SRCS = main.c
@@ -44,6 +45,7 @@ LIBS =\
 	${XDEV68K_DIR}/lib/xc/IOCSLIB.L \
 	${XDEV68K_DIR}/lib/xc/FLOATFNC.L \
 	${XDEV68K_DIR}/lib/m68k_elf/m68020/libgcc.a \
+	${XDEV68K_DIR}/lib/m68k_elf/m68020/libstdc++.a \
 
 # 中間ファイル生成用ディレクトリ
 INTERMEDIATE_DIR = _build
@@ -53,7 +55,8 @@ OBJS =	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.c,%.o,$(C_SRCS))) \
 	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.s,%.o,$(ASM_SRCS)))
 
 # 依存関係ファイル
-DEPS =	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.c,%.d,$(C_SRCS)))
+DEPS =	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.c,%.d,$(C_SRCS))) \
+	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.cpp,%.d,$(CPP_SRCS)))
 
 # HLK に入力するリンクリスト
 HLK_LINK_LIST = $(INTERMEDIATE_DIR)/_lk_list.tmp
@@ -89,6 +92,14 @@ $(EXECUTABLE) : $(OBJS) $(LIBS)
 $(INTERMEDIATE_DIR)/%.o : %.c makefile
 	mkdir -p $(dir $(INTERMEDIATE_DIR)/$*.o)
 	$(CC) -S $(CFLAGS) -o $(INTERMEDIATE_DIR)/$*.m68k-gas.s -MT $(INTERMEDIATE_DIR)/$*.o -MD -MP -MF $(INTERMEDIATE_DIR)/$*.d $<
+	$(GAS2HAS) -i $(INTERMEDIATE_DIR)/$*.m68k-gas.s -o $(INTERMEDIATE_DIR)/$*.s
+	rm -f $(INTERMEDIATE_DIR)/$*.m68k-gas.s
+	$(HAS) -e -u -w0 $(INCLUDE_FLAGS) $(INTERMEDIATE_DIR)/$*.s -o $(INTERMEDIATE_DIR)/$*.o
+
+# *.cpp ソースのコンパイル
+$(INTERMEDIATE_DIR)/%.o : %.cpp makefile
+	mkdir -p $(dir $(INTERMEDIATE_DIR)/$*.o)
+	$(CXX) -S $(CXXFLAGS) -o $(INTERMEDIATE_DIR)/$*.m68k-gas.s -MT $(INTERMEDIATE_DIR)/$*.o -MD -MP -MF $(INTERMEDIATE_DIR)/$*.d $<
 	$(GAS2HAS) -i $(INTERMEDIATE_DIR)/$*.m68k-gas.s -o $(INTERMEDIATE_DIR)/$*.s
 	rm -f $(INTERMEDIATE_DIR)/$*.m68k-gas.s
 	$(HAS) -e -u -w0 $(INCLUDE_FLAGS) $(INTERMEDIATE_DIR)/$*.s -o $(INTERMEDIATE_DIR)/$*.o
