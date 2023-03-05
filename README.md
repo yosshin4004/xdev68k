@@ -19,7 +19,7 @@ xdev68k は、
 	ここでは、推奨環境である msys2+mingw を利用する場合のインストール手順のみを示します。
 
 	msys2 のインストーラは https://www.msys2.org/ から入手可能です。
-	インストールが終わったら、msys の今ロース上で以下を実行し、gcc や perl 等、環境構築に必要なツールをインストールします。
+	インストールが終わったら、msys のコンソール上で以下を実行し、gcc や perl 等、環境構築に必要なツールをインストールします。
 	```bash
 	pacman -S base-devel
 	pacman -S mingw-w64-i686-toolchain
@@ -31,7 +31,20 @@ xdev68k は、
 	pacman -S cmake
 	pacman -S libiconv
 	```
-	以降 msys の bash コンソール起動は、スタートメニューの MSYS2 MinGW 64bit のアイコンから行います。
+	msys の perl は初期状態ではロケールが正しく設定されておらず、perl 起動の度に以下のように警告されます。
+	```bash
+		perl: warning: Setting locale failed.
+		perl: warning: Please check that your locale settings:
+	```
+	これを解消するため、C:/msys64/home/ユーザー名/.bashrc に以下のような指定を追加しておきます。
+
+	```bash
+		# perl の locale 警告対策
+		export LC_ALL="C"
+		export LC_CTYPE="C"
+		export LANG="en_US.UTF-8"
+	```
+	msys の bash コンソール起動は、スタートメニューの MSYS2 MinGW 64bit のアイコンから行います。
 	ここから起動しないと、ネイティブのコンパイラ環境にパスが通った状態にならず、クロスコンパイラ構築に失敗します。  
 	![screen_shot_gfx](https://user-images.githubusercontent.com/11882108/154822283-4b208ca4-8a69-4b34-a160-5b7845cbaa2a.png)
 
@@ -55,7 +68,7 @@ xdev68k は、
 	ここの操作では、以下のファイルが自動でダウンロードまたはインストールされます。
 	対象ファイルの詳細については、以下の URL でご確認頂けます。
 
-	* C Compiler PRO-68K ver2.1（XC）システムディスク 1 & 2  
+	* SHARP C Compiler PRO-68K ver2.1 システムディスク 1 & 2  
 	http://retropc.net/x68000/software/sharp/xc21/
 	（ファイル名 XC2101.LZH, XC2102_02.LZH）  
 	* HAS060.X  
@@ -64,9 +77,8 @@ xdev68k は、
 	* HLK v3.01  
 	http://retropc.net/x68000/software/develop/lk/hlk/
 	（ファイル名 HLK301B.LZH）
-	* X68K コマンドラインエミュレータ run68 Version 0.09  
-	https://sourceforge.net/projects/run68/
-	（ファイル名 run68bin-009a-20090920.zip）
+	* X68K コマンドラインエミュレータ run68  
+	https://github.com/GOROman/run68mac
 
 	ホスト環境の bash コンソール上で、先ほどと同じディレクトリ（xdev68k）から以下のコマンドを実行します。
 	```bash
@@ -98,6 +110,8 @@ xdev68k/
 │	│		原作者、入手元の情報、利用規約をまとめたテキスト
 │	├ libgcc_src.tar.gz
 │	│		libgcc のソースコード
+│	├ libstdc++_src.tar.gz
+│	│		libstdc++ のソースコード
 │	├ *.zip *.lzh
 │	│		原本のアーカイブファイル
 │	└ download/
@@ -130,7 +144,7 @@ xdev68k/
 │		├ license/
 │		│		libgcc のライセンス情報
 │		└ m68000/ m68020/ m68040/ m68060/ 
-│				各種 CPU 構成ごとの libgcc.a
+│				各種 CPU 構成ごとの libgcc.a および libstdc++.a
 ├ util/
 │	│
 │	└ x68k_gas2has.pl
@@ -147,6 +161,8 @@ xdev68k/
 │		クロスコンパイラのビルドスクリプト
 ├ build_x68k-libgcc.sh
 │		libgcc のビルドスクリプト
+├ build_x68k-libstdc++.sh
+│		libstdc++ のビルドスクリプト
 └ install_xdev68k-utils.sh
 		環境構築スクリプト
 ```
@@ -214,7 +230,7 @@ hello world.
 4. リンク  
 	main.o を X68K 対応リンカ hlk301.x でリンクします。
 	リンカの実行は、X68K コマンドラインエミュレータ run68 で行います。
-	本リポジトリに含まれている libgcc.a をリンクする必要があります。
+	本リポジトリに含まれているランタイムライブラリをリンクする必要があります。
 	```bash
 	# main.o をリンクする。
 	# HLK に長いパス文字を与えることは難しいので、
@@ -294,60 +310,62 @@ ___mulsi3:                          *__mulsi3:
  rts                                * rts
 ```
 
-# libgcc.a の種類と用途
+# ランタイムライブラリの種類と用途
 
 ディレクトリ xdev68k/lib/m68k_elf 以下には、
-gcc のランタイムライブラリである libgcc.a が置かれています。
-m68k-elf-gcc で生成したコードには、これを必ずリンクする必要があります。
+gcc のランタイムライブラリが置かれています。
+m68k-elf-gcc で生成したコードには libgcc.a を、
+m68k-elf-g++ で生成したコードには libstdc++.a をリンクする必要があります。
 
 >:warning:
->必ず xdev68k/lib/m68k_elf 以下の libgcc.a を利用してください。
->xdev68k/m68k-toolchain 以下にも同名ファイルである libgcc.a が存在しますが、これらは X68K のオブジェクトファイルとはリンクできません。
->従来の X68K 移植版 gcc に含まれた libgcc.a もリンク可能ですが、互換性が無いため動作保証はありません。
+>必ず xdev68k/lib/m68k_elf 以下のランタイムライブラリを利用してください。
+>xdev68k/m68k-toolchain 以下にも同名ファイルが存在しますが、これらは X68K のオブジェクトファイルとはリンクできません。
+>従来の X68K 移植版 gcc に含まれたランタイムライブラリもリンク可能ですが、互換性が無いため動作保証はありません。
 
-libgcc.a は複数種類あり、アプリケーションのビルド設定に合致するものを選択して利用します。
+ランタイムライブラリは複数種類あり、アプリケーションのビルド設定に合致するものを選択して利用します。
 
-* xdev68k/lib/m68k_elf/m68000/libgcc.a  
+* xdev68k/lib/m68k_elf/m68000/*.a  
 	MC68000 の命令セットで構成されています。
 	全世代の X680x0 で動作可能な実行ファイルを作成する場合にリンクします。
 	FPU 非搭載 X68030 環境も、こちらをリンクしてください。
 
-* xdev68k/lib/m68k_elf/m68020/libgcc.a  
+* xdev68k/lib/m68k_elf/m68020/*.a  
 	MC68020 の命令セット + FPU の MC68881 命令セットで構成されています。
 	FPU 搭載 X68030 で動作可能な実行ファイルを作成する場合にリンクします。
 	FPU 非搭載 X68030 では動作しないのでご注意ください。
 	また、MC68040 以降の内蔵 FPU には存在しない浮動小数演算命令（FMOVECR 等々）を含む可能性があるため、
 	MC68040 / MC68060 等の環境では動作保証がないことにご注意ください。
 
-* xdev68k/lib/m68k_elf/m68040/libgcc.a  
+* xdev68k/lib/m68k_elf/m68040/*.a  
 	MC68040 の命令セットで構成されています。
 	68040 アクセラレータを搭載した X680x0 で動作可能な実行ファイルを作成する場合にリンクします。
 
-* xdev68k/lib/m68k_elf/m68060/libgcc.a  
+* xdev68k/lib/m68k_elf/m68060/*.a  
 	MC68060 の命令セットで構成されています。
 	68060 アクセラレータを搭載した X680x0 で動作可能な実行ファイルを作成する場合にリンクします。
 
 
-# libgcc.a のリビルド手順
+# ランタイムライブラリのリビルド手順
 
-libgcc.a はビルド済みの状態で本リポジトリの xdev68k/lib 以下に含まれており、
+ランタイムライブラリはビルド済みの状態で本リポジトリの xdev68k/lib 以下に含まれており、
 ユーザーの手でビルドする必要はありませんが、
 もし何らかの事情でリビルドする必要がある場合は、ホスト環境の bash コンソール上でディレクトリ xdev68k に移動し、
 以下を実行します。
 ```bash
 ./build_x68k-libgcc.sh -m68000 -m68020 -m68040 -m68060  
+./build_x68k-libstdc++.sh -m68000 -m68020 -m68040 -m68060  
 ```
 ビルドに成功すると、コンソールに以下のように出力されます。
 ```bash
 The building process is completed successfully.
 ```
-ディレクトリ build_libgcc/ 以下は中間ファイルです。
+ディレクトリ build_libgcc/ および build_libstdc++/ は中間ファイルです。
 ビルド完了後は削除していただいても問題ありません。
 
 
-# 従来のコンパイラとの互換性問題
+# 従来の X68K 対応コンパイラとの互換性問題
 
-従来の X68K 対応コンパイラと最新の m68k-elf-gcc の間には互換性問題があります。
+従来の X68K 対応コンパイラ（SHARP C Compiler PRO-68K や gcc 真里子版）と最新の m68k-elf-gcc の間には互換性問題があります。
 
 ## 1. ABI が一致しない
 ABI とは Application Binary Interface の略で、
@@ -409,7 +427,7 @@ ABI とは Application Binary Interface の略で、
 この問題の再現例を示します。
 まず、
 従来の X68K 対応コンパイラ（古い X68K 移植版 gcc）で NaN Inf を発生させ、
-これらを SHARP C Compiler PRO-68K（XC）の CLIB.L に含まれる printf 関数で出力した結果を示します。
+これらを SHARP C Compiler PRO-68K の CLIB.L に含まれる printf 関数で出力した結果を示します。
 ```
 Inf (1.0f/0.0f を計算させて生成)
 	バイナリ表現      : 0x7FFFFFFF
@@ -420,7 +438,7 @@ NaN (0.0f/0.0f を計算させて生成)
 ```
 次に、
 最新の m68k-elf-gcc 上で NaN Inf を発生させ、
-これらを先ほどと同様に SHARP C Compiler PRO-68K（XC）の CLIB.L に含まれる printf 関数で出力した結果を示します。
+これらを先ほどと同様に SHARP C Compiler PRO-68K の CLIB.L に含まれる printf 関数で出力した結果を示します。
 ```
 Inf (1.0f/0.0f を計算させて生成)
 	バイナリ表現      : 0x7F800000（IEEE754 の Inf としては正しい）
@@ -441,23 +459,62 @@ LIBC には、
 リンク時にシンボルが衝突します。
 
 
+## 4. C/C++ 標準ヘッダの競合問題
+include 指定されたヘッダファイルは、
+コンパイラに -I オプションで指定した検索パス上で見つかればそのファイルが include され、
+見つからない場合は、m68k-toolchain 上に存在するファイルが include されます。
+これが原因で、
+古いソフトウェア資産に由来する C/C++ 標準ヘッダファイルと、
+m68k-toolchain 上に存在する新しい世代の C/C++ 標準ヘッダファイルとの間で混同や競合が発生する場合があります。
+
+
 # 推奨される利用スタイル
 
 以上をまとめると、m68k-elf-gcc の推奨される利用スタイルは以下のようになります。
 
 1. build_m68k-toolchain.sh で自力ビルドした m68k-elf-gcc を利用する。
 2. m68k-elf-gcc 側に -fcall-used-d2 -fcall-used-a2 を指定する。
-3. 本リポジトリに含まれている libgcc.a を利用する。
-4. 過去の資産を再コンパイルせず利用する場合は、long long 型、long double 型 を含まないものに限る。
+3. 本リポジトリに含まれているランタイムライブラリを利用する。
+4. 過去の資産を再コンパイルせず利用する場合は、long long 型、long double 型 を含まないものに限定する。
 5. NaN や Inf を古いコードに入力する場合、正しく処理されない可能性を考慮する。
+6. C/C++ 標準ヘッダファイルの利用は、古い世代のヘッダと新しい世代のヘッダで競合が起きないものに限定する。
+
+
+# SHARP C Compiler PRO-68K 以外のライブラリ環境を利用する
+
+install_xdev68k-utils.sh は、
+ライブラリ環境として SHARP C Compiler PRO-68K をインストールしますが、
+これは xdev68k デフォルトのライブラリ環境に過ぎず、
+ユーザー側で任意のものに差し替え可能です。
+xdev68k/example/ のサンプルコードを例に説明すると、
+ライブラリ環境の差し替えは、makefile 上のヘッダ検索パスとリンクライブラリファイル指定を変更するだけで可能です。
+具体的には以下のようにします。
+```bash
+# ヘッダ検索パス
+INCLUDE_FLAGS = （ここに -I に続けて差し替え先のヘッダ検索パスを書く）
+
+(中略)
+
+# リンク対象のライブラリファイル
+LIBS =\
+	（ここに差し替え先のライブラリ群を書く） \
+	${XDEV68K_DIR}/lib/m68k_elf/m68000/libgcc.a \
+	${XDEV68K_DIR}/lib/m68k_elf/m68000/libstdc++.a \
+```
 
 
 # その他の制限事項
 
 現状多くの制限があります。
 
-* c++ には未対応  
-	c++ 対応のランタイムライブラリが未整備のため、実行ファイルが生成できません。
+* c++ の例外と RTTI が扱えない  
+	例外や RTTI を利用すると、x68k_gas2has.pl が未サポートの GAS ディレクティブが出力されるため、アセンブルに失敗します。
+	例外および RTTI を無効化するには、m68k-elf-g++ のコンパイルオプションに
+	```bash
+	-fno-rtti
+	-fno-exceptions
+	```
+	を指定する必要があります。
 
 * GAS 形式アセンブラコードは gcc が出力する書式のみに対応  
 	x68k_gas2has.pl が認識できるのは、GAS 形式アセンブラコードの記述方法のうち、gcc が出力する可能性のある書式のみです。
@@ -505,13 +562,13 @@ LHa for UNIX with Autoconf 作成者 Koji Arai 氏に感謝いたします。
 
 # ライセンス
 
-* x68k_gas2has.pl / build_m68k-toolchain.sh / build_x68k-libgcc.sh / install_xdev68k-utils.sh  
+* x68k_gas2has.pl / build_m68k-toolchain.sh / build_x68k-libgcc.sh / build_x68k-libstdc++.sh / install_xdev68k-utils.sh  
 Apache License Version 2.0 が適用されます。
 
-* libgcc.a  
+* libgcc.a および libstdc++.a  
 GNU GENERAL PUBLIC LICENSE Version 3 と、GCC RUNTIME LIBRARY EXCEPTION Version 3.1 が適用されます。
-（libgcc.a をバイナリ単体で配布するときは GPL 適用になるため、ソースコードまたはその入手手段を開示する必要がある。
-libgcc.a をアプリケーションにリンクして利用する場合は、アプリケーションに GPL は伝搬しないし、ソース開示などの義務は生じない。）
+（アーカイブファイルをバイナリ単体で配布するときは GPL 適用になるため、ソースコードまたはその入手手段を開示する必要がある。
+アーカイブファイルをアプリケーションにリンクして利用する場合は、アプリケーションに GPL は伝搬しないし、ソース開示などの義務は生じない。）
 
 * install_xdev68k-utils.sh によりダウンロードまたはインストールされたファイル群  
 それぞれにライセンスと配布規定が存在します。
