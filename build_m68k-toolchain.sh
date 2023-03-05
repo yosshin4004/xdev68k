@@ -97,7 +97,7 @@ WITH_CPU=${CPU}
 # gcc ビルド用ワークディレクトリがすでに存在するなら削除確認
 if [ -d ${GCC_BUILD_DIR} ]; then
 	echo "${GCC_BUILD_DIR} already exists."
-	echo "Do you want to remove the existing directory and proceed? (Y/n)"
+	echo "Do you want to remove the existing directory and proceed the building process? (Y/n)"
 	read ANS
 	case $ANS in
 	  "" | [Yy]* )
@@ -115,7 +115,7 @@ fi
 # インストール先ディレクトリがすでに存在するなら削除確認
 if [ -d ${INSTALL_DIR} ]; then
 	echo "${INSTALL_DIR} already exists."
-	echo "Do you want to remove the existing directory and proceed? (Y/n)"
+	echo "Do you want to remove the existing directory and proceed the building process? (Y/n)"
 	read ANS
 	case $ANS in
 	  "" | [Yy]* )
@@ -149,7 +149,7 @@ if ! [ -f "${BINUTILS_ARCHIVE}" ]; then
 fi
 if [ $(sha512sum ${BINUTILS_ARCHIVE} | awk '{print $1}') != ${BINUTILS_SHA512SUM} ]; then
 	echo "SHA512SUM verification of ${BINUTILS_ARCHIVE} failed!"
-	exit
+	exit 1
 fi
 tar jxvf ${BINUTILS_ARCHIVE} -C ${SRC_DIR}
 
@@ -186,7 +186,7 @@ if ! [ -f "${GCC_ARCHIVE}" ]; then
 fi
 if [ $(sha512sum ${GCC_ARCHIVE} | awk '{print $1}') != ${GCC_SHA512SUM} ]; then
 	echo "SHA512SUM verification of ${GCC_ARCHIVE} failed!"
-	exit
+	exit 1
 fi
 tar xvf ${GCC_ARCHIVE} -C ${SRC_DIR}
 
@@ -227,7 +227,7 @@ if ! [ -f "${NEWLIB_ARCHIVE}" ]; then
 fi
 if [ $(sha512sum ${NEWLIB_ARCHIVE} | awk '{print $1}') != ${NEWLIB_SHA512SUM} ]; then
 	echo "SHA512SUM verification of ${NEWLIB_ARCHIVE} failed!"
-	exit
+	exit 1
 fi
 tar zxvf ${NEWLIB_ARCHIVE} -C ${SRC_DIR}
 
@@ -300,4 +300,5 @@ echo "--------------------------------------------------------------------------
 echo "The building process is completed successfully."
 echo "-----------------------------------------------------------------------------"
 echo ""
+exit 0
 
