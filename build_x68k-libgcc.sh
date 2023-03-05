@@ -8,7 +8,7 @@
 #		build_m68k-toolchain.sh を実行した後に本スクリプトを実行する。
 #
 #	EN:
-#		Build libgcc.a for X68K with m68k-toolchain.
+#		libgcc.a builder for X68K using m68k-toolchain.
 #		Run this script After build_m68k-toolchain.sh has finished.
 #
 #------------------------------------------------------------------------------
@@ -153,7 +153,7 @@ set -eu
 # 環境変数の確認
 if [ -z ${XDEV68K_DIR-} ]; then
   echo "Please set XDEV68K_DIR environment variable."
-  exit -1
+  exit 1
 fi
 
 
@@ -202,7 +202,7 @@ INCLUDE_PATHS=(
 # libgcc ビルド用ワークディレクトリがすでに存在するなら削除確認
 if [ -d ${LIBGCC_BUILD_DIR} ]; then
 	echo "${LIBGCC_BUILD_DIR} already exists."
-	echo "Do you want to remove the existing directory and proceed? (Y/n)"
+	echo "Do you want to remove the existing directory and proceed the building process? (Y/n)"
 	read ANS
 	case $ANS in
 	  "" | [Yy]* )
@@ -220,8 +220,8 @@ fi
 # gcc ビルド用ワークディレクトリが存在しないならエラー
 if [ ! -e ${GCC_BUILD_DIR} ];
 then
-	echo "ERROR: directory '${GCC_BUILD_DIR}' is not found. please run build_m68k-toolchain.sh."
-	exit 0
+	echo "ERROR: Can not found directory '${GCC_BUILD_DIR}'. please run build_m68k-toolchain.sh."
+	exit 1
 fi
 
 # libgcc ビルド用ワークディレクトリを作成
@@ -236,8 +236,8 @@ if [ -n "${OPTIONS["--reuse-old-libgcc"]-}" ]; then
 		cp ${OLD_LIBGCC_FILE_NAME} ${LIBGCC_BUILD_DIR}/src/libgcc.a
 	else
 		# エラー
-		echo "ERROR: '${OLD_LIBGCC_FILE_NAME}' is not found."
-		exit 0
+		echo "ERROR: Can not found '${OLD_LIBGCC_FILE_NAME}'."
+		exit 1
 	fi
 fi
 
@@ -252,7 +252,7 @@ AR="${RUN68} ${XDEV68K_DIR}/x68k_bin/AR.X"
 #-----------------------------------------------------------------------------
 for TARGET in ${TARGETS[@]}
 do
-	echo "generating asm sources for ${TARGET}."
+	echo "generating libgcc.a for ${TARGET}."
 	TARGET_DIR=${TARGET_DIRS[$TARGET]}
 
 	# ターゲットのソースディレクトリ名
@@ -457,16 +457,15 @@ do
 	# libgcc2.c 以外のファイルから生成するオブジェクトファイル名
 	#	[オブジェクトファイル名]=ソースファイル名
 	#	X68K のファイル名規則に違反する場合はここでリネームする。
-	#	明らかに不要なもの（デバッグ情報に関連する unwind～）はコメントアウトした。
 	declare -A SRC_FILES_EMIT_NOT_FROM_LIBGCC2
 	SRC_FILES_EMIT_NOT_FROM_LIBGCC2=(
 		[_xfgnulib]=${LIBGCC_TARGET_SRC_DIR}/_xfgnulib
 		[_fpgnulib]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/config/m68k/fpgnulib
 		[_en_exe_stack]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/enable-execute-stack-empty
-#		[_unwind_dw2]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/unwind-dw2
-#		[_unwind_dw2_fde]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/unwind-dw2-fde
-#		[_unwind_sjlj]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/unwind-sjlj
-#		[_unwind_c]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/unwind-c
+		[_unwind_dw2]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/unwind-dw2
+		[_unwind_dw2_fde]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/unwind-dw2-fde
+		[_unwind_sjlj]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/unwind-sjlj
+		[_unwind_c]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/unwind-c
 		[_emutls]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/emutls
 	)
 
@@ -496,7 +495,7 @@ do
 
 
 	#-----------------------------------------------------------------------------
-	# X68K 上でのビルド
+	# アセンブルとアーカイブファイルの作成
 	#-----------------------------------------------------------------------------
 
 	# ディレクトリ移動
@@ -629,5 +628,6 @@ echo "--------------------------------------------------------------------------
 echo "The building process is completed successfully."
 echo "-----------------------------------------------------------------------------"
 echo ""
+exit 0
 
 
