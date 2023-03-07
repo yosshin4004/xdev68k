@@ -33,16 +33,16 @@ xdev68k は、
 	```
 	msys の perl は初期状態ではロケールが正しく設定されておらず、perl 起動の度に以下のように警告されます。
 	```bash
-		perl: warning: Setting locale failed.
-		perl: warning: Please check that your locale settings:
+	perl: warning: Setting locale failed.
+	perl: warning: Please check that your locale settings:
 	```
 	これを解消するため、C:/msys64/home/ユーザー名/.bashrc に以下のような指定を追加しておきます。
 
 	```bash
-		# perl の locale 警告対策
-		export LC_ALL="C"
-		export LC_CTYPE="C"
-		export LANG="en_US.UTF-8"
+	# perl の locale 警告対策
+	export LC_ALL="C"
+	export LC_CTYPE="C"
+	export LANG="en_US.UTF-8"
 	```
 	msys の bash コンソールは、スタートメニューの「MSYS2 MinGW 64bit」のショートカットから起動します。
 	ここから起動しないと、ネイティブのコンパイラ環境にパスが通った状態にならず、クロスコンパイラ構築に失敗します。  
@@ -472,10 +472,10 @@ include 指定されたヘッダファイルは、
 次のような動作となります。
 ```C
 ※良い例
-#include <stdbool.h>	// XC には含まれないので m68k-toolchain 側が読まれる
-#include <stdint.h>		// XC には含まれないので m68k-toolchain 側が読まれる
-#include <stdlib.h>		// XC 側が読まれる
-#include <stdio.h>		// XC 側が読まれる
+#include <stdbool.h>    // XC には含まれないので m68k-toolchain 側が読まれる
+#include <stdint.h>     // XC には含まれないので m68k-toolchain 側が読まれる
+#include <stdlib.h>     // XC 側が読まれる
+#include <stdio.h>      // XC 側が読まれる
 ```
 この動作は、新しい世代の C 標準ヘッダファイルを部分的に取り込む場合には便利です。
 しかし一方で、これが原因で、
@@ -484,7 +484,7 @@ m68k-toolchain 上に存在する新しい世代の C/C++ 標準ヘッダファ�
 問題となる場合があります。
 ```C
 ※悪い例
-#include <iostream>	// XC には含まれないので m68k-toolchain 側が読まれる。
+#include <iostream> // XC には含まれないので m68k-toolchain 側が読まれる。
                     // iostream が include するヘッダが一部 XC 側から読まれる（混同）。
                     // その結果、大量のコンパイルエラーが出力される。
 ```
