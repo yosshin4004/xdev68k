@@ -49,7 +49,7 @@ GCC_BUILD_DIR="build_gcc"
 LIBGCC_BUILD_DIR="build_libgcc"
 
 # m68k ツールチェインのディレクトリ
-M68K_TOOLCHAIN="m68k-toolchain"
+M68K_TOOLCHAIN_DIR="m68k-toolchain"
 
 # m68k gas -> X68K has 変換
 GAS2HAS="perl ./util/x68k_gas2has.pl"
@@ -302,7 +302,7 @@ do
 	do
 		SRC=${SRC_FILES_EMIT_FROM_LB1SF68[$OBJ]}
 		echo "	generating ${OBJ}.s from lb1sf68.S."
-		${M68K_TOOLCHAIN}/bin/${GCC_ABI}-cpp -E -DL${OBJ} -o ${LIBGCC_TARGET_SRC_DIR}/${OBJ}_.s ${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/config/m68k/lb1sf68.S
+		${M68K_TOOLCHAIN_DIR}/bin/${GCC_ABI}-cpp -E -DL${OBJ} -o ${LIBGCC_TARGET_SRC_DIR}/${OBJ}_.s ${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/config/m68k/lb1sf68.S
 		${GAS2HAS} -i ${LIBGCC_TARGET_SRC_DIR}/${OBJ}_.s -o ${LIBGCC_TARGET_SRC_DIR}/${OBJ}.s -cpu ${TARGET}
 		rm ${LIBGCC_TARGET_SRC_DIR}/${OBJ}_.s
 	done
@@ -317,8 +317,11 @@ do
 
 	# コンパイルオプション
 	CFLAGS="\
-		-isystem ${M68K_TOOLCHAIN}/${GCC_ABI}/include\
-		-isystem ${M68K_TOOLCHAIN}/${GCC_ABI}/sys-include\
+		-B${XDEV68K_DIR}/build_gcc/build/gcc-${GCC_VERSION}_stage2/./gcc/\
+		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/bin/\
+		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/lib/\
+		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/include\
+		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/sys-include\
 		-O2 -DIN_GCC -DCROSS_DIRECTORY_STRUCTURE\
 		-W -Wall -Wwrite-strings -Wcast-qual -Wstrict-prototypes -Wold-style-definition\
 		-Wno-narrowing -Wno-missing-prototypes -Wno-implicit-function-declaration\
@@ -429,12 +432,12 @@ do
 	do
 		SRC=${SRC_FILES_EMIT_FROM_LIBGCC2[$OBJ]}
 		echo "	generating ${OBJ}.s from libgcc2.c."
-		${M68K_TOOLCHAIN}/bin/${GCC_ABI}-gcc ${CFLAGS} -S -o ${LIBGCC_TARGET_SRC_DIR}/${OBJ}_.s -DL${SRC} -c ${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/libgcc2.c
+		${M68K_TOOLCHAIN_DIR}/bin/${GCC_ABI}-gcc ${CFLAGS} -S -o ${LIBGCC_TARGET_SRC_DIR}/${OBJ}_.s -DL${SRC} -c ${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/libgcc2.c
 		${GAS2HAS} -i ${LIBGCC_TARGET_SRC_DIR}/${OBJ}_.s -o ${LIBGCC_TARGET_SRC_DIR}/${OBJ}.s -cpu ${TARGET} -inline-asm-syntax gas
 		rm ${LIBGCC_TARGET_SRC_DIR}/${OBJ}_.s
 
 		# 依存ファイルを収集
-		${M68K_TOOLCHAIN}/bin/${GCC_ABI}-gcc ${CFLAGS} -c -M ${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/libgcc2.c -MF ${LIBGCC_TARGET_SRC_DIR}/${OBJ}.d
+		${M68K_TOOLCHAIN_DIR}/bin/${GCC_ABI}-gcc ${CFLAGS} -c -M ${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/libgcc2.c -MF ${LIBGCC_TARGET_SRC_DIR}/${OBJ}.d
 		DEP_FILES=(`cat ${LIBGCC_TARGET_SRC_DIR}/${OBJ}.d`)
 		for DEP_FILE in ${DEP_FILES[@]}
 		do
@@ -474,12 +477,12 @@ do
 	do
 		SRC=${SRC_FILES_EMIT_NOT_FROM_LIBGCC2[$OBJ]}
 		echo "	generating ${OBJ}.s from ${SRC}.c."
-		${M68K_TOOLCHAIN}/bin/${GCC_ABI}-gcc ${CFLAGS} -S -o ${LIBGCC_TARGET_SRC_DIR}/${OBJ}_.s -c ${SRC}.c
+		${M68K_TOOLCHAIN_DIR}/bin/${GCC_ABI}-gcc ${CFLAGS} -S -o ${LIBGCC_TARGET_SRC_DIR}/${OBJ}_.s -c ${SRC}.c
 		${GAS2HAS} -i ${LIBGCC_TARGET_SRC_DIR}/${OBJ}_.s -o ${LIBGCC_TARGET_SRC_DIR}/${OBJ}.s -cpu ${TARGET} -inline-asm-syntax gas
 		rm ${LIBGCC_TARGET_SRC_DIR}/${OBJ}_.s
 
 		# 依存ファイルを収集
-		${M68K_TOOLCHAIN}/bin/${GCC_ABI}-gcc ${CFLAGS} -c -M ${SRC}.c -MF ${LIBGCC_TARGET_SRC_DIR}/${OBJ}.d
+		${M68K_TOOLCHAIN_DIR}/bin/${GCC_ABI}-gcc ${CFLAGS} -c -M ${SRC}.c -MF ${LIBGCC_TARGET_SRC_DIR}/${OBJ}.d
 		DEP_FILES=(`cat ${LIBGCC_TARGET_SRC_DIR}/${OBJ}.d`)
 		for DEP_FILE in ${DEP_FILES[@]}
 		do

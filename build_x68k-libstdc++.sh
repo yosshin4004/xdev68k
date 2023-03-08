@@ -49,7 +49,7 @@ GCC_BUILD_DIR="build_gcc"
 LIBSTDCXX_BUILD_DIR="build_libstdc++"
 
 # m68k ツールチェインのディレクトリ
-M68K_TOOLCHAIN="m68k-toolchain"
+M68K_TOOLCHAIN_DIR="m68k-toolchain"
 
 # m68k gas -> X68K has 変換
 GAS2HAS="perl ./util/x68k_gas2has.pl"
@@ -255,15 +255,19 @@ do
 
 	# C コンパイルオプション
 	CFLAGS="\
-		-isystem ${XDEV68K_DIR}/m68k-toolchain/m68k-elf/include\
-		-isystem ${XDEV68K_DIR}/m68k-toolchain/m68k-elf/sys-include\
+		-B${GCC_BUILD_DIR}/build/gcc-${GCC_VERSION}_stage2/./gcc/\
+		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/bin/\
+		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/lib/\
+		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/include\
+		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/sys-include\
 		-DHAVE_CONFIG_H\
 		-I${GCC_BUILD_LIBSTDCXX_DIR}\
 		-I${GCC_SRC_LIBSTDCXX_DIR}/../libiberty\
 		-I${GCC_SRC_LIBSTDCXX_DIR}/../include\
-		-I${GCC_BUILD_LIBSTDCXX_DIR}/include/m68k-elf\
+		-I${GCC_BUILD_LIBSTDCXX_DIR}/include/${GCC_ABI}\
 		-I${GCC_BUILD_LIBSTDCXX_DIR}/include\
 		-I${GCC_SRC_LIBSTDCXX_DIR}/libsupc++\
+		-mcpu=${TARGET}\
 		-O2\
 		-DIN_GLIBCPP_V3\
 		-Wno-error\
@@ -284,12 +288,12 @@ do
 		OBJ_QUOTE=`printf "%q" "${OBJ}"`
 
 		echo "	generating ${OBJ}.s"
-		${M68K_TOOLCHAIN}/bin/${GCC_ABI}-gcc ${CFLAGS} -S -o ${LIBSTDCXX_TARGET_SRC_DIR}/${OBJ}_.s ${CSRC_ARG}
+		${M68K_TOOLCHAIN_DIR}/bin/${GCC_ABI}-gcc ${CFLAGS} -S -o ${LIBSTDCXX_TARGET_SRC_DIR}/${OBJ}_.s -frandom-seed=${OBJ}.lo ${CSRC_ARG}
 		${GAS2HAS} -i ${LIBSTDCXX_TARGET_SRC_DIR}/${OBJ}_.s -o ${LIBSTDCXX_TARGET_SRC_DIR}/${OBJ}.s -cpu ${TARGET} -inline-asm-syntax gas
 		rm ${LIBSTDCXX_TARGET_SRC_DIR}/${OBJ}_.s
 
 		# 依存ファイルを収集
-		${M68K_TOOLCHAIN}/bin/${GCC_ABI}-gcc ${CFLAGS} -M ${CSRC_ARG} -MF ${LIBSTDCXX_TARGET_SRC_DIR}/${OBJ}.d
+		${M68K_TOOLCHAIN_DIR}/bin/${GCC_ABI}-gcc ${CFLAGS} -M ${CSRC_ARG} -MF ${LIBSTDCXX_TARGET_SRC_DIR}/${OBJ}.d
 		DEP_FILES=(`cat ${LIBSTDCXX_TARGET_SRC_DIR}/${OBJ}.d`)
 		for DEP_FILE in ${DEP_FILES[@]}
 		do
@@ -302,17 +306,20 @@ do
 
 	# C++ コンパイルオプション
 	CXXFLAGS="\
-		-isystem ${M68K_TOOLCHAIN}/${GCC_ABI}/include\
-		-isystem ${M68K_TOOLCHAIN}/${GCC_ABI}/sys-include\
+		-shared-libgcc\
+		-B${GCC_BUILD_DIR}/build/gcc-${GCC_VERSION}_stage2/./gcc\
+		-nostdinc++\
+		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/bin/\
+		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/lib/\
+		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/include\
+		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/sys-include\
 		-I${GCC_SRC_LIBSTDCXX_DIR}/../libgcc\
 		-I${GCC_BUILD_LIBSTDCXX_DIR}/include/${GCC_ABI}\
 		-I${GCC_BUILD_LIBSTDCXX_DIR}/include\
 		-I${GCC_SRC_LIBSTDCXX_DIR}/libsupc++\
-		-mcpu=$TARGET\
-		-std=gnu++17\
+		-mcpu=${TARGET}\
 		-fno-implicit-templates -Wall -Wextra -Wwrite-strings -Wcast-qual -Wabi=2\
 		-fdiagnostics-show-location=once -ffunction-sections -fdata-sections\
-		-frandom-seed=complex_io.lo\
 		-O2\
 		-fno-rtti -fno-exceptions\
 		-fcall-used-d2 -fcall-used-a2\
@@ -439,7 +446,7 @@ do
 		[pool_allocator]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++98/pool_allocator.cc -std=gnu++98"
 		[stdexcept]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++98/stdexcept.cc -std=gnu++98"
 		[streambuf]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++98/streambuf.cc -std=gnu++98"
-		[strstream]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++98/strstream.cc -std=gnu++98 -I${GCC_BUILD_DIR}/gcc-${GCC_VERSION}_stage2/${GCC_ABI}/libstdc++-v3/include/backward -Wno-deprecated"
+		[strstream]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++98/strstream.cc -std=gnu++98 -I${GCC_BUILD_DIR}/build/gcc-${GCC_VERSION}_stage2/${GCC_ABI}/libstdc++-v3/include/backward -Wno-deprecated"
 		[time_members]="-c ${GCC_BUILD_LIBSTDCXX_DIR}/src/c++98/time_members.cc -std=gnu++98"
 		[tree]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++98/tree.cc -std=gnu++98"
 		[valarray]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++98/valarray.cc -std=gnu++98"
@@ -517,13 +524,13 @@ do
 		OBJ_QUOTE=`printf "%q" "${OBJ}"`
 
 		echo "	generating ${OBJ}.s"
-		${M68K_TOOLCHAIN}/bin/${GCC_ABI}-g++ ${CXXFLAGS} -S -o ${LIBSTDCXX_TARGET_SRC_DIR}/${OBJ}_.s ${CXXSRC_ARG}
+		${M68K_TOOLCHAIN_DIR}/bin/${GCC_ABI}-g++ ${CXXFLAGS} -S -o ${LIBSTDCXX_TARGET_SRC_DIR}/${OBJ}_.s -frandom-seed=${OBJ}.lo ${CXXSRC_ARG}
 		${GAS2HAS} -i ${LIBSTDCXX_TARGET_SRC_DIR}/${OBJ}_.s -o ${LIBSTDCXX_TARGET_SRC_DIR}/${OBJ}.s -cpu ${TARGET} -inline-asm-syntax gas
 
 		rm ${LIBSTDCXX_TARGET_SRC_DIR}/${OBJ}_.s
 
 		# 依存ファイルを収集
-		${M68K_TOOLCHAIN}/bin/${GCC_ABI}-gcc ${CXXFLAGS} -M ${CXXSRC_ARG} -MF ${LIBSTDCXX_TARGET_SRC_DIR}/${OBJ}.d
+		${M68K_TOOLCHAIN_DIR}/bin/${GCC_ABI}-gcc ${CXXFLAGS} -M ${CXXSRC_ARG} -MF ${LIBSTDCXX_TARGET_SRC_DIR}/${OBJ}.d
 		DEP_FILES=(`cat ${LIBSTDCXX_TARGET_SRC_DIR}/${OBJ}.d`)
 		for DEP_FILE in ${DEP_FILES[@]}
 		do
