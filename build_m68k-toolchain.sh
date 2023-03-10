@@ -163,7 +163,13 @@ ${SRC_DIR}/${BINUTILS_DIR}/configure \
     --enable-multilib \
 
 make -j${NUM_PROC} 2<&1 | tee build.binutils.1.log
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+	exit 1;
+fi
 make install -j${NUM_PROC} 2<&1 | tee build.binutils.2.log
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+	exit 1;
+fi
 
 export PATH=${INSTALL_DIR}/bin:${PATH}
 
@@ -210,7 +216,13 @@ cd ${BUILD_DIR}/${GCC_DIR}_stage1
     --disable-threads \
 
 make -j${NUM_PROC} all-gcc 2<&1 | tee build.gcc-stage1.1.log
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+	exit 1;
+fi
 make install-gcc 2<&1 | tee build.gcc-stage1.2.log
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+	exit 1;
+fi
 
 cd ${ROOT_DIR}
 
@@ -254,7 +266,13 @@ ${SRC_DIR}/${NEWLIB_DIR}/configure \
     --target=${TARGET} \
 
 make -j${NUM_PROC} 2<&1 | tee build.newlib.1.log
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+	exit 1;
+fi
 make install | tee build.newlib.2.log
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+	exit 1;
+fi
 
 cd ${ROOT_DIR}
 
@@ -286,7 +304,13 @@ cd ${BUILD_DIR}/${GCC_DIR}_stage2
     --disable-threads \
 
 make -j${NUM_PROC} 2<&1 | tee build.gcc-stage2.1.log
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+	exit 1;
+fi
 make install 2<&1 | tee build.gcc-stage2.2.log
+if [ ${PIPESTATUS[0]} -ne 0 ]; then
+	exit 1;
+fi
 
 cd ${ROOT_DIR}
 
