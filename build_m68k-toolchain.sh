@@ -196,6 +196,19 @@ if [ $(sha512sum ${GCC_ARCHIVE} | awk '{print $1}') != ${GCC_SHA512SUM} ]; then
 fi
 tar xvf ${GCC_ARCHIVE} -C ${SRC_DIR}
 
+#
+#	新しい mingw 環境では以下のようなエラーとなる。
+#		../../../src/gcc-10.2.0/gcc/system.h:743:30: error: expected identifier before string constant
+#		743 | #define abort() fancy_abort (__FILE__, __LINE__, __FUNCTION__)
+#	応急処置として、問題を起こす行を除去する。
+#	abort() は stdlib.h 内で宣言された実装のままの挙動となる。
+#
+if [ "$(expr substr $(uname -s) 1 5)" == "MINGW" ]; then
+	cat ${SRC_DIR}/${GCC_DIR}/gcc/system.h |\
+	perl -e 'my $before="#define abort() fancy_abort (__FILE__, __LINE__, __FUNCTION__)";my $after="/* $before */";$before=quotemeta($before);while(<>){$_=~s/$before/$after/g;print $_;}' > ${SRC_DIR}/${GCC_DIR}/gcc/system.h.tmp;
+	mv ${SRC_DIR}/${GCC_DIR}/gcc/system.h.tmp ${SRC_DIR}/${GCC_DIR}/gcc/system.h
+fi
+
 cd ${SRC_DIR}/${GCC_DIR}
 ./contrib/download_prerequisites
 
