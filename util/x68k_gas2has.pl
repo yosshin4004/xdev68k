@@ -3197,8 +3197,10 @@ sub modify_arg_list {
 			push(@a_modified_arg, $modified_arg);
 		}
 		# #imm
+		#	gas では &imm と書くこともある。
 		elsif (
-			$arg =~ /^\#($g_regex_expression{$asm_mode})$/i
+			 $arg =~ /^\#($g_regex_expression{$asm_mode})$/i
+		||	($arg =~ /^\&($g_regex_expression{$asm_mode})$/i && $asm_mode eq 'gas')
 		) {
 			my $expression = $1;
 			my $modified_arg;
