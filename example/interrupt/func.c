@@ -49,7 +49,7 @@ void initVsyncInterrupt(void *func) {
 
 		/* スーパーバイザーモードに入る */
 		"	suba.l	a1,a1\n"
-		"	iocs	__B_SUPER\n"					/* iocscall.inc で "__B_SUPER equ $81" が定義されている */
+		"	iocs	__B_SUPER\n"					/* iocscall.inc で "__B_SUPER: .equ $81" が定義されている */
 		"	move.l	d0,_s_uspBackup\n"				/*（もともとスーパーバイザーモードなら d0.l=-1） */
 
 		/* 割り込み off */
@@ -78,7 +78,7 @@ void initVsyncInterrupt(void *func) {
 		"	move.l	_s_uspBackup(pc),d0\n"
 		"	bmi.b	@F\n"							/* スーパーバイザーモードから実行されていたら戻す必要無し */
 		"		movea.l	d0,a1\n"
-		"		iocs	__B_SUPER\n"				/* iocscall.inc で "__B_SUPER equ $81" が定義されている */
+		"		iocs	__B_SUPER\n"				/* iocscall.inc で "__B_SUPER: .equ $81" が定義されている */
 		"@@:\n"
 
 	:	/* 出力 */
@@ -96,7 +96,7 @@ void termVsyncInterrupt() {
 	asm volatile (
 		/* スーパーバイザーモードに入る */
 		"	suba.l	a1,a1\n"
-		"	iocs	__B_SUPER\n"					/* iocscall.inc で "__B_SUPER equ $81" が定義されている */
+		"	iocs	__B_SUPER\n"					/* iocscall.inc で "__B_SUPER: .equ $81" が定義されている */
 		"	move.l	d0,_s_uspBackup\n"				/*（もともとスーパーバイザーモードなら d0.l=-1） */
 
 		/* 割り込み off */
@@ -133,7 +133,7 @@ void termVsyncInterrupt() {
 		"	move.l	_s_uspBackup(pc),d0\n"
 		"	bmi.b	@F\n"							/* スーパーバイザーモードから実行されていたら戻す必要無し */
 		"		movea.l	d0,a1\n"
-		"		iocs	__B_SUPER\n"				/* iocscall.inc で "__B_SUPER equ $81" が定義されている */
+		"		iocs	__B_SUPER\n"				/* iocscall.inc で "__B_SUPER: .equ $81" が定義されている */
 		"@@:\n"
 
 	:	/* 出力 */

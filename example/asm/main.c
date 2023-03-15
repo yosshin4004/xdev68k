@@ -63,7 +63,7 @@ int main(int argc, char *argv[]){
 		static char s_string[] = "hello world. (by doscall)\r\n";
 		asm volatile (
 			"	move.l	%0,-(sp)\n"
-			"	dc.w	__PRINT\n"			/* doscall.inc ‚Å "__PRINT equ 0xff09" ‚ª’è‹`‚³‚ê‚Ä‚¢‚é */
+			"	dc.w	__PRINT\n"			/* doscall.inc ‚Å "__PRINT: .equ $ff09" ‚ª’è‹`‚³‚ê‚Ä‚¢‚é */
 			"	addq.l	#4,sp\n"
 		:	/* o—Í */
 		:	/* “ü—Í */	"irm" (&s_string)	/* ˆø” %0 */

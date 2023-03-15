@@ -23,7 +23,7 @@ int main(int argc, char *argv[]){
 			"	.else\n"
 			"		move.l	%1,-(sp)\n"
 			"	.endif\n"
-			"	dc.w	__PRINT\n"			/* doscall.inc ‚Å "__PRINT equ 0xff09" ‚ª’è‹`‚³‚ê‚Ä‚¢‚é */
+			"	dc.w	__PRINT\n"			/* doscall.inc ‚Å "__PRINT: .equ $ff09" ‚ª’è‹`‚³‚ê‚Ä‚¢‚é */
 			"	addq.l	#4,sp\n"
 		:	/* o—Í */
 		:	/* “ü—Í */	"irm" (&s_string1),	/* ˆø” %0 */

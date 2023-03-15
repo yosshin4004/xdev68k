@@ -11,7 +11,7 @@
 void dosPrint(const char *string){
 	asm volatile (
 		"	move.l	%0,-(sp)\n"
-		"	dc.w	__PRINT\n"			/* doscall.inc で "__PRINT equ 0xff09" が定義されている */
+		"	dc.w	__PRINT\n"			/* doscall.inc で "__PRINT: .equ $ff09" が定義されている */
 		"	addq.l	#4,sp\n"
 	:	/* 出力 */
 	:	/* 入力 */	"r" (string)		/* 引数 %0 */
@@ -24,7 +24,7 @@ int32_t dosSetBlock(void *memptr, uint32_t newlen){
 	asm volatile (
 		"	move.l	%0,-(sp)\n"
 		"	move.l	%1,-(sp)\n"
-		"	dc.w	__SETBLOCK\n"
+		"	dc.w	__SETBLOCK\n"		/* doscall.inc で "__SETBLOCK: .equ $ff4a" が定義されている */
 		"	addq.l	#8,sp\n"
 	:	/* 出力 */
 	:	/* 入力 */	"r" (newlen),		/* 引数 %0 */
