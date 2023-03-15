@@ -85,6 +85,14 @@ mkdir -p ../archive/download
 cp -p run68mac-master/build/run68* ../run68/
 cp -p ${ARCHIVE} ../archive/download/run68mac-${ARCHIVE}
 
+# run68.ini が正しく認識されていることを確認
+MEMSIZE=`../run68/run68 ..\\\\x68k_bin\\\\MEMSIZE.X`
+echo "available memory size on run68 is ${MEMSIZE} bytes"
+if [ ${MEMSIZE} -lt 2097152 ]; then
+	echo "run68 memory size test failed!"
+	exit 1
+fi
+
 
 #------------------------------------------------------------------------------
 # lha コマンドをソースからビルド
@@ -94,7 +102,7 @@ SHA512SUM="e75dc606d7637f2c506072f2f44eda69da075a57ad2dc76f54e41b1d39d34ca014103
 wget -nc https://github.com/jca02266/lha/archive/refs/tags/${ARCHIVE}
 if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
 	echo "SHA512SUM verification of ${ARCHIVE} failed!"
-	exit
+	exit 1
 fi
 unzip ${ARCHIVE}
 cd lha-release-20211125/
@@ -115,7 +123,7 @@ SHA512SUM="2b6947ebccc422ece82cb90b27252754a89625fbac9d9806fb774d4c70763786982ec
 wget -nc http://retropc.net/x68000/software/develop/as/has060/${ARCHIVE}
 if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
 	echo "SHA512SUM verification of ${ARCHIVE} failed!"
-	exit
+	exit 1
 fi
 ${LHA} -x -w=${ARCHIVE%.*} ${ARCHIVE}
 
@@ -138,7 +146,7 @@ cp -p ${ARCHIVE} ../archive/download
 #wget -nc http://retropc.net/x68000/software/develop/lk/hlkev/${ARCHIVE}
 #if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
 #	echo "SHA512SUM verification of ${ARCHIVE} failed!"
-#	exit
+#	exit 1
 #fi
 #unzip -x ${ARCHIVE}
 #
@@ -157,7 +165,7 @@ SHA512SUM="afe6b96b6b9549cbddc1215bf534b255b840249d1d14e149a06d4b50591e1ac0842b2
 wget -nc http://retropc.net/x68000/software/develop/lk/hlk/${ARCHIVE}
 if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
 	echo "SHA512SUM verification of ${ARCHIVE} failed!"
-	exit
+	exit 1
 fi
 ${LHA} -x -w=${ARCHIVE%.*} ${ARCHIVE}
 
@@ -176,7 +184,7 @@ SHA512SUM="5746f2100a7aa8428313ccb36cdba603601eaaa131f98aba2c22016b294e50fb61293
 wget -nc http://retropc.net/x68000/software/sharp/xc21/${ARCHIVE}
 if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
 	echo "SHA512SUM verification of ${ARCHIVE} failed!"
-	exit
+	exit 1
 fi
 ${LHA} -x -w=${ARCHIVE%.*} ${ARCHIVE}
 
@@ -185,7 +193,7 @@ SHA512SUM="c06339be8bf3251bb0b4a37365aa013a6083294edad17a3c4fafc35ab2cd265626045
 wget -nc http://retropc.net/x68000/software/sharp/xc21/${ARCHIVE}
 if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
 	echo "SHA512SUM verification of ${ARCHIVE} failed!"
-	exit
+	exit 1
 fi
 ${LHA} -x -w=${ARCHIVE%.*} ${ARCHIVE}
 
