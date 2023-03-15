@@ -160,8 +160,10 @@ xdev68k/
 │	│		X68k Archiver v1.00
 │	├ HAS060.X
 │	│		High-speed Assembler 68060 対応版 version 3.09+89
-│	└ hlk301.x
-│			HLK v3.01
+│	├ hlk301.x
+│	│		HLK v3.01
+│	└ MEMSIZE.X
+│			フリーメモリサイズをコンソール出力する（run68 の動作テスト用）
 ├ build_m68k-toolchain.sh
 │		クロスコンパイラのビルドスクリプト
 ├ build_x68k-libgcc.sh
@@ -654,10 +656,10 @@ LHa for UNIX with Autoconf 作成者 Koji Arai 氏に感謝いたします。
 
 # ライセンス
 
-* x68k_gas2has.pl / atomic.pl / build_m68k-toolchain.sh / build_x68k-libgcc.sh / build_x68k-libstdc++.sh / install_xdev68k-utils.sh  
+* x68k_gas2has.pl / atomic.pl / build_m68k-toolchain.sh / build_x68k-libgcc.sh / build_x68k-libstdc++.sh / install_xdev68k-utils.sh / MEMSIZE.X
 Apache License Version 2.0 が適用されます。
 （MIT ライセンス相当の制約の緩いライセンスであり、
-かつパテント・トロール的な第三者が特許取得することを抑止することで、
+かつパテント・トロール的な第三者による特許取得を抑止することで、
 オープンソース利用者が想定外のリスクに晒されることを防止する機能を持つ優れたライセンス。）
 
 * libgcc.a および libstdc++.a  
