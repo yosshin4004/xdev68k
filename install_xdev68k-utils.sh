@@ -86,7 +86,11 @@ cp -p run68mac-master/build/run68* ../run68/
 cp -p ${ARCHIVE} ../archive/download/run68mac-${ARCHIVE}
 
 # run68.ini が正しく認識されていることを確認
-MEMSIZE=`../run68/run68 ..\\\\x68k_bin\\\\MEMSIZE.X`
+if [ "$(expr substr $(uname -s) 1 5)" == "MINGW" ]; then
+	MEMSIZE=`../run68/run68 ..\\\\x68k_bin\\\\MEMSIZE.X`
+else
+	MEMSIZE=`../run68/run68 ../x68k_bin/MEMSIZE.X`
+fi
 echo "available memory size on run68 is ${MEMSIZE} bytes"
 if [ ${MEMSIZE} -lt 2097152 ]; then
 	echo "run68 memory size test failed!"
