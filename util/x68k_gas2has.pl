@@ -914,7 +914,7 @@ $g_regex_directive{'gas'} = '(?:\\.[a-zA-Z][0-9a-zA-Z_]*' . $g_regex_opsize . '?
 #	HAS と GAS で、local ディレクティブの意味が異なるので注意。
 my %g_regex_label_definition_directive;
 $g_regex_label_definition_directive{'has'} = '(?:\\.?(?:local|globl|global)' . $g_regex_end_of_name . ')';
-$g_regex_label_definition_directive{'gas'} = '(?:\\.(?:local|globl|global)' . $g_regex_end_of_name . ')';
+$g_regex_label_definition_directive{'gas'} = '(?:\\.(?:local|globl|global|extern|weak)' . $g_regex_end_of_name . ')';
 
 # シンボル定義ディレクティブにマッチする正規表現
 #	m68k-elf-gcc から出力されるアセンブリコードには含まれないので、
@@ -1429,6 +1429,20 @@ sub apply_converter {
 					my $spaces2		= $3;
 					my $label		= $4;
 					my $modified_label = modify_label($label, $asm_mode);
+
+					# GAS の .weak は HAS 形式では .globl に置き換える
+					if ($asm_mode eq 'gas'
+					&&	$directive eq '.weak'
+					) {
+						$directive = '.globl';
+					}
+
+					# GAS の .extern は HAS 形式では .xref に置き換える
+					if ($asm_mode eq 'gas'
+					&&	$directive eq '.extern'
+					) {
+						$directive = '.xref';
+					}
 
 					# 既出？
 					if (exists($g_already_declared_label{$label})) {
@@ -2008,6 +2022,7 @@ sub modify_directive {
 		#	GAS
 		#		.long	123, ...
 		#		.word	123, ...
+		#		.short	123, ...
 		#		.byte	123, ...
 		#	HAS
 		#		.dc.l	123, ...
@@ -2019,7 +2034,7 @@ sub modify_directive {
 			my $arg_list	= $3;
 			$modified = $spaces1 . '.dc.l' . $spaces2 . modify_arg_list($arg_list, $asm_mode);
 		}
-		elsif ($line =~ /^(\s*)\.word(\s+)(.+?)$g_regex_end/i) {
+		elsif ($line =~ /^(\s*)\.(?:word|short)(\s+)(.+?)$g_regex_end/i) {
 			my $spaces1		= $1;
 			my $spaces2		= $2;
 			my $arg_list	= $3;
@@ -2206,10 +2221,9 @@ sub modify_directive {
 		#	.size		デバッグ情報らしい
 		#	.ident		コンパイラのバージョン情報らしい
 		#	.section	必要なものは個別に認識済み
-		#	.weak		弱いシンボル
 		#	.swbeg		詳細不明
 		#	.cfi_...	デバッグ情報らしい
-		elsif ($line =~ /^(\s*)(\.(?:hidden|type|size|ident|section|weak|swbeg|cfi_\w+))(?:(\s+)(.+?))?$g_regex_end/i) {
+		elsif ($line =~ /^(\s*)(\.(?:hidden|type|size|ident|section|swbeg|cfi_\w+))(?:(\s+)(.+?))?$g_regex_end/i) {
 			my $spaces1		= $1;
 			my $directive	= $2;
 			my $spaces2		= $3;	# 省略可能
