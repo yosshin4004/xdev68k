@@ -216,7 +216,6 @@ fi
 
 # libstdc++ ビルド用ワークディレクトリを作成
 mkdir -p ${LIBSTDCXX_BUILD_DIR}
-mkdir -p ${LIBSTDCXX_BUILD_DIR}/src
 
 # X68K のコマンド
 RUN68="${XDEV68K_DIR}/run68/run68.exe"
@@ -236,7 +235,7 @@ do
 	CPU_DIR=${CPU_DIRS[$TARGET]}
 
 	# ターゲットのソース生成先ディレクトリ名
-	LIBSTDCXX_TARGET_SRC_DIR=${LIBSTDCXX_BUILD_DIR}/src/${GCC_ABI_IN_X68K}/${TARGET_DIR}
+	LIBSTDCXX_TARGET_SRC_DIR=${LIBSTDCXX_BUILD_DIR}/${GCC_ABI_IN_X68K}/${TARGET_DIR}
 
 	# libstdc++ ソースディレクトリ名
 	GCC_SRC_LIBSTDCXX_DIR=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libstdc++-v3
@@ -254,23 +253,24 @@ do
 	#-----------------------------------------------------------------------------
 
 	# C コンパイルオプション
-	CFLAGS="\
-		-B${GCC_BUILD_DIR}/build/gcc-${GCC_VERSION}_stage2/./gcc/\
-		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/bin/\
-		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/lib/\
-		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/include\
-		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/sys-include\
-		-DHAVE_CONFIG_H\
-		-I${GCC_BUILD_LIBSTDCXX_DIR}\
-		-I${GCC_SRC_LIBSTDCXX_DIR}/../libiberty\
-		-I${GCC_SRC_LIBSTDCXX_DIR}/../include\
-		-I${GCC_BUILD_LIBSTDCXX_DIR}/include/${GCC_ABI}\
-		-I${GCC_BUILD_LIBSTDCXX_DIR}/include\
-		-I${GCC_SRC_LIBSTDCXX_DIR}/libsupc++\
-		-mcpu=${TARGET}\
-		-O2\
-		-DIN_GLIBCPP_V3\
-		-Wno-error\
+	CFLAGS="
+		-B${GCC_BUILD_DIR}/build/gcc-${GCC_VERSION}_stage2/./gcc/
+		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/bin/
+		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/lib/
+		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/include
+		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/sys-include
+		-DHAVE_CONFIG_H
+		-I${GCC_BUILD_LIBSTDCXX_DIR}
+		-I${GCC_SRC_LIBSTDCXX_DIR}/../libiberty
+		-I${GCC_SRC_LIBSTDCXX_DIR}/../include
+		-I${GCC_BUILD_LIBSTDCXX_DIR}/include/${GCC_ABI}
+		-I${GCC_BUILD_LIBSTDCXX_DIR}/include
+		-I${GCC_SRC_LIBSTDCXX_DIR}/libsupc++
+		-mcpu=${TARGET}
+		-O2
+		-DIN_GLIBCPP_V3
+		-Wno-error
+		-fcall-used-d2 -fcall-used-a2
 	"
 
 	# libstdc++.a にアーカイブするオブジェクトファイル名とオブジェクトファイルを生成するコマンドライン（c ソース）
@@ -305,24 +305,24 @@ do
 	done
 
 	# C++ コンパイルオプション
-	CXXFLAGS="\
-		-shared-libgcc\
-		-B${GCC_BUILD_DIR}/build/gcc-${GCC_VERSION}_stage2/./gcc\
-		-nostdinc++\
-		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/bin/\
-		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/lib/\
-		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/include\
-		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/sys-include\
-		-I${GCC_SRC_LIBSTDCXX_DIR}/../libgcc\
-		-I${GCC_BUILD_LIBSTDCXX_DIR}/include/${GCC_ABI}\
-		-I${GCC_BUILD_LIBSTDCXX_DIR}/include\
-		-I${GCC_SRC_LIBSTDCXX_DIR}/libsupc++\
-		-mcpu=${TARGET}\
-		-fno-implicit-templates -Wall -Wextra -Wwrite-strings -Wcast-qual -Wabi=2\
-		-fdiagnostics-show-location=once -ffunction-sections -fdata-sections\
-		-O2\
-		-fno-rtti -fno-exceptions\
-		-fcall-used-d2 -fcall-used-a2\
+	CXXFLAGS="
+		-shared-libgcc
+		-B${GCC_BUILD_DIR}/build/gcc-${GCC_VERSION}_stage2/./gcc
+		-nostdinc++
+		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/bin/
+		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/lib/
+		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/include
+		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/sys-include
+		-I${GCC_SRC_LIBSTDCXX_DIR}/../libgcc
+		-I${GCC_BUILD_LIBSTDCXX_DIR}/include/${GCC_ABI}
+		-I${GCC_BUILD_LIBSTDCXX_DIR}/include
+		-I${GCC_SRC_LIBSTDCXX_DIR}/libsupc++
+		-mcpu=${TARGET}
+		-fno-implicit-templates -Wall -Wextra -Wwrite-strings -Wcast-qual -Wabi=2
+		-fdiagnostics-show-location=once -ffunction-sections -fdata-sections
+		-O2
+		-fno-rtti -fno-exceptions
+		-fcall-used-d2 -fcall-used-a2
     "
 
 	# libstdc++.a にアーカイブするオブジェクトファイル名とオブジェクトファイルを生成するコマンドライン（c++ ソース）
@@ -582,7 +582,7 @@ done
 # ソースコードパッケージの作成
 #-----------------------------------------------------------------------------
 ROOT_DIR="${PWD}"
-cd ${LIBSTDCXX_BUILD_DIR}/src/
+cd ${LIBSTDCXX_BUILD_DIR}
 tar -zcvf libgcc_src.tar.gz ${GCC_ABI_IN_X68K}/
 mkdir -p ${XDEV68K_DIR}/archive/
 mv libgcc_src.tar.gz ${XDEV68K_DIR}/archive/libstdc++_src.tar.gz
