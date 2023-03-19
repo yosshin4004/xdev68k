@@ -49,12 +49,9 @@ LIBS =\
 INTERMEDIATE_DIR = _build
 
 # オブジェクトファイル
-#	minicrt.o をリンクリストの先頭に配置する必要がある。
-#	そのため、ASM_SRCS 由来のオブジェクトファイルが先頭に来るように
-#	配置を調整している。
-OBJS =	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.s,%.o,$(ASM_SRCS))) \
-	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.c,%.o,$(C_SRCS))) \
-	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.cpp,%.o,$(CPP_SRCS)))
+OBJS =	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.c,%.o,$(C_SRCS))) \
+	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.cpp,%.o,$(CPP_SRCS))) \
+	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.s,%.o,$(ASM_SRCS)))
 
 # 依存関係ファイル
 DEPS =	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.c,%.d,$(C_SRCS))) \

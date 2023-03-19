@@ -2,8 +2,7 @@
 #define	APP_H
 
 
-/* アプリケーション main 関数 */
-int appMain(int argc, char *argv[]);
+int main(int argc, char *argv[]);
 
 
 #endif

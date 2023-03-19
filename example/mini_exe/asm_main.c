@@ -109,7 +109,7 @@ int asmMain(void *a0, void *a1, void *a2, void *a3, void *a4) {
 
 	/* アプリケーション本体を実行 */
 	uint16_t ret = 0;
-	ret = appMain(argc, s_argv);
+	ret = main(argc, s_argv);
 	return ret;
 }
 

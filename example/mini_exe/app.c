@@ -21,7 +21,7 @@
 			1) minicrt.s からプログラムの実行が開始する。
 			2) minicrt.s から asmMain() 関数を実行する。
 			3) asmMain() 関数でコマンドライン引数を解析する。
-			4) コマンドライン引数解析結果を与えて appMain() 関数を実行する。
+			4) コマンドライン引数解析結果を与えて main() 関数を実行する。
 */
 
 #include <stdbool.h>
@@ -31,7 +31,7 @@
 #include "app.h"
 
 
-int appMain(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
 	/* 引数を TTY 出力 */
 	for (int i=0; i<argc; i++) {
 		dosPrint(argv[i]);
