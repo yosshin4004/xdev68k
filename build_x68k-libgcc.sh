@@ -226,14 +226,13 @@ fi
 
 # libgcc ビルド用ワークディレクトリを作成
 mkdir -p ${LIBGCC_BUILD_DIR}
-mkdir -p ${LIBGCC_BUILD_DIR}/src
 
 # 旧 libgcc.a ファイルの再利用が指定されている場合
 if [ -n "${OPTIONS["--reuse-old-libgcc"]-}" ]; then
 	# 旧 libgcc.a ファイルが存在するなら
 	if [ -e ${OLD_LIBGCC_FILE_NAME} ]; then
-		# 旧 libgcc.a をワークディレクトリの src 以下にコピー
-		cp ${OLD_LIBGCC_FILE_NAME} ${LIBGCC_BUILD_DIR}/src/libgcc.a
+		# 旧 libgcc.a をビルド用ワークディレクトリ以下にコピー
+		cp ${OLD_LIBGCC_FILE_NAME} ${LIBGCC_BUILD_DIR}/libgcc.a
 	else
 		# エラー
 		echo "ERROR: Can not found '${OLD_LIBGCC_FILE_NAME}'."
@@ -256,7 +255,7 @@ do
 	TARGET_DIR=${TARGET_DIRS[$TARGET]}
 
 	# ターゲットのソースディレクトリ名
-	LIBGCC_TARGET_SRC_DIR=${LIBGCC_BUILD_DIR}/src/${GCC_ABI_IN_X68K}/${TARGET_DIR}
+	LIBGCC_TARGET_SRC_DIR=${LIBGCC_BUILD_DIR}/${GCC_ABI_IN_X68K}/${TARGET_DIR}
 
 	# ディレクトリ生成
 	mkdir -p ${LIBGCC_TARGET_SRC_DIR}
@@ -316,30 +315,30 @@ do
 	#-----------------------------------------------------------------------------
 
 	# コンパイルオプション
-	CFLAGS="\
-		-B${XDEV68K_DIR}/build_gcc/build/gcc-${GCC_VERSION}_stage2/./gcc/\
-		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/bin/\
-		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/lib/\
-		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/include\
-		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/sys-include\
-		-O2 -DIN_GCC -DCROSS_DIRECTORY_STRUCTURE\
-		-W -Wall -Wwrite-strings -Wcast-qual -Wstrict-prototypes -Wold-style-definition\
-		-Wno-narrowing -Wno-missing-prototypes -Wno-implicit-function-declaration\
-		-DIN_LIBGCC2 -fbuilding-libgcc -fno-stack-protector\
-		-Dinhibit_libc\
-		-isystem ${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/include\
-		-isystem ${GCC_BUILD_DIR}/build/gcc-${GCC_VERSION}_stage2/gcc\
-		-I${INCLUDE_PATHS[$TARGET]}\
-		-I${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc\
-		-I${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/.\
-		-I${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/../gcc\
-		-I${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/../include\
-		-DHAVE_CC_TLS\
-		-fvisibility=hidden\
-		-DHIDE_EXPORTS\
-		-m${TARGET}\
-		 -fcall-used-d2 -fcall-used-a2\
-    "
+	CFLAGS="
+		-B${XDEV68K_DIR}/build_gcc/build/gcc-${GCC_VERSION}_stage2/gcc/
+		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/bin/
+		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/lib/
+		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/include
+		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/sys-include
+		-O2 -DIN_GCC -DCROSS_DIRECTORY_STRUCTURE
+		-W -Wall -Wwrite-strings -Wcast-qual -Wstrict-prototypes -Wold-style-definition
+		-Wno-narrowing -Wno-missing-prototypes -Wno-implicit-function-declaration
+		-DIN_LIBGCC2 -fbuilding-libgcc -fno-stack-protector
+		-Dinhibit_libc
+		-isystem ${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/include
+		-isystem ${GCC_BUILD_DIR}/build/gcc-${GCC_VERSION}_stage2/gcc
+		-I${INCLUDE_PATHS[$TARGET]}
+		-I${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc
+		-I${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/.
+		-I${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/../gcc
+		-I${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/../include
+		-DHAVE_CC_TLS
+		-fvisibility=hidden
+		-DHIDE_EXPORTS
+		-m${TARGET}
+		 -fcall-used-d2 -fcall-used-a2
+	"
 
 	# libgcc2.c から生成するオブジェクトファイル名
 	#	[オブジェクトファイル名]=ソースファイル名
@@ -498,6 +497,81 @@ do
 
 
 	#-----------------------------------------------------------------------------
+	# extra startfiles
+	#-----------------------------------------------------------------------------
+	# コンパイルオプション
+	CFLAGS="
+		-B${XDEV68K_DIR}/build_gcc/build/gcc-${GCC_VERSION}_stage2/gcc/
+		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/bin/
+		-B${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/lib/
+		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/include
+		-isystem ${M68K_TOOLCHAIN_DIR}/${GCC_ABI}/sys-include
+		-O2
+		-DIN_GCC
+		-DCROSS_DIRECTORY_STRUCTURE
+		-W -Wall
+		-Wno-narrowing
+		-Wwrite-strings
+		-Wcast-qual
+		-Wno-error=format-diag
+		-Wstrict-prototypes
+		-Wmissing-prototypes
+		-Wold-style-definition
+		-isystem ${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/include
+		-I${XDEV68K_DIR}/build_gcc/build/gcc-${GCC_VERSION}_stage2/gcc/
+		-I${INCLUDE_PATHS[$TARGET]}
+		-I${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc
+		-I${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/.
+		-I${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/../gcc
+		-I${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/../include
+		-finhibit-size-directive
+		-fno-inline
+		-fno-exceptions
+		-fno-zero-initialized-in-bss
+		-fno-toplevel-reorder
+		-fno-tree-vectorize
+		-fbuilding-libgcc
+		-fno-stack-protector
+		-Dinhibit_libc
+		-DHIDE_EXPORTS
+		-m${TARGET}
+		-fcall-used-d2 -fcall-used-a2
+	"
+
+	# extra startfiles 生成ルール
+	#	[オブジェクトファイル名]=ビルドオプション
+	#	X68K のファイル名規則に違反する場合はここでリネームする。
+	declare -A CSRC_ARGS_FOR_EXTRA_STARTFILE
+	CSRC_ARGS_FOR_EXTRA_STARTFILE=(
+		[crtbegin]="-c ${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/crtstuff.c -DCRT_BEGIN"
+		[crtend]="-c ${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/crtstuff.c -DCRT_END"
+	)
+
+	# C コンパイル
+	for OBJ in ${!CSRC_ARGS_FOR_EXTRA_STARTFILE[@]}
+	do
+		CSRC_ARG=${CSRC_ARGS_FOR_EXTRA_STARTFILE[$OBJ]}
+		OBJ_QUOTE=`printf "%q" "${OBJ}"`
+
+		echo "	generating ${OBJ}.s"
+		${M68K_TOOLCHAIN_DIR}/bin/${GCC_ABI}-gcc ${CFLAGS} -S -o ${LIBGCC_TARGET_SRC_DIR}/${OBJ}_.s ${CSRC_ARG}
+		${GAS2HAS} -i ${LIBGCC_TARGET_SRC_DIR}/${OBJ}_.s -o ${LIBGCC_TARGET_SRC_DIR}/${OBJ}.s -cpu ${TARGET} -inline-asm-syntax gas
+		rm ${LIBGCC_TARGET_SRC_DIR}/${OBJ}_.s
+
+		# 依存ファイルを収集
+		${M68K_TOOLCHAIN_DIR}/bin/${GCC_ABI}-gcc ${CFLAGS} -M ${CSRC_ARG} -MF ${LIBGCC_TARGET_SRC_DIR}/${OBJ}.d
+		DEP_FILES=(`cat ${LIBGCC_TARGET_SRC_DIR}/${OBJ}.d`)
+		for DEP_FILE in ${DEP_FILES[@]}
+		do
+			if [ -e ${DEP_FILE} ]; then
+				cp ${DEP_FILE} ${LIBGCC_TARGET_SRC_DIR}/dep
+			fi
+		done
+		rm ${LIBGCC_TARGET_SRC_DIR}/${OBJ}.d
+	done
+
+
+	#-----------------------------------------------------------------------------
 	# アセンブルとアーカイブファイルの作成
 	#-----------------------------------------------------------------------------
 
@@ -521,6 +595,13 @@ do
 	do
 		${AS} -e -u -w0 -m ${TARGET} ${OBJ}.s
 	done
+
+	# extra startfiles のアセンブル
+	for OBJ in ${!CSRC_ARGS_FOR_EXTRA_STARTFILE[@]}
+	do
+		${AS} -e -u -w0 -m ${TARGET} ${OBJ}.s
+	done
+
 
 	# 旧 libgcc.a から再利用可能なオブジェクトファイル名
 	#	[コピー先オブジェクトファイル名]=コピー元オブジェクトファイル名
@@ -599,6 +680,10 @@ do
 	# デプロイ
 	mkdir -p ${XDEV68K_DIR}/lib/m68k_elf/${TARGET_DIR}/
 	mv ./libgcc.a ${XDEV68K_DIR}/lib/m68k_elf/${TARGET_DIR}/libgcc.a
+	for OBJ in ${!CSRC_ARGS_FOR_EXTRA_STARTFILE[@]}
+	do
+		cp ${OBJ}.o ${XDEV68K_DIR}/lib/m68k_elf/${TARGET_DIR}/
+	done
 
 	# オブジェクトファイルは除去
 	rm *.o
@@ -615,7 +700,7 @@ done
 # ソースコードパッケージの作成
 #-----------------------------------------------------------------------------
 ROOT_DIR="${PWD}"
-cd ${LIBGCC_BUILD_DIR}/src/
+cd ${LIBGCC_BUILD_DIR}
 tar -zcvf libgcc_src.tar.gz ${GCC_ABI_IN_X68K}/
 mkdir -p ${XDEV68K_DIR}/archive/
 mv libgcc_src.tar.gz ${XDEV68K_DIR}/archive/libgcc_src.tar.gz
