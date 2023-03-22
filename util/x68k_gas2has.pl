@@ -886,7 +886,7 @@ $g_regex_directive{'gas'} = '(?:\\.[a-zA-Z][0-9a-zA-Z_]*' . $g_regex_opsize . '?
 #	HAS の場合は冒頭 . が省略可能。
 #	HAS と GAS で、local ディレクティブの意味が異なるので注意。
 my %g_regex_label_definition_directive;
-$g_regex_label_definition_directive{'has'} = '(?:\\.?(?:local|globl|global)' . $g_regex_end_of_name . ')';
+$g_regex_label_definition_directive{'has'} = '(?:\\.?(?:local|globl|global|xdef|public|entry|xref|extrn|external)' . $g_regex_end_of_name . ')';
 $g_regex_label_definition_directive{'gas'} = '(?:\\.(?:local|globl|global|extern|weak)' . $g_regex_end_of_name . ')';
 
 # シンボル定義ディレクティブにマッチする正規表現
@@ -1326,7 +1326,7 @@ sub apply_converter {
 		# 入力ファイルオープン
 		my $fh_input  = IO::File->new($input_file_name,  'r') or die("ERROR : Cannot open [" . $input_file_name  . "].\n");
 
-		# 冒頭の定型行を出力
+		# 2 パス目：冒頭の定型行を出力
 		if ($pass == 2) {
 			print $fh_output
 					'* NO_APP'
@@ -1440,6 +1440,8 @@ sub apply_converter {
 						) {
 							$modified .= $spaces1 . $directive . $spaces2 . $modified_label;
 						}
+
+						# 1 パス目：シンボルデータベースにラベル置換ルールを登録
 						if ($pass == 1) {
 							symbol_db_register_label($label, $modified_label);
 						}
@@ -2160,8 +2162,21 @@ sub modify_directive {
 			my $string	= $3;
 			$modified = $spaces1 . '.file' . $spaces2 . '"' . $string . '"';
 		}
+		# 引数有り end
+		#	GAS
+		#		.end __main
+		#	HAS
+		#		.end __main
+		# 注：引数無し end は、HAS 互換ディレクティブとして別途処理される。
+		elsif ($line =~ /^(\s*)(\.(?:end))(\s+)(.+?)$g_regex_end/i) {
+			my $spaces1		= $1;
+			my $directive	= $2;
+			my $spaces2		= $3;
+			my $arg_list	= $4;
+			$modified = $spaces1 . $directive . $spaces2 . modify_arg_list($arg_list, $asm_mode);
+		}
 		# HAS と互換のある、引数無しディレクティブ
-		elsif ($line =~ /^(\s*)(\.(?:text|data|even))$g_regex_end/i) {
+		elsif ($line =~ /^(\s*)(\.(?:text|data|even|end))$g_regex_end/i) {
 			my $spaces1		= $1;
 			my $directive	= $2;
 			$modified = $spaces1 . $directive;
