@@ -10,11 +10,14 @@ endif
 # デフォルトサフィックスを削除
 .SUFFIXES:
 
+# ビルド対象の CPU
+CPU = 68000
+
 # 各種コマンド短縮名
 ATOMIC = perl ${XDEV68K_DIR}/util/atomic.pl
 CXX = ${XDEV68K_DIR}/m68k-toolchain/bin/m68k-elf-g++
 CC = ${XDEV68K_DIR}/m68k-toolchain/bin/m68k-elf-gcc
-GAS2HAS = perl ${XDEV68K_DIR}/util/x68k_gas2has.pl -cpu 68000 -inc doscall.inc -inc iocscall.inc
+GAS2HAS = perl ${XDEV68K_DIR}/util/x68k_gas2has.pl -cpu $(CPU) -inc doscall.inc -inc iocscall.inc
 RUN68 = $(ATOMIC) ${XDEV68K_DIR}/run68/run68
 HAS = $(RUN68) ${XDEV68K_DIR}/x68k_bin/HAS060.X
 HLK = $(RUN68) ${XDEV68K_DIR}/x68k_bin/hlk301.x
@@ -28,7 +31,7 @@ INCLUDE_FLAGS = -I${XDEV68K_DIR}/include/xc -I${XDEV68K_DIR}/include/xdev68k
 
 
 # コンパイルフラグ
-COMMON_FLAGS = -m68000 -Os $(INCLUDE_FLAGS)
+COMMON_FLAGS = -m$(CPU) -Os $(INCLUDE_FLAGS)
 CFLAGS = $(COMMON_FLAGS) -Wno-builtin-declaration-mismatch -fcall-used-d2 -fcall-used-a2 -finput-charset=cp932 -fexec-charset=cp932 -fverbose-asm
 CXXFLAGS = $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++17
 
@@ -48,11 +51,11 @@ LIBS =\
 	${XDEV68K_DIR}/lib/xc/DOSLIB.L \
 	${XDEV68K_DIR}/lib/xc/IOCSLIB.L \
 	${XDEV68K_DIR}/lib/xc/FLOATFNC.L \
-	${XDEV68K_DIR}/lib/m68k_elf/m68000/libgcc.a \
-	${XDEV68K_DIR}/lib/m68k_elf/m68000/libstdc++.a \
+	${XDEV68K_DIR}/lib/m68k_elf/m$(CPU)/libgcc.a \
+	${XDEV68K_DIR}/lib/m68k_elf/m$(CPU)/libstdc++.a \
 
 # 中間ファイル生成用ディレクトリ
-INTERMEDIATE_DIR = _build
+INTERMEDIATE_DIR = _build/m$(CPU)
 
 # オブジェクトファイル
 OBJS =	$(addprefix $(INTERMEDIATE_DIR)/,$(patsubst %.c,%.o,$(C_SRCS))) \
