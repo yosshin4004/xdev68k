@@ -158,6 +158,8 @@ xdev68k/
 │	│	X68K のコマンドラインユーティリティ
 │	├ AR.X
 │	│		X68k Archiver v1.00
+│	├ DB.X
+│	│		X68k Debugger v2.00
 │	├ HAS060.X
 │	│		High-speed Assembler 68060 対応版 version 3.09+89
 │	├ hlk301.x
