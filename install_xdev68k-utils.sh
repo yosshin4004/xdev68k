@@ -181,7 +181,7 @@ cp -p ${ARCHIVE} ../archive/download
 
 
 #------------------------------------------------------------------------------
-# C Compiler PRO-68K ver2.1（XC）から include/ lib/ AR.X をインストール
+# C Compiler PRO-68K ver2.1（XC）から include/ lib/ AR.X DB.X をインストール
 #------------------------------------------------------------------------------
 ARCHIVE="XC2101.LZH"
 SHA512SUM="5746f2100a7aa8428313ccb36cdba603601eaaa131f98aba2c22016b294e50fb612930ed5edd7dbdebe2d8f12d2ff0a81eb5c7c2f37e530debb44673903809e6"
@@ -220,6 +220,7 @@ mkdir -p ../archive/download
 cp -r XC2102_02/INCLUDE/* ../include/xc
 cp -r XC2102_02/LIB/* ../lib/xc
 cp -r XC2101/BIN/AR.X ../x68k_bin
+cp -r XC2101/BIN/DB.X ../x68k_bin
 cp -p XC2101.LZH ../archive/download
 cp -p XC2102_02.LZH ../archive/download
 
