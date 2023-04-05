@@ -48,5 +48,10 @@ my $exit_code = system($command_line);
 # ロック解除
 $fh_lock_txt->close();
 
+# 正常終了していないならエラー
+if ($exit_code != 0) {
+	die("");
+}
+
 # 終了コードを返して終了
 exit $exit_code;
