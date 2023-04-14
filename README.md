@@ -621,26 +621,26 @@ xdev68k でビルドした結果を XEiJ でデバッグ実行するには、以
 	をダウンロードし展開します。
 	展開先のディレクトリ名は何でも良いですが、ここでは説明上 xeij_boot とします。
 	```
-		xeij_boot/ （以下、HUMAN302.LZH を展開して得られたファイル群）
-		├ ASK/
-		├ BASIC2/
-		├ BIN/
-		中略
-		├ AUTOECEC.BAT
-		以下略
+	xeij_boot/ （以下、HUMAN302.LZH を展開して得られたファイル群）
+	├ ASK/
+	├ BASIC2/
+	├ BIN/
+	中略
+	├ AUTOECEC.BAT
+	以下略
 	```
-	環境変数 XEIJ_BOOT_DIR に xeij_boot のフルパスを設定します。
+	環境変数 XEIJ_BOOT_DIR にディレクトリ xeij_boot のフルパスを設定します。
+	フルパスは、C: 等のドライブ名から始まる windows スタイルではなく、
+	/c 等から始まる unix スタイルで指定してください。
 	msys の場合、.bashrc で以下のように実行しておきます。
 	```bash
 	export XEIJ_BOOT_DIR=ディレクトリxeij_bootのフルパス
 	```
-	フルパスは、C: 等のドライブ名から始まる windows スタイルではなく、
-	/c 等から始まる unix スタイルで指定してください。
 
 	続いて、Human68k のファイル名文字数制限（8+3 文字）を緩和するため、
 	TwentyOne.x を組み込みます。
 	X68000 LIBRARY http://retropc.net/x68000/software/disk/filename/twentyone/ から
-	tw136c14.lzh をダウンロードし、xeij_boot/ 以下に展開し、
+	tw136c14.lzh をダウンロードし、ディレクトリ xeij_boot 以下に展開し、
 	xeij_boot/CONFIG.SYS に以下のような一行を追加します。
 	```
 	DEVICE = \tw136c14\TwentyOne.x +TPS
@@ -650,27 +650,27 @@ xdev68k でビルドした結果を XEiJ でデバッグ実行するには、以
 
 3. ディレクトリ xdev68k を Human68k 起動ドライブ以下に配置する  
 	X68K から xdev68k 関連ファイルが見えるようにするため、
-	ディレクトリ xdev68k を上記の xeij_boot 以下に配置する必要があります。
+	ディレクトリ xdev68k をディレクトリ xeij_boot 以下に配置する必要があります。
 	```
-		xeij_boot/ 
-		├ xdev68k/ （← ここに配置した）
-		├ ASK/
-		├ BASIC2/
-		├ BIN/
-		中略
-		├ AUTOECEC.BAT
-		以下略
+	xeij_boot/ 
+	├ xdev68k/ （← ここに配置した）
+	├ ASK/
+	├ BASIC2/
+	├ BIN/
+	中略
+	├ AUTOECEC.BAT
+	以下略
 	```
 
 4. XEiJ を起動する  
-	xeij_boot を Human68k の起動ドライブとみなして XEiJ を起動するには、
+	ディレクトリ xeij_boot を Human68k の起動ドライブとみなして XEiJ を起動するには、
 	ホストマシンのコマンドラインから以下のように実行します。
 	```
 	java -jar XEiJ.jar -boot=xeij_boot
 	```
 
 	XEiJ が起動したら、XEiJ のメインウィンドウ上で 「設定」→「ターミナル」 を選択し、ターミナルウィンドウを開いておきます。
-	このウィンドウは、デバッグ用のログ出力ウィンドウとして使えます。
+	このウィンドウは、デバッグ用のログ出力ウィンドウ等に使えます。
 	他にもデバッグに役立つウィンドウが沢山用意されていますので、開いておきます。
 
 
@@ -698,8 +698,8 @@ xdev68k でビルドした結果を XEiJ でデバッグ実行するには、以
 
 XEiJ によるデバッグ実行は、makefile に次の記述を追加することで可能になります。
 ```
-	run_xeij : 実行ファイル名
-		${XDEV68K_DIR}/util/xeij_remote_debug.sh 実行ファイル名 引数
+run_xeij : 実行ファイル名
+	${XDEV68K_DIR}/util/xeij_remote_debug.sh 実行ファイル名 引数
 ```
 詳しい処理内容はここでは解説しませんので、
 xdev68k/util/xeij_remote_debug.sh
@@ -711,13 +711,15 @@ xdev68k/util/xeij_remote_debug.sh
 サンプルコード xdev68k/example/run_xeij 実行中のスクリーンショットです。
 左上がデバッグ対象のプログラムの画面、
 左下がターミナルウィンドウになります。
+画面右側は、実行中のプログラムの解析情報を表示するウィンドウ群です。
 
 ![debug_with_xeij](https://user-images.githubusercontent.com/11882108/230971524-56ba9039-d11c-4903-8738-68f743fbabe2.png)
 
 
 ## 注意点
 
-デバッグ中のプログラムの中断は、ソフトウェア的に interrupt スイッチ入力を発生させることで強制的に行われます。
+デバッグ中のプログラムの中断は、
+ソフトウェア的に interrupt スイッチ入力を発生させることで強制的に行われます。
 このため、割り込み処理を利用したプログラムのような場合、
 割り込み停止されないままプログラムが終了されることになり、
 その後のシステムの動作が不安定になります。
