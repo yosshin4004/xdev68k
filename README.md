@@ -604,6 +604,16 @@ XEiJ を利用したデバッグは、一般的なクロス開発環境におけ
 デバッグ用の printf ログ等を X68K のメイン画面ではなく、独立したウィンドウ上に出力可能です。
 
 
+## デバッグの様子
+
+サンプルコード xdev68k/example/run_xeij 実行中のスクリーンショットです。
+左上がデバッグ対象のプログラムの画面、
+左下がターミナルウィンドウになります。
+画面右側は、実行中のプログラムの解析情報を表示するウィンドウ群です。
+
+![debug_with_xeij](https://user-images.githubusercontent.com/11882108/230971524-56ba9039-d11c-4903-8738-68f743fbabe2.png)
+
+
 ## 環境設定
 
 xdev68k でビルドした結果を XEiJ でデバッグ実行するには、以下のように環境設定を行う必要があります。
@@ -611,7 +621,7 @@ xdev68k でビルドした結果を XEiJ でデバッグ実行するには、以
 1. XEiJ（0.23.04.10以降）のインストール  
 	公式サイトから XEiJ のアーカイブをダウンロードし展開します。  
 	https://stdkmd.net/xeij/#download  
-	XEiJ の起動に必要な環境設定は公式サイトをご参照ください。  
+	XEiJ の環境設定は公式サイトをご参照ください。  
 	https://stdkmd.net/xeij/environment.htm  
 
 
@@ -696,7 +706,7 @@ xdev68k でビルドした結果を XEiJ でデバッグ実行するには、以
 
 ## makefile 記述
 
-XEiJ によるデバッグ実行は、makefile に次の記述を追加することで可能になります。
+XEiJ によるデバッグ実行は、makefile に次のような記述を追加することで可能になります。
 ```
 run_xeij : 実行ファイル名
 	${XDEV68K_DIR}/util/xeij_remote_debug.sh 実行ファイル名 引数
@@ -704,16 +714,6 @@ run_xeij : 実行ファイル名
 詳しい処理内容はここでは解説しませんので、
 xdev68k/util/xeij_remote_debug.sh
 の実装をご参照ください。
-
-
-## デバッグの様子
-
-サンプルコード xdev68k/example/run_xeij 実行中のスクリーンショットです。
-左上がデバッグ対象のプログラムの画面、
-左下がターミナルウィンドウになります。
-画面右側は、実行中のプログラムの解析情報を表示するウィンドウ群です。
-
-![debug_with_xeij](https://user-images.githubusercontent.com/11882108/230971524-56ba9039-d11c-4903-8738-68f743fbabe2.png)
 
 
 ## 注意点
