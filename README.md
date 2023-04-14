@@ -157,12 +157,12 @@ xdev68k/
 │	├ atomic.pl
 │	│		指定のコマンドラインをシングルスレッド実行するスクリプト
 │	├ db_pop_states.txt
-│	│		ステート復活を行うデバッガコマンド
+│	│		割り込み処理のステート復活を行うデバッガコマンド
 │	├ db_push_states.txt
-│	│		ステート退避を行うデバッガコマンド
+│	│		割り込み処理のステート退避を行うデバッガコマンド
 │	├ xeij_*.bat
 │	│		XEiJ 制御用バッチファイル
-│	├ xeij_debug.sh
+│	├ xeij_remote_debug.sh
 │	│		XEiJ 上で指定ファイルをデバッグ実行するスクリプト
 │	└ x68k_gas2has.pl
 │			GAS to HAS コンバータ
