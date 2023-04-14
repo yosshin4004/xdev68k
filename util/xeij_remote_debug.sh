@@ -41,7 +41,7 @@ then
 	echo "	xeij_remote_debug.sh [filename]"
 	echo ""
 	echo "	example:"
-	echo "		xeij_remote_debug.sh MAIN.X"
+	echo "		xeij_remote_debug.sh MAIN.X -hoge fuga -piyo geba"
 	echo ""
 	exit 1
 fi
@@ -83,35 +83,58 @@ fi
 
 
 # XEiJ の boot ディレクトリから見たカレントディレクトリの相対パス
-REL_PATH=`shell realpath --relative-to=${XEIJ_BOOT_DIR} .`
+REL_BOOT_TO_PWD=`shell realpath --relative-to=${XEIJ_BOOT_DIR} .`
 
 # 相対パスが .. で始まる場合は、XEiJ の boot ディレクトリ以下で実行されていないのでエラー。
-if [[ ${REL_PATH} =~ ^\.\. ]]; then
+if [[ ${REL_BOOT_TO_PWD} =~ ^\.\. ]]; then
 	echo "ERROR: Invalid relative path. Please run under \${XEIJ_BOOT_DIR}."
 	exit 1
 fi
 
-# DB.X のパス
-DBX_PATH=${XDEV68K_DIR}/x68k_bin/DB.X
 
-# DB.X が存在しないならエラー
-if [ ! -e ${DBX_PATH} ]; then
-	echo "ERROR: ${DBX_PATH} does not exist."
-	exit 1
-fi
+# XEiJ の boot ディレクトリから見た xdev68k の相対パス
+REL_BOOT_TO_XDEV68K=`shell realpath --relative-to=${XEIJ_BOOT_DIR} ${XDEV68K_DIR}`
 
-# XEiJ の boot ディレクトリから見た DB.X の相対パス
-DBX_REL_PATH=`shell realpath --relative-to=${XEIJ_BOOT_DIR} ${DBX_PATH}`
-
-# 相対パスが .. で始まる場合は、XEiJ の boot ディレクトリ以下で実行されていないのでエラー。
-if [[ ${DBX_REL_PATH} =~ ^\.\. ]]; then
+# 相対パスが .. で始まる場合は、xdev68k が XEiJ の boot ディレクトリ以下に配置されていないのでエラー。
+if [[ ${REL_BOOT_TO_XDEV68K} =~ ^\.\. ]]; then
 	echo "ERROR: Invalid relative path. Please locate \${XDEV68K_DIR} under \${XEIJ_BOOT_DIR}."
 	exit 1
 fi
 
-# 相対パスの / を \ に置換する（多重にエスケープシーケンスされてとても読みづらいが・・・）
-REL_PATH_X68K=`echo ${REL_PATH} | sed s/\\\\//\\\\\\\\/g`
-DBX_REL_PATH_X68K=`echo ${DBX_REL_PATH} | sed s/\\\\//\\\\\\\\/g`
+
+# カレントディレクトリから見た xdev68k のパス
+REL_PWD_TO_XDEV68K=`shell realpath --relative-to=. ${XDEV68K_DIR}`
+
+
+# DB.X のパス、および boot ディレクトリから見た相対パス
+DBX=${XDEV68K_DIR}/x68k_bin/DB.X
+REL_BOOT_TO_DBX=`shell realpath --relative-to=${XEIJ_BOOT_DIR} ${DBX}`
+
+# DB.X が存在しないならエラー
+if [ ! -e ${DBX} ]; then
+	echo "ERROR: ${DBX} does not exist."
+	exit 1
+fi
+
+
+# DB.X バッチスクリプトのパス、および boot ディレクトリから見た相対パス
+REL_PWD_TO_DB_PUSH_STATES=${REL_PWD_TO_XDEV68K}/util/db_push_states.txt
+REL_PWD_TO_DB_POP_STATES=${REL_PWD_TO_XDEV68K}/util/db_pop_states.txt
+REL_PWD_TO_DB_CMD=${REL_PWD_TO_XDEV68K}/util/db_cmd.txt
+
+# パスの / を \ に置換する（多重にエスケープシーケンスされてとても読みづらいが・・・）
+REL_BOOT_TO_PWD_X68K=`echo ${REL_BOOT_TO_PWD} | sed s/\\\\//\\\\\\\\/g`
+REL_BOOT_TO_XDEV68K_X68K=`echo ${REL_BOOT_TO_XDEV68K} | sed s/\\\\//\\\\\\\\/g`
+REL_BOOT_TO_DBX_X68K=`echo ${REL_BOOT_TO_DBX} | sed s/\\\\//\\\\\\\\/g`
+REL_PWD_TO_DB_PUSH_STATES=`echo ${REL_PWD_TO_DB_PUSH_STATES} | sed s/\\\\//\\\\\\\\/g`
+REL_PWD_TO_DB_POP_STATES=`echo ${REL_PWD_TO_DB_POP_STATES} | sed s/\\\\//\\\\\\\\/g`
+REL_PWD_TO_DB_CMD=`echo ${REL_PWD_TO_DB_CMD} | sed s/\\\\//\\\\\\\\/g`
+
+
+# コマンド短縮名
+XEIJ_PASTE="cmd //c ${XDEV68K_DIR}/util/xeij_paste.bat"
+XEIJ_CONTROL="cmd //c ${XDEV68K_DIR}/util/xeij_control.bat"
+XEIJ_CAT="cmd //c ${XDEV68K_DIR}/util/xeij_cat.bat"
 
 
 #-----------------------------------------------------------------------------
@@ -126,30 +149,68 @@ function abort
 
 
 # XEiJ が利用できることを確認するため、ダミー処理を paste する（失敗したらエラー終了）
-cmd //c ${XDEV68K_DIR}/util/xeij_paste.bat rem || abort ERROR: XEiJ is not available.
+${XEIJ_PASTE} rem || abort ERROR: XEiJ is not available.
 
-# カレントディレクトリを移動する
-cmd //c ${XDEV68K_DIR}/util/xeij_paste.bat cd \\${REL_PATH_X68K}
+# X68K 側のカレントディレクトリを移動する
+${XEIJ_PASTE} cd \\${REL_BOOT_TO_PWD_X68K}
 
 # デバッガから実行ファイルを起動する
-cmd //c ${XDEV68K_DIR}/util/xeij_paste.bat \\${DBX_REL_PATH_X68K} ${COMMAND_LINE}
+${XEIJ_PASTE} \\${REL_BOOT_TO_DBX_X68K} ${COMMAND_LINE}
+
+# 割り込み周りのハードウェアステートを退避する。
+# デバッガのシステム変数は Z0～Z10 の 10 個しかないので、必要最小限のステートしか
+# 退避できない。ここでは、主にゲーム系で使われる割り込み設定のみを対象としている。
+# db_push_interrupt_settings.txt は、以下の処理を一括で行う。
+#	Z9=.sr				Z9 にステータスレジスタ退避
+#	X sr				ステータスレジスタ変更
+#	.sr^|700			ステータスレジスタ |= 0x700（割り込み off）
+#	Z0=[E88003].b		Z0 に AER 退避
+#	Z1=[E88007].b		Z1 に IERA 退避
+#	Z2=[E88009].b		Z2 に IERB 退避
+#	Z3=[E88013].b		Z3 に IMRA 退避
+#	Z4=[E88015].b		Z4 に IMRB 退避
+#	Z5=[118].l			Z5 に V-disp ベクタ退避
+#	Z6=[138].l			Z6 に CRT-IRQ ベクタ退避
+#	Z7=[E80012].w		Z7 に CRT-IRQ ラスタ No. 退避
+${XEIJ_CAT} ${REL_PWD_TO_DB_PUSH_STATES}
 
 # デバッグ開始
-cmd //c ${XDEV68K_DIR}/util/xeij_paste.bat G
+${XEIJ_PASTE} G
 
 # ホスト側をキー入力待ちにする
 read -p "Press [Enter] key to interrupt."
 
 # デバッグ中断
-cmd //c ${XDEV68K_DIR}/util/xeij_control.bat interrupt
+${XEIJ_CONTROL} interrupt
 
-# DB.X へのコマンドは、以下のようにコロン区切りで複数を一括指定できる。
 # 操作を aux に切り替えてレジスタ情報と PC 周辺のディスアセンブルを表示する。
-cmd //c ${XDEV68K_DIR}/util/xeij_paste.bat V:X:L.pc:L.pc:L.pc:V
+#	V		操作を aux に切り替え
+#	X		レジスタ情報の表示
+#	L.pc	プログラムカウンタの位置からディスアセンブル
+#	V		操作を aux に切り替え
+# aux への切り替えと復帰を一括実行する必要がある。
+# デバッガのコマンドを一括実行するには、コロン区切りでコマンドを列挙する。
+${XEIJ_PASTE} V:X:L.pc:L.pc:L.pc:V
+
+# 割り込み周りのハードウェアステートを復帰する。
+# db_pop_interrupt_settings.txt は、以下の処理を一括で行う。
+#	X sr				ステータスレジスタ変更
+#	.sr^|700			ステータスレジスタ |= 0x700（割り込み off）
+#	MEsE88003.Z0		Z0 から AER 復帰
+#	MEsE88007.Z1		Z1 から IERA 復帰
+#	MEsE88009.Z2		Z2 から IERB 復帰
+#	MEsE88013.Z3		Z3 から IMRA 復帰
+#	MEsE88015.Z4		Z4 から IMRB 復帰
+#	MEl118.Z5			Z5 から V-disp ベクタ復帰
+#	MEl138.Z6			Z6 から CRT-IRQ ベクタ復帰
+#	MEwE80012.Z7		Z7 から CRT-IRQ ラスタ No. 復帰
+#	X sr				ステータスレジスタ変更
+#	.Z9					ステータスレジスタ = Z9（割り込み設定復帰）
+${XEIJ_CAT} ${REL_PWD_TO_DB_POP_STATES}
 
 # デバッガを抜ける
-cmd //c ${XDEV68K_DIR}/util/xeij_paste.bat Q
+${XEIJ_PASTE} Q
 
 # 画面を初期化
-cmd //c ${XDEV68K_DIR}/util/xeij_paste.bat screen
+${XEIJ_PASTE} screen
 
