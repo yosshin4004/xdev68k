@@ -15,8 +15,9 @@
 
 		XEiJ によるデバッグは、makefile に次の記述を追加することで可能になり
 		ます。
+
 			run_xeij : 実行ファイル名
-				${XDEV68K_DIR}/util/xeij_remote_debug.sh 実行ファイル名 引数
+				bash ${XDEV68K_DIR}/util/xeij_remote_debug.sh 実行ファイル名 引数
 
 		詳しい処理内容はここでは解説しませんので、xeij_remote_debug.sh の実装
 		をご参照ください。

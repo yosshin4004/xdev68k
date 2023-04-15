@@ -132,9 +132,11 @@ REL_PWD_TO_DB_CMD=`echo ${REL_PWD_TO_DB_CMD} | sed s/\\\\//\\\\\\\\/g`
 
 
 # コマンド短縮名
-XEIJ_PASTE="cmd //c ${XDEV68K_DIR}/util/xeij_paste.bat"
-XEIJ_CONTROL="cmd //c ${XDEV68K_DIR}/util/xeij_control.bat"
-XEIJ_CAT="cmd //c ${XDEV68K_DIR}/util/xeij_cat.bat"
+#	msys から実行する場合、cmd.exe //c としないと、バッチファイル実行後自動で
+#	exit してくれない。
+XEIJ_PASTE="cmd.exe //c ${XDEV68K_DIR}/util/xeij_paste.bat"
+XEIJ_CONTROL="cmd.exe //c ${XDEV68K_DIR}/util/xeij_control.bat"
+XEIJ_CAT="cmd.exe //c ${XDEV68K_DIR}/util/xeij_cat.bat"
 
 
 #-----------------------------------------------------------------------------

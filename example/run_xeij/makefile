@@ -82,7 +82,7 @@ clean :
 
 # 実行
 run_xeij : $(EXECUTABLE)
-	${XDEV68K_DIR}/util/xeij_remote_debug.sh $(EXECUTABLE)
+	bash ${XDEV68K_DIR}/util/xeij_remote_debug.sh $(EXECUTABLE)
 
 # 実行ファイルの生成
 #	HLK に長いパス文字を与えることは難しい。

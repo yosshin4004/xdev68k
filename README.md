@@ -709,7 +709,7 @@ xdev68k でビルドした結果を XEiJ でデバッグ実行するには、以
 XEiJ によるデバッグ実行は、makefile に次のような記述を追加することで可能になります。
 ```
 run_xeij : 実行ファイル名
-	${XDEV68K_DIR}/util/xeij_remote_debug.sh 実行ファイル名 引数
+	bash ${XDEV68K_DIR}/util/xeij_remote_debug.sh 実行ファイル名 引数
 ```
 詳しい処理内容はここでは解説しませんので、
 xdev68k/util/xeij_remote_debug.sh
