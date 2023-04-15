@@ -83,7 +83,7 @@ fi
 
 
 # XEiJ の boot ディレクトリから見たカレントディレクトリの相対パス
-REL_BOOT_TO_PWD=`shell realpath --relative-to=${XEIJ_BOOT_DIR} .`
+REL_BOOT_TO_PWD=`realpath --relative-to=${XEIJ_BOOT_DIR} .`
 
 # 相対パスが .. で始まる場合は、XEiJ の boot ディレクトリ以下で実行されていないのでエラー。
 if [[ ${REL_BOOT_TO_PWD} =~ ^\.\. ]]; then
@@ -93,7 +93,7 @@ fi
 
 
 # XEiJ の boot ディレクトリから見た xdev68k の相対パス
-REL_BOOT_TO_XDEV68K=`shell realpath --relative-to=${XEIJ_BOOT_DIR} ${XDEV68K_DIR}`
+REL_BOOT_TO_XDEV68K=`realpath --relative-to=${XEIJ_BOOT_DIR} ${XDEV68K_DIR}`
 
 # 相対パスが .. で始まる場合は、xdev68k が XEiJ の boot ディレクトリ以下に配置されていないのでエラー。
 if [[ ${REL_BOOT_TO_XDEV68K} =~ ^\.\. ]]; then
@@ -103,12 +103,12 @@ fi
 
 
 # カレントディレクトリから見た xdev68k のパス
-REL_PWD_TO_XDEV68K=`shell realpath --relative-to=. ${XDEV68K_DIR}`
+REL_PWD_TO_XDEV68K=`realpath --relative-to=. ${XDEV68K_DIR}`
 
 
 # DB.X のパス、および boot ディレクトリから見た相対パス
 DBX=${XDEV68K_DIR}/x68k_bin/DB.X
-REL_BOOT_TO_DBX=`shell realpath --relative-to=${XEIJ_BOOT_DIR} ${DBX}`
+REL_BOOT_TO_DBX=`realpath --relative-to=${XEIJ_BOOT_DIR} ${DBX}`
 
 # DB.X が存在しないならエラー
 if [ ! -e ${DBX} ]; then
