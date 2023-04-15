@@ -59,6 +59,7 @@ COMMAND_LINE=$@
 set -eu
 
 # msys 以外の環境は未サポート
+# WSL もサポートしたいが、名前付きパイプにアクセスする簡便な方法が不明。
 if [ "$(expr substr $(uname -s) 1 5)" != "MINGW" ]; then
 	echo "Only msys is supported as host environment. Please use msys."
 	exit 1

@@ -3,7 +3,7 @@
 @rem #	xeij_cat.bat
 @rem #
 @rem #	JP:
-@rem #		XEiJ 上で実行されている X68K の stdin に指定の文字列を送信します。
+@rem #		XEiJ 上で実行されている X68K の stdin に指定のファイルを送信します。
 @rem #
 @rem #	EN:
 @rem #		Sends the specified file to stdin on X68K running on XEiJ.
