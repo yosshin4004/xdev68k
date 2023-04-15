@@ -58,14 +58,21 @@ COMMAND_LINE=$@
 # 未定義変数を参照したらエラーにする。
 set -eu
 
+# msys 以外の環境は未サポート
+if [ "$(expr substr $(uname -s) 1 5)" != "MINGW" ]; then
+	echo "Only msys is supported as host environment. Please use msys."
+	exit 1
+fi
+
+
 # 環境変数の確認
 if [ -z ${XDEV68K_DIR-} ]; then
-  echo "Please set XDEV68K_DIR environment variable."
-  exit 1
+	echo "Please set XDEV68K_DIR environment variable."
+	exit 1
 fi
 if [ -z ${XEIJ_BOOT_DIR-} ]; then
-  echo "Please set XEIJ_BOOT_DIR environment variable."
-  exit 1
+	echo "Please set XEIJ_BOOT_DIR environment variable."
+	exit 1
 fi
 
 
