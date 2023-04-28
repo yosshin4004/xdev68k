@@ -181,6 +181,26 @@ cp -p ${ARCHIVE} ../archive/download
 
 
 #------------------------------------------------------------------------------
+# g2as g2lk のインストール
+#------------------------------------------------------------------------------
+ARCHIVE="G3_20.LZH"
+SHA512SUM="3a22c9c9fed1f8a5f4cb87640cb9dfaabeafec18098b12ce6e71eebcdb61f1a7571d0e17e8a5e7518466b8f243bdb1589281fd17b5fc754a3a997eb53f6848c0"
+wget -nc http://retropc.net/x68000/software/develop/c/gcc2/${ARCHIVE}
+if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
+	echo "SHA512SUM verification of ${ARCHIVE} failed!"
+	exit 1
+fi
+${LHA} -x -w=${ARCHIVE%.*} ${ARCHIVE}
+
+# インストール
+mkdir -p ../x68k_bin
+mkdir -p ../archive/download
+cp -p ${ARCHIVE%.*}/g2as.x ../x68k_bin/
+cp -p ${ARCHIVE%.*}/g2lk.x ../x68k_bin/
+cp -p ${ARCHIVE} ../archive/download
+
+
+#------------------------------------------------------------------------------
 # C Compiler PRO-68K ver2.1（XC）から include/ lib/ AR.X DB.X をインストール
 #------------------------------------------------------------------------------
 ARCHIVE="XC2101.LZH"
