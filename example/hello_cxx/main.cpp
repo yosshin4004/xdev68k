@@ -22,9 +22,19 @@
 				-fno-rtti -fno-exceptions
 			を指定する必要があります。詳しくは makefile を参照してください。
 
-		3) static インスタンスのコンストラクタ＆デストラクタが実行されない。
+		3) static インスタンスのコンストラクタ＆デストラクタは自動実行されない
 			XC の CLIB は、static なインスタンスのコンストラクタ＆デストラクタ
-			の実行に対応していません。
+			の実行に対応していません。アプリケーション側で自力でそれらを実行
+			する必要があります。
+
+		4) C++ 対応したアセンブラとリンカを利用する必要がある
+			static コンストラクタ/デストラクタを利用するには、それらに対応
+			したアセンブラとリンカである g2as.x と g2lk.x を利用する必要が
+			あります。詳しくは makefile を参照してください。
+
+		5) 68060 はサポートされない
+			g2as.x と g2lk.x は残念ながら 68040 までの CPU しかサポートして
+			居ません。このため 68060 と C++ の同時利用は現状では不可能です。
 */
 
 /*
@@ -37,27 +47,49 @@ extern "C" {
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "cxx_for_xc.h"
 
 #ifdef __cplusplus
 }
 #endif
 
 
+/* 一般的なクラスの例 */
 class Example {
 public:
 	void hello() {
-		printf("hello c++ world.\n");
+		printf("Example: hello c++ world.\n");
 	}
 	Example() {
-		printf("ctor.\n");
+		printf("Example: ctor.\n");
 	}
 	~Example() {
-		printf("dtor.\n");
+		printf("Example: dtor.\n");
 	}
 };
 
 
+/* スタティックコンストラクタの例 */
+class StaticCtorExample {
+public:
+	StaticCtorExample() {
+		printf("StaticCtorExample: ctor.\n");
+	}
+	~StaticCtorExample() {
+		printf("StaticCtorExample: dtor.\n");
+	}
+};
+static StaticCtorExample s_staticCtorExample;
+
+
 int main(int argc, char *argv[]){
+	/*
+		スタティックコンストラクタを実行する。
+		スタティックデストラクタはスタティックコンストラクタが自動で
+		atexit 関数として登録してくれる。
+	*/
+	execute_static_ctors();
+
 	Example example;
 	example.hello();
 	return 0;

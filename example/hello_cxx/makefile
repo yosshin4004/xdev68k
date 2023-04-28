@@ -19,8 +19,9 @@ CXX = ${XDEV68K_DIR}/m68k-toolchain/bin/m68k-elf-g++
 CC = ${XDEV68K_DIR}/m68k-toolchain/bin/m68k-elf-gcc
 GAS2HAS = perl ${XDEV68K_DIR}/util/x68k_gas2has.pl -cpu $(CPU) -inc doscall.inc -inc iocscall.inc
 RUN68 = $(ATOMIC) ${XDEV68K_DIR}/run68/run68
-HAS = $(RUN68) ${XDEV68K_DIR}/x68k_bin/HAS060.X
-HLK = $(RUN68) ${XDEV68K_DIR}/x68k_bin/hlk301.x
+# for C++
+HAS = $(RUN68) ${XDEV68K_DIR}/x68k_bin/g2as.x
+HLK = $(RUN68) ${XDEV68K_DIR}/x68k_bin/g2lk.x
 
 # 最終生成物
 EXECUTABLE = MAIN.X
@@ -36,7 +37,7 @@ CFLAGS = $(COMMON_FLAGS) -Wno-builtin-declaration-mismatch -fcall-used-d2 -fcall
 CXXFLAGS = $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++17
 
 # *.c ソースファイル
-C_SRCS = 
+C_SRCS = cxx_for_xc.c
 
 # *.cpp ソースファイル
 CPP_SRCS = main.cpp
