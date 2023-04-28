@@ -2004,10 +2004,24 @@ sub modify_directive {
 		#		.dc.w	123, ...
 		#		.dc.b	123, ...
 		if    ($line =~ /^(\s*)\.long(\s+)(.+?)$g_regex_end/i) {
-			my $spaces1		= $1;
-			my $spaces2		= $2;
-			my $arg_list	= $3;
-			$modified = $spaces1 . '.dc.l' . $spaces2 . modify_arg_list($arg_list, $asm_mode);
+			# static コンストラクタ
+			#	GAS
+			#		.long	_GLOBAL__sub_I_func.cpp
+			#	HAS
+			#		.dc.l	__GLOBAL__sub_I_func?cpp
+			#	ちなみに、デストラクタはコンストラクタ内で atexit で登録されるので、
+			#	対処する必要はない。
+			if    ($line =~ /^(\s*)\.long(\s+)(_GLOBAL_.+?)$g_regex_end/i) {
+				my $spaces1		= $1;
+				my $spaces2		= $2;
+				my $arg_list	= $3;
+				$modified = $spaces1 . '.ctor' . $spaces2 . modify_arg_list($arg_list, $asm_mode);
+			} else {
+				my $spaces1		= $1;
+				my $spaces2		= $2;
+				my $arg_list	= $3;
+				$modified = $spaces1 . '.dc.l' . $spaces2 . modify_arg_list($arg_list, $asm_mode);
+			}
 		}
 		elsif ($line =~ /^(\s*)\.(?:word|short)(\s+)(.+?)$g_regex_end/i) {
 			my $spaces1		= $1;
