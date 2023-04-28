@@ -176,6 +176,10 @@ xdev68k/
 │	│		X68k Archiver v1.00
 │	├ DB.X
 │	│		X68k Debugger v2.00
+│	├ g2as.x
+│	│		X68k High-speed Assembler v3.08 modified for GCC
+│	├ g2lk.x
+│	│		X68k SILK Hi-Speed Linker v2.29 modified for GCC
 │	├ HAS060.X
 │	│		High-speed Assembler 68060 対応版 version 3.09+89
 │	├ hlk301.x
