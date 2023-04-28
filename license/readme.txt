@@ -190,6 +190,30 @@
 		HLK301B.LZH に含まれる readme.doc に従ってください。
 
 
+・g2as.x g2lk.x
+
+	オリジナルアーカイブファイル
+		xdev68k/archive/download/
+			G3_20.LZH
+
+	xdev68k 上のインストール先
+		xdev68k/x68k_bin
+			G3_20.LZH から取り出した g2as.x g2lk.x をコピーしています。
+
+	原作者
+		Y.Nakamura さん
+
+	作者
+		Ｃharlie さん
+
+	入手元
+		以下の URL から転載されたアーカイブが入手可能です。
+		http://retropc.net/x68000/software/develop/c/gcc2/
+
+	利用規約
+		G3_20.LZH に含まれる readme.doc に従ってください。
+
+
 ・Project C Library LIBC 1.1.32A ぱっち DON 版
 
 	ファイル
