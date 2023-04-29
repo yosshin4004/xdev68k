@@ -82,6 +82,9 @@ xdev68k は、
 	* HLK v3.01  
 	http://retropc.net/x68000/software/develop/lk/hlk/
 	（ファイル名 HLK301B.LZH）
+	* g2as g2lk (Charlie 版 GCC の一部)
+	http://retropc.net/x68000/software/develop/c/gcc2/
+	（ファイル名 G3_20.LZH）
 	* X68K コマンドラインエミュレータ run68  
 	https://github.com/GOROman/run68mac
 
