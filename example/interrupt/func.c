@@ -58,7 +58,7 @@ void initVsyncInterrupt(void *func) {
 
 		/* MFP のバックアップを取る */
 		"	movea.l	#$e88000,a0\n"					/* a0.l = MFPアドレス */
-		"	lea.l	_s_mfpBackup(pc),a1\n"			/* a1.l = MFP保存先アドレス */
+		"	lea.l	_s_mfpBackup,a1\n"				/* a1.l = MFP保存先アドレス */
 		"	move.b	AER(a0),AER(a1)\n"				/*  AER 保存 */
 		"	move.b	IERB(a0),IERB(a1)\n"			/* IERB 保存 */
 		"	move.b	IMRB(a0),IMRB(a1)\n"			/* IMRB 保存 */
@@ -75,7 +75,7 @@ void initVsyncInterrupt(void *func) {
 		"	andi.w	#$f8ff,sr\n"
 
 		/* ユーザーモードに復帰 */
-		"	move.l	_s_uspBackup(pc),d0\n"
+		"	move.l	_s_uspBackup,d0\n"
 		"	bmi.b	@F\n"							/* スーパーバイザーモードから実行されていたら戻す必要無し */
 		"		movea.l	d0,a1\n"
 		"		iocs	__B_SUPER\n"				/* iocscall.inc で "__B_SUPER: .equ $81" が定義されている */
@@ -105,7 +105,7 @@ void termVsyncInterrupt() {
 
 		/* MFP の設定を復帰 */
 		"	movea.l	#$e88000,a0\n"					/* a0.l = MFPアドレス */
-		"	lea.l	_s_mfpBackup(pc),a1\n"			/* a1.l = MFPを保存しておいたアドレス */
+		"	lea.l	_s_mfpBackup,a1\n"				/* a1.l = MFPを保存しておいたアドレス */
 
 		"	move.b	AER(a1),d0\n"
 		"	andi.b	#%%0101_0000,d0\n"
@@ -123,14 +123,14 @@ void termVsyncInterrupt() {
 		"	or.b	d0,IMRB(a0)\n"					/* IMRB bit6 復帰 */
 
 		/* V-DISP 割り込み復帰 */
-		"	move.l	_s_vector118Backup(pc),$118\n"
+		"	move.l	_s_vector118Backup,$118\n"
 
 		/* 割り込み on */
 		"	bsr		_waitForMfp\n"
 		"	andi.w	#$f8ff,sr\n"
 
 		/* ユーザーモードに復帰 */
-		"	move.l	_s_uspBackup(pc),d0\n"
+		"	move.l	_s_uspBackup,d0\n"
 		"	bmi.b	@F\n"							/* スーパーバイザーモードから実行されていたら戻す必要無し */
 		"		movea.l	d0,a1\n"
 		"		iocs	__B_SUPER\n"				/* iocscall.inc で "__B_SUPER: .equ $81" が定義されている */
