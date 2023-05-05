@@ -397,7 +397,8 @@ The building process is completed successfully.
 
 ## 従来の X68K 対応コンパイラとの互換性問題
 
-従来の X68K 対応コンパイラ（SHARP C Compiler PRO-68K や gcc 真里子版）と最新の m68k-elf-gcc の間には互換性問題があります。
+従来の X68K 対応コンパイラ（SHARP C Compiler PRO-68K や gcc 真里子版）と最新の m68k-elf-gcc の間には互換性問題があります。  
+※gcc2 Charlie版、gcc2.95.2 等との互換性については検証しきれていません。
 
 ### 1. ABI が一致しない
 ABI とは Application Binary Interface の略で、
@@ -408,8 +409,8 @@ ABI とは Application Binary Interface の略で、
 * 破壊レジスタの違い（回避可能）  
 	従来の X68K 対応コンパイラと最新の m68k-elf-gcc の間で、関数呼び出し時の破壊レジスタが異なります。
 	```
-	従来の X68K 対応コンパイラ : d0-d2/a0-a2/fp0-fp1  
-	m68k-elf-gcc               : d0-d2/a0-a2/fp0-fp1  
+	SHARP C Compiler PRO-68K、gcc 真里子版 : d0-d2/a0-a2/fp0-fp1  
+	m68k-elf-gcc                           : d0-d1/a0-a1/fp0-fp1  
 	```
 	この問題は、m68k-elf-gcc 側にコンパイルオプション -fcall-used-d2 -fcall-used-a2 を指定することで解消されます。
 
@@ -434,8 +435,8 @@ ABI とは Application Binary Interface の略で、
 	64 bit 整数型である long long 型のバイナリ表現が、
 	従来の X68K 対応コンパイラと m68k-elf-gcc とで異なります。
 	```
-	従来の X68K 対応コンパイラ : 下位 32bit、上位 32bit の順に格納（つまりビッグエンディアン配置でない）  
-	m68k-elf-gcc               : 上位 32bit、下位 32bit の順に格納（厳密にビッグエンディアン配置）  
+	SHARP C Compiler PRO-68K、gcc 真里子版 : 下位 32bit、上位 32bit の順に格納（つまりビッグエンディアン配置でない）  
+	m68k-elf-gcc                           : 上位 32bit、下位 32bit の順に格納（厳密にビッグエンディアン配置）  
 	```
 	現状ではこの問題の回避策はありません。
 	（幸い、過去のソフトウェア資産上に long long 型が出現することは少なく、問題に発展することは稀。
@@ -445,8 +446,9 @@ ABI とは Application Binary Interface の略で、
 	拡張倍精度浮動小数型である long double 型のバイナリ表現が、
 	従来の X68K 対応コンパイラと m68k-elf-gcc とで異なります。
 	```
-	従来の X68K 対応コンパイラ : long double ＝ 8 bytes 型（double 型互換）  
-	m68k-elf-gcc               : long double ＝ 12 bytes 型  
+	SHARP C Compiler PRO-68K、gcc 真里子版 : long double ＝ 8 bytes 型（double 型互換）  
+	m68k-elf-gcc                           : long double ＝ 12 bytes 型  
+	※gcc2 Charlie版 も 12 bytes 型とのことです。  
 	```
 	現状ではこの問題の回避策はありません。
 	（幸い、過去のソフトウェア資産上に long double 型が出現することは少なく、問題に発展することは稀。
@@ -481,7 +483,7 @@ NaN (0.0f/0.0f を計算させて生成)
 	printf による出力 : -680564693277060000000000000000000000000.000000（正しくない）
 ```
 
-従来の X68K 対応コンパイラ（古い X68K 移植版 gcc）ではこのような問題は起きませんでした。
+従来の X68K 対応コンパイラ（SHARP C Compiler PRO-68K、gcc 真里子版）ではこのような問題は起きませんでした。
 同様のコードを gcc 真里子版 でコンパイルし実行した結果を示します。
 
 ```
