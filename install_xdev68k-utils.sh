@@ -122,8 +122,8 @@ LHA=lha-release-20211125/src/lha
 #------------------------------------------------------------------------------
 # HAS060.X のインストール
 #------------------------------------------------------------------------------
-ARCHIVE="HAS06089.LZH"
-SHA512SUM="2b6947ebccc422ece82cb90b27252754a89625fbac9d9806fb774d4c70763786982ec81a6394dbcf0b9aae9e72e138c822554dbe6180aeaca998fe3c6a992f71"
+ARCHIVE="HAS06091.LZH"
+SHA512SUM="ed6c019cfaf57d23565f4ccb90c616bc54ffd4780e00d1b2ce6a8b2c3015938d254deff6bc1e15bbccb68cacb060a797a6e0fd23f2a3f032cdc8402232ed18bd"
 wget -nc http://retropc.net/x68000/software/develop/as/has060/${ARCHIVE}
 if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
 	echo "SHA512SUM verification of ${ARCHIVE} failed!"
