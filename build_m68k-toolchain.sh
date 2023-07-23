@@ -254,7 +254,15 @@ if [ $(sha512sum ${NEWLIB_ARCHIVE} | awk '{print $1}') != ${NEWLIB_SHA512SUM} ];
 	echo "SHA512SUM verification of ${NEWLIB_ARCHIVE} failed!"
 	exit 1
 fi
-tar zxvf ${NEWLIB_ARCHIVE} -C ${SRC_DIR}
+#
+#	newlib のアーカイブはシンボリックリンクを含んでいるため、windows 環境で
+#	展開する時は注意が必要。以下のように tar コマンドを使うナイーブな方法では
+#	正常動作しない。
+#		tar zxvf ${NEWLIB_ARCHIVE} -C ${SRC_DIR}
+#	代替手段として、pax コマンドを利用する。
+#
+cd ${SRC_DIR}
+pax -z -r -f ${DOWNLOAD_DIR}/${NEWLIB_ARCHIVE}
 
 export CC_FOR_TARGET=${PROGRAM_PREFIX}gcc
 export LD_FOR_TARGET=${PROGRAM_PREFIX}ld
