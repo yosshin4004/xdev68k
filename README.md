@@ -31,6 +31,7 @@ xdev68k は、
 	pacman -S cmake
 	pacman -S libiconv
 	pacman -S git
+	pacman -S pax
 	```
 	msys の perl は初期状態ではロケールが正しく設定されておらず、perl 起動の度に以下のように警告されます。
 	```bash
