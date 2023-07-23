@@ -78,7 +78,7 @@ xdev68k は、
 	（ファイル名 XC2101.LZH, XC2102_02.LZH）  
 	* HAS060.X  
 	http://retropc.net/x68000/software/develop/as/has060/
-	（ファイル名 HAS06089.LZH）
+	（ファイル名 HAS06091.LZH）
 	* HLK v3.01  
 	http://retropc.net/x68000/software/develop/lk/hlk/
 	（ファイル名 HLK301B.LZH）
@@ -184,7 +184,7 @@ xdev68k/
 │	├ g2lk.x
 │	│		X68k SILK Hi-Speed Linker v2.29 modified for GCC
 │	├ HAS060.X
-│	│		High-speed Assembler 68060 対応版 version 3.09+89
+│	│		High-speed Assembler 68060 対応版 version 3.09+91
 │	├ hlk301.x
 │	│		HLK v3.01
 │	└ MEMSIZE.X
