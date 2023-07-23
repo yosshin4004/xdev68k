@@ -61,7 +61,7 @@ xdev68k は、
 	十分なディスク容量（10GB 程度）があることを確認した上で、
 	ホスト環境の bash コンソール上で先ほど clone したディレクトリ xdev68k に移動し、以下のコマンドを実行します。
 	```bash
-	./build_m68k-toolchain.sh
+	bash ./build_m68k-toolchain.sh
 	```
 	xdev68k/m68k-toolchain 以下に、Motorola 680x0 シリーズ対応のクロスコンパイラである m68k-elf-gcc が構築されます。
 	以下のメッセージがコンソールに出力されれば完了です。
@@ -90,7 +90,7 @@ xdev68k は、
 
 	ホスト環境の bash コンソール上で、先ほどと同じディレクトリ（xdev68k）から以下のコマンドを実行します。
 	```bash
-	./install_xdev68k-utils.sh
+	bash ./install_xdev68k-utils.sh
 	```
 	クロスコンパイル環境で必要になるユーティリティの実行ファイル、ヘッダおよびライブラリがインストールされます。
 	以下のメッセージがコンソールに出力されれば完了です。
