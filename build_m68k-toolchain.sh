@@ -43,30 +43,31 @@
 #-----------------------------------------------------------------------------
 # 設定
 #
-#	debian 系のディストリビューションで stable とされている構成に倣っている。
+#	debian Trixie が利用しているバージョンに合わせたいが、msys 対応の都合上、
+#	gcc のバージョンを 14.2 から 13.4 に下げている。
 #-----------------------------------------------------------------------------
 
 # gcc の ABI
 GCC_ABI=m68k-elf
 
 # binutils
-BINUTILS_VERSION="2.35"
+BINUTILS_VERSION="2.44"
 BINUTILS_ARCHIVE="binutils-${BINUTILS_VERSION}.tar.bz2"
-BINUTILS_SHA512SUM="826c1fdac2dd7b2326c4fc5449a585cf0c1f979a98c6ee062bab5ebd6bc657e697c468fc3a4c3c5a7fa383a4902e8cacd27e1752707bbaf042b36b2653469947"
+BINUTILS_SHA512SUM="d1783e109c28c5706bacadf31d2652afe8f09ca3dfa6fb8b4e530904280207b2e1825d202faa92ff753e4ee6261a68a8429be4cd564446c6e040d75f6c2afc2d"
 BINUTILS_URL="https://ftp.gnu.org/gnu/binutils/${BINUTILS_ARCHIVE}"
 BINUTILS_DIR="binutils-${BINUTILS_VERSION}"
 
 # gcc
-GCC_VERSION="10.2.0"
+GCC_VERSION="13.4.0"
 GCC_ARCHIVE="gcc-${GCC_VERSION}.tar.gz"
-GCC_SHA512SUM="5118865a85e70ba58702bb3615d3d9e44dcdbc725fdb71124da78dd412388c5fc367378771bf82fed4d6e2c62fde4c7c362ec1f8ddcae762a2af957f2d605520"
+GCC_SHA512SUM="c4c1ab3c65690c4d872988113db0c402206fd250110ed3cd6c4df47a5030ce95865869bb3638873f123f75d5983bcb8c8c99a6e7f8978efd9f3cbb66faa9a8fb"
 GCC_URL="https://gcc.gnu.org/pub/gcc/releases/gcc-${GCC_VERSION}/${GCC_ARCHIVE}"
 GCC_DIR="gcc-${GCC_VERSION}"
 
 # newlib
-NEWLIB_VERSION="3.3.0"
+NEWLIB_VERSION="4.5.0.20241231"
 NEWLIB_ARCHIVE="newlib-${NEWLIB_VERSION}.tar.gz"
-NEWLIB_SHA512SUM="2f0c6666487520e1a0af0b6935431f85d2359e27ded0d01d02567d0d1c6479f2f0e6bbc60405e88e46b92c2a18780a01a60fc9281f7e311cfd40b8d5881d629c"
+NEWLIB_SHA512SUM="d391ea3ac68ddb722909ef790f81ba4d6c35d9b2e0fcdb029f91a6c47db9ee94a686a2bdff211fb84025e1a317e257acfa59abda3fd2bc6609966798e1c604dc"
 NEWLIB_URL="ftp://sourceware.org/pub/newlib/${NEWLIB_ARCHIVE}"
 NEWLIB_DIR="newlib-${NEWLIB_VERSION}"
 
@@ -159,7 +160,6 @@ ${SRC_DIR}/${BINUTILS_DIR}/configure \
     --program-prefix=${PROGRAM_PREFIX} \
     --target=${TARGET} \
     --enable-lto \
-    --enable-interwork \
     --enable-multilib \
 
 make -j${NUM_PROC} 2<&1 | tee build.binutils.1.log
@@ -196,19 +196,6 @@ if [ $(sha512sum ${GCC_ARCHIVE} | awk '{print $1}') != ${GCC_SHA512SUM} ]; then
 fi
 tar xvf ${GCC_ARCHIVE} -C ${SRC_DIR}
 
-#
-#	新しい mingw 環境では以下のようなエラーとなる。
-#		../../../src/gcc-10.2.0/gcc/system.h:743:30: error: expected identifier before string constant
-#		743 | #define abort() fancy_abort (__FILE__, __LINE__, __FUNCTION__)
-#	応急処置として、問題を起こす行を除去する。
-#	abort() は stdlib.h 内で宣言された実装のままの挙動となる。
-#
-if [ "$(expr substr $(uname -s) 1 5)" == "MINGW" ]; then
-	cat ${SRC_DIR}/${GCC_DIR}/gcc/system.h |\
-	perl -e 'my $before="#define abort() fancy_abort (__FILE__, __LINE__, __FUNCTION__)";my $after="/* $before */";$before=quotemeta($before);while(<>){$_=~s/$before/$after/g;print $_;}' > ${SRC_DIR}/${GCC_DIR}/gcc/system.h.tmp;
-	mv ${SRC_DIR}/${GCC_DIR}/gcc/system.h.tmp ${SRC_DIR}/${GCC_DIR}/gcc/system.h
-fi
-
 cd ${SRC_DIR}/${GCC_DIR}
 ./contrib/download_prerequisites
 
@@ -223,10 +210,10 @@ cd ${BUILD_DIR}/${GCC_DIR}_stage1
     --with-arch=m68k \
     --with-cpu=${WITH_CPU} \
     --with-newlib \
-    --enable-interwork \
     --enable-multilib \
     --disable-shared \
     --disable-threads \
+    --disable-nls \
 
 make -j${NUM_PROC} all-gcc 2<&1 | tee build.gcc-stage1.1.log
 if [ ${PIPESTATUS[0]} -ne 0 ]; then
@@ -254,32 +241,14 @@ if [ $(sha512sum ${NEWLIB_ARCHIVE} | awk '{print $1}') != ${NEWLIB_SHA512SUM} ];
 	echo "SHA512SUM verification of ${NEWLIB_ARCHIVE} failed!"
 	exit 1
 fi
-#
-#	newlib のアーカイブはシンボリックリンクを含んでいるため、windows 環境で
-#	展開する時は注意が必要。以下のように tar コマンドを使うナイーブな方法では
-#	正常動作しない。
-#		tar zxvf ${NEWLIB_ARCHIVE} -C ${SRC_DIR}
-#	代替手段として、pax コマンドを利用する。
-#
-cd ${SRC_DIR}
-pax -z -r -f ${DOWNLOAD_DIR}/${NEWLIB_ARCHIVE}
+tar zxvf ${NEWLIB_ARCHIVE} -C ${SRC_DIR}
 
 export CC_FOR_TARGET=${PROGRAM_PREFIX}gcc
 export LD_FOR_TARGET=${PROGRAM_PREFIX}ld
 export AS_FOR_TARGET=${PROGRAM_PREFIX}as
 export AR_FOR_TARGET=${PROGRAM_PREFIX}ar
 export RANLIB_FOR_TARGET=${PROGRAM_PREFIX}ranlib
-#
-#	次の記述は、
-#		if [ ! -v newlib_cflags ]; then
-#	としたいが、-v が使えない bash 環境が存在するため、代替手段を利用する。
-#	"${newlib_cflags+exists}" は、newlib_cflags が未定義なら空文字（偽）、
-#	そうでなければ exists（真）になる。従って -v の代替になる。
-#
-if [ ! "${newlib_cflags+exists}" ]; then
-	newlib_cflags=""
-fi
-export newlib_cflags="${newlib_cflags} -DPREFER_SIZE_OVER_SPEED -D__OPTIMIZE_SIZE__"
+export CFLAGS_FOR_TARGET="-O2"
 
 cd ${BUILD_DIR}/${NEWLIB_DIR}
 ${SRC_DIR}/${NEWLIB_DIR}/configure \
@@ -319,10 +288,10 @@ cd ${BUILD_DIR}/${GCC_DIR}_stage2
     --with-arch=m68k \
     --with-cpu=${WITH_CPU} \
     --with-newlib \
-    --enable-interwork \
     --enable-multilib \
     --disable-shared \
     --disable-threads \
+    --disable-nls \
 
 make -j${NUM_PROC} 2<&1 | tee build.gcc-stage2.1.log
 if [ ${PIPESTATUS[0]} -ne 0 ]; then

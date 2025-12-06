@@ -40,7 +40,7 @@
 GCC_ABI="m68k-elf"
 
 # gcc のバージョン
-GCC_VERSION="10.2.0"
+GCC_VERSION="13.4.0"
 
 # gcc ビルドディレクトリ
 GCC_BUILD_DIR="build_gcc"
@@ -463,7 +463,7 @@ do
 	SRC_FILES_EMIT_NOT_FROM_LIBGCC2=(
 		[_xfgnulib]=${LIBGCC_TARGET_SRC_DIR}/_xfgnulib
 		[_fpgnulib]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/config/m68k/fpgnulib
-		[_en_exe_stack]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/enable-execute-stack-empty
+		[_en_exe_stack]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/enable-execute-stack-empty			# *.o ファイル名を短縮した
 		[_unwind_dw2]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/unwind-dw2
 		[_unwind_dw2_fde]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/unwind-dw2-fde
 		[_unwind_sjlj]=${GCC_BUILD_DIR}/src/gcc-${GCC_VERSION}/libgcc/unwind-sjlj
@@ -645,7 +645,7 @@ do
 	for SRC in ${!OBJ_FILES_COPY_FROM_X68K_LIBGCC[@]}
 	do
 		DST=${OBJ_FILES_COPY_FROM_X68K_LIBGCC[$SRC]}
-		${AR} -x ${OLD_LIBGCC_FILE_NAME_FOR_X68K} ${DST}.o
+		${AR} -x ${OLD_LIBGCC_FILE_NAME} ${DST}.o
 		# 抽出成功を確認
 		if [ ! -e ${DST}.o ]; then
 			echo "Can not extract ${DST}.o"

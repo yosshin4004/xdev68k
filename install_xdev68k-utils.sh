@@ -101,22 +101,25 @@ fi
 #------------------------------------------------------------------------------
 # lha コマンドをソースからビルド
 #------------------------------------------------------------------------------
-ARCHIVE="release-20211125.zip"
-SHA512SUM="e75dc606d7637f2c506072f2f44eda69da075a57ad2dc76f54e41b1d39d34ca01410317cc6538f8ea42f4da81ca14889df1195161f4e305d2d67189ec8e60e24"
-wget -nc https://github.com/jca02266/lha/archive/refs/tags/${ARCHIVE}
-if [ $(sha512sum ${ARCHIVE} | awk '{print $1}') != ${SHA512SUM} ]; then
-	echo "SHA512SUM verification of ${ARCHIVE} failed!"
-	exit 1
-fi
-unzip ${ARCHIVE}
-cd lha-release-20211125/
+# 2025/12/06 時点のスナップショットを利用する。
+# 安定版の release ビルドが利用できるなら置き換えたい。
+
+HASH="0a07ec7fcc8014d0a4a3fa844abf1ea4f8278a28"
+wget -nc https://github.com/jca02266/lha/archive/${HASH}.zip
+unzip ${HASH}
+cd lha-${HASH}/
+
 autoreconf -is
-sh ./configure
+# 警告を抑制する。
+# -Dsymlink\(...\)=0 は symlink 関数の呼び出しを無効化する可変長引数マクロ。
+# 以下と等価である。
+#		#define symlink(...) 0
+CFLAGS="-Wno-old-style-definition -Wno-implicit-int -Wno-implicit-function-declaration -Dsymlink\(...\)=0" ./configure
 make
 cd ../
 
 # lha コマンド
-LHA=lha-release-20211125/src/lha
+LHA=lha-${HASH}/src/lha
 
 
 #------------------------------------------------------------------------------

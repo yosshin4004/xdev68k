@@ -40,7 +40,7 @@
 GCC_ABI="m68k-elf"
 
 # gcc のバージョン
-GCC_VERSION="10.2.0"
+GCC_VERSION="13.4.0"
 
 # gcc ビルドディレクトリ
 GCC_BUILD_DIR="build_gcc"
@@ -333,20 +333,23 @@ do
 		[compatibility]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++98/compatibility.cc -std=gnu++98"
 		[compat-debuglist]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++98/compatibility-debug_list.cc -std=gnu++98"			# *.o ファイル名を短縮した
 		[compat-debuglist2]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++98/compatibility-debug_list-2.cc -std=gnu++98"		# *.o ファイル名を短縮した
-		[compat-c++0x]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/compatibility-c++0x.cc -std=gnu++11"					# *.o ファイル名を短縮した
 		[compat-atmc++0x]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/compatibility-atomic-c++0x.cc -std=gnu++11"		# *.o ファイル名を短縮した
-		[compat-thrc++0x]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/compatibility-thread-c++0x.cc -std=gnu++11"		# *.o ファイル名を短縮した
+		[compat-c++0x]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/compatibility-c++0x.cc -std=gnu++11"					# *.o ファイル名を短縮した
 		[compat-chrono]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/compatibility-chrono.cc -std=gnu++11"				# *.o ファイル名を短縮した
 		[compat-condvar]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/compatibility-condvar.cc -std=gnu++11"				# *.o ファイル名を短縮した
+		[compat-thrc++0x]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/compatibility-thread-c++0x.cc -std=gnu++11"		# *.o ファイル名を短縮した
+
 		[array_type_info]="-c ${GCC_SRC_LIBSTDCXX_DIR}/libsupc++/array_type_info.cc"
 		[atexit_arm]="-c ${GCC_SRC_LIBSTDCXX_DIR}/libsupc++/atexit_arm.cc"
 		[atexit_thread]="-c ${GCC_SRC_LIBSTDCXX_DIR}/libsupc++/atexit_thread.cc"
+		[atomicity]="-c ${GCC_SRC_LIBSTDCXX_DIR}/libsupc++/atomicity.cc"
 		[bad_alloc]="-c ${GCC_SRC_LIBSTDCXX_DIR}/libsupc++/bad_alloc.cc"
 		[bad_array_length]="-c ${GCC_SRC_LIBSTDCXX_DIR}/libsupc++/bad_array_length.cc"
 		[bad_array_new]="-c ${GCC_SRC_LIBSTDCXX_DIR}/libsupc++/bad_array_new.cc"
 		[bad_cast]="-c ${GCC_SRC_LIBSTDCXX_DIR}/libsupc++/bad_cast.cc"
 		[bad_typeid]="-c ${GCC_SRC_LIBSTDCXX_DIR}/libsupc++/bad_typeid.cc"
 		[class_type_info]="-c ${GCC_SRC_LIBSTDCXX_DIR}/libsupc++/class_type_info.cc"
+		[cp-demangle]="-c ${GCC_SRC_LIBSTDCXX_DIR}/libsupc++/cp-demangle.cc"
 		[del_op]="-c ${GCC_SRC_LIBSTDCXX_DIR}/libsupc++/del_op.cc"
 		[del_opa]="-c ${GCC_SRC_LIBSTDCXX_DIR}/libsupc++/del_opa.cc -std=gnu++1z"
 		[del_opant]="-c ${GCC_SRC_LIBSTDCXX_DIR}/libsupc++/del_opant.cc -std=gnu++1z"
@@ -403,7 +406,6 @@ do
 		[vterminate]="-c ${GCC_SRC_LIBSTDCXX_DIR}/libsupc++/vterminate.cc"
 
 		[allocator-inst]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++98/allocator-inst.cc -std=gnu++98"
-		[atomicity]="-c ${GCC_BUILD_LIBSTDCXX_DIR}/src/c++98/atomicity.cc -std=gnu++98"
 		[basic_file]="-c ${GCC_BUILD_LIBSTDCXX_DIR}/src/c++98/basic_file.cc -std=gnu++98"
 		[bitmap_allocator]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++98/bitmap_allocator.cc -std=gnu++98"
 		[c++locale]="-c ${GCC_BUILD_LIBSTDCXX_DIR}/src/c++98/c++locale.cc -std=gnu++98 -fimplicit-templates"
@@ -451,8 +453,8 @@ do
 		[tree]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++98/tree.cc -std=gnu++98"
 		[valarray]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++98/valarray.cc -std=gnu++98"
 
+		[assert_fail]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/assert_fail.cc -std=gnu++11"
 		[chrono]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/chrono.cc -std=gnu++11"
-		[lt1-codecvt]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/codecvt.cc -std=gnu++11 -fchar8_t"
 		[condition_variable]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/condition_variable.cc -std=gnu++11"
 		[cow-fstream-inst]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/cow-fstream-inst.cc -std=gnu++11"
 		[cow-locale_init]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/cow-locale_init.cc -std=gnu++11"
@@ -483,6 +485,7 @@ do
 		[hashtable_c++0x]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/hashtable_c++0x.cc -std=gnu++11"
 		[ios-inst]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/ios-inst.cc -std=gnu++11"
 		[ios]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/ios.cc -std=gnu++11"
+		[ios_errcat]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/ios_errcat.cc -std=gnu++11"
 		[iostream-inst]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/iostream-inst.cc -std=gnu++11"
 		[istream-inst]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/istream-inst.cc -std=gnu++11"
 		[limits]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++11/limits.cc -std=gnu++11"
@@ -508,13 +511,12 @@ do
 		[cow-fs_dir]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++17/cow-fs_dir.cc -std=gnu++17 -fimplicit-templates"
 		[cow-fs_ops]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++17/cow-fs_ops.cc -std=gnu++17 -fimplicit-templates"
 		[cow-fs_path]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++17/cow-fs_path.cc -std=gnu++17 -fimplicit-templates"
-		[lt2-cow-string-inst]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++17/cow-string-inst.cc -std=gnu++17 -fimplicit-templates"
+		[floating_from_chars]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++17/floating_from_chars.cc -std=gnu++17 -fimplicit-templates"
+		[floating_to_chars]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++17/floating_to_chars.cc -std=gnu++17 -fimplicit-templates"
 		[fs_dir]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++17/fs_dir.cc -std=gnu++17 -fimplicit-templates"
 		[fs_ops]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++17/fs_ops.cc -std=gnu++17 -fimplicit-templates"
 		[fs_path]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++17/fs_path.cc -std=gnu++17 -fimplicit-templates"
 		[memory_resource]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++17/memory_resource.cc -std=gnu++17 -fimplicit-templates"
-		[lt3-ostream-inst]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++17/ostream-inst.cc -std=gnu++17 -fimplicit-templates"
-		[lt4-string-inst]="-c ${GCC_SRC_LIBSTDCXX_DIR}/src/c++17/string-inst.cc -std=gnu++17 -fimplicit-templates"
 	)
 
 	# C++ コンパイル
