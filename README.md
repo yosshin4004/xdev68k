@@ -117,8 +117,6 @@ xdev68k/
 │
 ├ archive/
 │	│	利用させて頂いたソフトウェアのアーカイブファイル
-│	├ readme.txt
-│	│		原作者、入手元の情報、利用規約をまとめたテキスト
 │	├ libgcc_src.tar.gz
 │	│		libgcc のソースコード
 │	├ libstdc++_src.tar.gz
@@ -138,6 +136,9 @@ xdev68k/
 │	│		SHARP C Compiler PRO-68K ver2.1 のヘッダファイル
 │	└ xdev68k/
 │			xdev68k 環境で追加されたヘッダファイル等
+├ license/
+│	└ readme.txt
+│			原作者、入手元の情報、利用規約をまとめたテキスト
 ├ m68k-toolchain/
 │		クロスコンパイラのビルド結果
 │		このディレクトリ以下には 1700 程度のファイルが存在する。削除してはいけない。
@@ -472,7 +473,7 @@ NaN や Inf の float → double 変換は、
 gcc の気持ち次第（inline 指定された関数を実際に inline するか否かなど）で変化するため、
 結果を確実に予測することは不可能です。
 
-printf フォーマットで引数をスタックに詰む時、コンパイラは float を double 値に変換します。
+printf フォーマットで引数をスタックに積む時、コンパイラは float を double 値に変換します。
 そのため float 値を printf で確認したいケースでこの問題によく遭遇します。
 実例として、最新の m68k-elf-gcc 上で NaN Inf を発生させ、printf 関数で出力した結果を示します。
 ```
@@ -573,7 +574,7 @@ linuxネイティブ >>> WSL(linuxパス上) > msys == cygwin >> WSL(windowsパ�
 
 ### 2. 並列コンパイルによる高速化
 xdev68k によるコンパイル時間は、make の並列実行によって劇的に短縮されます。
-並列実行は、単に make コマンドに -j オプションで並列度を指定するだけ可能です。
+並列実行は、単に make コマンドに -j オプションで並列度を指定するだけで可能です。
 例えば物理 8 コアあるホスト環境では、以下のように実行すると良いでしょう。
 ```bash
 # CPU 8 コアで並列コンパイル
@@ -652,7 +653,7 @@ xdev68k でビルドした結果を XEiJ でデバッグ実行するには、以
 	├ BASIC2/
 	├ BIN/
 	中略
-	├ AUTOECEC.BAT
+	├ AUTOEXEC.BAT
 	以下略
 	```
 	環境変数 XEIJ_BOOT_DIR にディレクトリ xeij_boot のフルパスを設定します。
@@ -684,7 +685,7 @@ xdev68k でビルドした結果を XEiJ でデバッグ実行するには、以
 	├ BASIC2/
 	├ BIN/
 	中略
-	├ AUTOECEC.BAT
+	├ AUTOEXEC.BAT
 	以下略
 	```
 
@@ -832,7 +833,7 @@ Free Software Foundation の gcc をはじめとするツールチェイン、
 X68000 LIBRARY http://retropc.net/x68000/ からダウンロードさせて頂いています。
 HAS060 や XEiJ の作者でもあり、アーカイブを保守されている X68000 LIBRARY の管理者 M.Kamada さんに感謝いたします。
 
-install_xdev68k-utils.sh の *.lhz アーカイブ展開処理で、
+install_xdev68k-utils.sh の *.lzh アーカイブ展開処理で、
 LHa for UNIX with Autoconf https://github.com/jca02266/lha/ 
 を利用させて頂いています。
 LHa for UNIX 原作者の Tsugio Okamoto 氏、

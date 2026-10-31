@@ -5,7 +5,7 @@
 ・binutils
 
 	オリジナルアーカイブファイル
-		build_gcc/download/binutils-2.35.tar.bz2
+		build_gcc/download/binutils-2.44.tar.bz2
 
 	xdev68k 上のインストール先
 		xdev68k/m68k-toolchain/
@@ -24,7 +24,7 @@
 ・gcc
 
 	オリジナルアーカイブファイル
-		build_gcc/download/gcc-10.2.0.tar.gz
+		build_gcc/download/gcc-13.4.0.tar.gz
 
 	xdev68k 上のインストール先
 		xdev68k/m68k-toolchain/
@@ -43,7 +43,7 @@
 ・libgcc/libstdc++
 
 	オリジナルアーカイブファイル
-		build_gcc/download/gcc-10.2.0.tar.gz
+		build_gcc/download/gcc-13.4.0.tar.gz
 			gcc のフルパッケージ
 		xdev68k/archive/libgcc_src.tar.gz
 		xdev68k/archive/libstdc++_src.tar.gz
@@ -72,7 +72,7 @@
 ・newlib
 
 	オリジナルアーカイブファイル
-		build_gcc/download/newlib-3.3.0.tar.gz
+		build_gcc/download/newlib-4.5.0.20241231.tar.gz
 
 	xdev68k 上のインストール先
 		xdev68k/m68k-toolchain/
@@ -145,15 +145,15 @@
 		xdev68k/license/FSHARP/許諾条件.txt に従ってください。
 
 
-・High-speed Assembler 68060 対応版 version 3.09+89
+・High-speed Assembler 68060 対応版 version 3.09+91
 
 	オリジナルアーカイブファイル
 		xdev68k/archive/download/
-			HAS06089.LZH
+			HAS06091.LZH
 
 	xdev68k 上のインストール先
 		xdev68k/x68k_bin
-			HAS06089.LZH から取り出した HAS060.X をコピーしています。
+			HAS06091.LZH から取り出した HAS060.X をコピーしています。
 
 	原作者
 		Y.Nakamura さん
@@ -166,7 +166,7 @@
 		http://retropc.net/x68000/software/develop/as/has060/
 
 	利用規約
-		HAS06089.LZH に含まれる README.DOC に従ってください。
+		HAS06091.LZH に含まれる README.DOC に従ってください。
 
 
 ・HLK version 3.01

@@ -30,7 +30,7 @@
 
 		戻り値
 			コピー先に作成を試みた文字列の長さ（終端 \0 を除く）。
-			戻り値 >= siz なら、文字列コピー先のメモり領域が不足
+			戻り値 >= siz なら、文字列コピー先のメモリ領域が不足
 			していたことを示す。
 
 	my_strlcpy は、strlcpy 互換関数のアセンブリコード実装である。
@@ -62,7 +62,7 @@ static FORCE_INLINE size_t my_strlcpy(char *dst, const char *src, size_t siz) {
 
 	/*
 		asm 構文では、入出力リスト、破壊リスト、メモリバリア等を指定する。
-		入出力リストは Constranits、破壊リストは Clobbers と呼ばれる。
+		入出力リストは Constraints、破壊リストは Clobbers と呼ばれる。
 
 		まず、入出力リストと破壊リストの指定を行う。
 		ここでは話を単純にするため、asm 構文の入出力レジスタを、以下の 3 つ
@@ -71,17 +71,17 @@ static FORCE_INLINE size_t my_strlcpy(char *dst, const char *src, size_t siz) {
 			1) out
 				・アセンブラコード内で書き込み専用
 				・出力リストに記述
-				・Constranits : "=r"
+				・Constraints : "=r"
 
 			2) in out
 				・アセンブラコード内で読み書き
 				・出力リストに記述
-				・Constranits : "+r"
+				・Constraints : "+r"
 
 			3) in
 				・アセンブラコード内で読み取り専用
 				・入力リストに記述
-				・Constranits : "r"
+				・Constraints : "r"
 
 		my_strlcpy の d0 a0 a1 は、入力かつ更新または破壊されるレジスタなので
 		(2) の in out レジスタに分類する。d0 a0 a1 のうち d0 の出力のみが利用
@@ -90,7 +90,7 @@ static FORCE_INLINE size_t my_strlcpy(char *dst, const char *src, size_t siz) {
 		破壊リストに記述するレジスタは、入出力レジスタとして出現せず、破壊だけ
 		されるものに限る。my_strlcpy では、d1 d2 が該当する。
 
-		a0 a1 を破壊リストに記述すると、Constranits と Clobbers が衝突している
+		a0 a1 を破壊リストに記述すると、Constraints と Clobbers が衝突している
 		というコンパイルエラーになる。前述のとおり、a0 a1 は破壊レジスタでは
 		なく in out レジスタと見なすことで、この問題を回避することができる。
 

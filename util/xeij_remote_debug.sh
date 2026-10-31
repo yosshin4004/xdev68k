@@ -170,7 +170,7 @@ ${XEIJ_PASTE} \\${REL_BOOT_TO_DBX_X68K} ${COMMAND_LINE}
 # 割り込み周りのハードウェアステートを退避する。
 # デバッガのシステム変数は Z0～Z10 の 10 個しかないので、必要最小限のステートしか
 # 退避できない。ここでは、主にゲーム系で使われる割り込み設定のみを対象としている。
-# db_push_interrupt_settings.txt は、以下の処理を一括で行う。
+# db_push_states.txt は、以下の処理を一括で行う。
 #	Z9=.sr				Z9 にステータスレジスタ退避
 #	X sr				ステータスレジスタ変更
 #	.sr^|700			ステータスレジスタ |= 0x700（割り込み off）
@@ -203,7 +203,7 @@ ${XEIJ_CONTROL} interrupt
 ${XEIJ_PASTE} V:X:L.pc:L.pc:L.pc:V
 
 # 割り込み周りのハードウェアステートを復帰する。
-# db_pop_interrupt_settings.txt は、以下の処理を一括で行う。
+# db_pop_states.txt は、以下の処理を一括で行う。
 #	X sr				ステータスレジスタ変更
 #	.sr^|700			ステータスレジスタ |= 0x700（割り込み off）
 #	MEsE88003.Z0		Z0 から AER 復帰

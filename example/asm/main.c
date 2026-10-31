@@ -32,12 +32,12 @@
 		volatile は、コンパイラの最適化による命令の並べ替えを抑止するための
 		指定です。これは、必要なければ省略することができます。
 		入出力リストには、アセンブラコードの引数や戻り値の受け渡し方法を記述
-		します。これは Constranits と呼ばれます。
+		します。これは Constraints と呼ばれます。
 		破壊リストには、アセンブラコード内で破壊されるレジスタを列挙します。
 		これは Clobbers と呼ばれます。
 
-		Constranits や Clobbers の記述ルールについては、gcc の公式ドキュメント
-		をご参照くたさい。
+		Constraints や Clobbers の記述ルールについては、gcc の公式ドキュメント
+		をご参照ください。
 		https://gcc.gnu.org/onlinedocs/gcc/Using-Assembly-Language-with-C.html#Using-Assembly-Language-with-C
 */
 
