@@ -60,7 +60,7 @@ int asmMain(void *a0, void *a1, void *a2, void *a3, void *a4) {
 
 	/* 引数のコピーを作成しながら argc と argv も作成する */
 	for (int i = 0; i < sizeof(s_cmdLineCopy); i++) {
-		char byte = cmdLine[i];
+		unsigned char byte = cmdLine[i];
 
 		/* 1 文字コピー */
 		s_cmdLineCopy[i] = byte;
