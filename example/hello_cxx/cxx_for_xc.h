@@ -7,7 +7,7 @@ extern "C" {
 
 void execute_static_ctors();
 
-void __cxa_atexit(void (*p)());
+int __cxa_atexit(void (*func)(void *), void *object, void *dso);
 
 #ifdef __cplusplus
 }

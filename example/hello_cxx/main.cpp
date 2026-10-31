@@ -83,15 +83,18 @@ public:
 
 /* スタティックコンストラクタの例 */
 class StaticCtorExample {
+	int m_value;
 public:
-	StaticCtorExample() {
-		printf("StaticCtorExample: ctor.\n");
+	StaticCtorExample(int value) : m_value(value) {
+		printf("StaticCtorExample: ctor. m_value=%d.\n", m_value);
 	}
 	~StaticCtorExample() {
-		printf("StaticCtorExample: dtor.\n");
+		/* 正しい this が渡されていることを、メンバの参照で確認する */
+		printf("StaticCtorExample: dtor. m_value=%d\n", m_value);
 	}
 };
-static StaticCtorExample s_staticCtorExample;
+static StaticCtorExample s_staticCtorExample1(123);
+static StaticCtorExample s_staticCtorExample2(456);
 
 
 int main(int argc, char *argv[]){
