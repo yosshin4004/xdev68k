@@ -28,6 +28,7 @@ _my_strlcpy:
 
 	move.l	a0,d1					* d1.l = src
 
+	tst.l	d0
 	jbeq	_?L7
 	add.l	d1,d0
 

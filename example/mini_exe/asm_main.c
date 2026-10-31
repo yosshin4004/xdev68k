@@ -31,7 +31,7 @@ int asmMain(void *a0, void *a1, void *a2, void *a3, void *a4) {
 		int32_t ret1 = dosSetBlock(memblock, 0x7FFFFFFF);
 		if (ret1 < 0) {
 			uint32_t availableSizeInBytes = ret1 - 0x81000000;
-			int32_t ret2 = dosSetBlock(memblock, 0x100000);
+			int32_t ret2 = dosSetBlock(memblock, availableSizeInBytes);
 			if (ret2 < 0) {
 				return EXIT_FAILURE;
 			}

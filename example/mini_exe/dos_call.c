@@ -15,21 +15,22 @@ void dosPrint(const char *string){
 		"	addq.l	#4,sp\n"
 	:	/* 出力 */
 	:	/* 入力 */	"r" (string)		/* 引数 %0 */
-	:	/* 破壊 */	"d0"				/* doscall は d0 に結果を返すか破壊する */
+	:	/* 破壊 */	"memory",			/* メモリバリアを要求 */
+					"d0"
 	);
 }
 
 int32_t dosSetBlock(void *memptr, uint32_t newlen){
 	register int reg_d0 asm ("d0");
 	asm volatile (
-		"	move.l	%0,-(sp)\n"
 		"	move.l	%1,-(sp)\n"
+		"	move.l	%2,-(sp)\n"
 		"	dc.w	__SETBLOCK\n"		/* doscall.inc で "__SETBLOCK: .equ $ff4a" が定義されている */
 		"	addq.l	#8,sp\n"
-	:	/* 出力 */
-	:	/* 入力 */	"r" (newlen),		/* 引数 %0 */
-					"r" (memptr)		/* 引数 %1 */
-	:	/* 破壊 */	"d0"				/* doscall は d0 に結果を返すか破壊する */
+	:	/* 出力 */	"=d" (reg_d0)		/* 戻り値 %0 */
+	:	/* 入力 */	"r" (newlen),		/* 引数 %1 */
+					"r" (memptr)		/* 引数 %2 */
+	:	/* 破壊 */
 	);
 	return reg_d0;
 }
