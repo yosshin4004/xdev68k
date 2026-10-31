@@ -35,15 +35,16 @@ use IO::File;
 use FindBin;
 use Fcntl ':flock';
 
-# コマンドライン
-my $command_line = join(' ', @ARGV);
-
 # lock ファイルを open して排他ロック 
 my $fh_lock_txt = IO::File->new("$FindBin::Bin/atomic.lock", "r");
 flock($fh_lock_txt, LOCK_EX);
 
 # コマンドライン実行
-my $exit_code = system($command_line);
+#	以下は、system と exec に用意された、実行プログラムを明示する特別な構文である。
+#	@ARGV が、
+#		('run68', 'HAS060.X', 'my file.s')
+#	のように、スペースを含む文字列を含んでいても問題なく動作する。
+my $exit_code = system { $ARGV[0] } @ARGV;
 
 # ロック解除
 $fh_lock_txt->close();
