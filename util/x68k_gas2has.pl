@@ -3340,12 +3340,29 @@ sub split_and_modify_arg_list {
 	# 直前のステート
 	my $state = '';
 
-	# 行末コメントとスペースを除去
+	# 行末コメントを除去
 	$arg_list =~ s/$g_regex_line_end_comment//gi;
-	$arg_list =~ s/\s*//gi;
+
+	# 引用符がなければ、空白をまとめて除去する。
+	if ($arg_list !~ /["']/) {
+		# 文字列リテラル以外なので空白を除去
+		$arg_list =~ s/\s+//g;
+	}
+	# 引用符があれば、文字列リテラルを保護しながら空白を除去する。
+	else {
+		# キャプチャ付き split で、文字列リテラルも分割結果に残す。
+		# 偶数番目は文字列外、奇数番目は文字列リテラルになる。
+		my @parts = split(/($g_regex_string_literal)/, $arg_list);
+		for (my $i = 0; $i < @parts; $i += 2) {
+			# 文字列リテラル以外なので空白を除去
+			$parts[$i] =~ s/\s+//g;
+		}
+		$arg_list = join('', @parts);
+	}
 
 	# 引数リストが空になるまで分解
 	while ($arg_list ne '') {
+
 		# オペランドサイズ？
 		if    (
 			$arg_list =~ /^($g_regex_opsize)/i
